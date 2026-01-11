@@ -40,7 +40,7 @@
         .main-price { color: var(--primary); font-weight: 900; display: flex; align-items: flex-start; line-height: 0.85; font-size: 40px; }
         .label-por { font-size: 10px; margin-right: 2px; align-self: center; color: #000; }
 
-        /* CARTAZ PROMOÇÃO - PÁGINA ÚNICA */
+        /* CARTAZ PROMOÇÃO - PÁGINA ÚNICA E ESPAÇAMENTOS AJUSTADOS */
         .promo-tag-lp { background: white; border: 12px solid var(--primary); width: 21cm; height: 28.2cm; padding: 0.3cm; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; color: #000; margin: 0 auto 5px; page-break-after: always; }
         .lp-header-box { background: #000; color: #fff; width: calc(100% + 0.6cm); margin-top: -0.3cm; padding: 12px 0; margin-bottom: 15px; }
         .lp-header-box h1 { font-size: 110px; margin: 0; line-height: 0.8; letter-spacing: -3px; }
@@ -73,8 +73,9 @@
         };
         firebase.initializeApp(firebaseConfig);
     </script>
-    <div class="no-print" style="text-align:center; padding: 10px;">
-        <img src="logo.png" style="max-height: 80px; width: auto;" onerror="this.outerHTML='<b>SOUZA FARMA</b>'">
+    <div class="no-print" style="text-align:center; padding: 15px;">
+        <img src="logo.png" style="max-height: 80px; width: auto;" onerror="this.style.display='none'"><br>
+        <b style="color:var(--primary); font-size: 18px;">SOUZA FARMA - FARMÁCIA DO TRABALHADOR</b>
     </div>
     <div class="no-print">
         <div class="tabs">
@@ -116,39 +117,25 @@
             input.addEventListener('input', (e) => {
                 const val = e.target.value.toUpperCase();
                 const exact = db.find(i => String(Object.values(i)[0]) === val);
-                if(exact) { 
-                    if(inputId === 'searchField') selectedItem = {code: Object.values(exact)[0], name: Object.values(exact)[2]};
-                    else selectedItemLP = {code: Object.values(exact)[0], name: Object.values(exact)[2]};
-                    input.value = Object.values(exact)[2];
-                    document.getElementById(suggestionId).style.display = 'none';
-                    setTimeout(() => document.getElementById(focusId).focus(), 50);
+                if(exact) { if(inputId === 'searchField') selectedItem = {code: Object.values(exact)[0], name: Object.values(exact)[2]}; else selectedItemLP = {code: Object.values(exact)[0], name: Object.values(exact)[2]}; input.value = Object.values(exact)[2]; document.getElementById(suggestionId).style.display = 'none'; setTimeout(() => document.getElementById(focusId).focus(), 50);
                 } else if(val.length >= 2) {
                     const matches = db.filter(i => String(Object.values(i)[2]).toUpperCase().includes(val));
-                    if(matches.length > 0) {
-                        document.getElementById(suggestionId).innerHTML = matches.slice(0,10).map(m => `<div class="suggestion-item" onclick="selectItem('${Object.values(m)[0]}', '${Object.values(m)[2]}', '${inputId}', '${focusId}', '${suggestionId}')"><b>${Object.values(m)[0]}</b> - ${Object.values(m)[2]}</div>`).join('');
-                        document.getElementById(suggestionId).style.display = 'block';
-                    }
+                    if(matches.length > 0) { document.getElementById(suggestionId).innerHTML = matches.slice(0,10).map(m => `<div class="suggestion-item" onclick="selectItem('${Object.values(m)[0]}', '${Object.values(m)[2]}', '${inputId}', '${focusId}', '${suggestionId}')"><b>${Object.values(m)[0]}</b> - ${Object.values(m)[2]}</div>`).join(''); document.getElementById(suggestionId).style.display = 'block'; }
                 }
             });
         }
         setupBipe('searchField', 'pOld', 'suggestions');
         setupBipe('lpProd', 'lpLeve', 'suggestionsLP');
-        function selectItem(code, name, inputId, focusId, suggestionId) { 
-            if(inputId === 'searchField') selectedItem = {code, name}; else selectedItemLP = {code, name};
-            document.getElementById(inputId).value = name; document.getElementById(suggestionId).style.display = 'none'; setTimeout(() => document.getElementById(focusId).focus(), 50); 
-        }
+        function selectItem(code, name, inputId, focusId, suggestionId) { if(inputId === 'searchField') selectedItem = {code, name}; else selectedItemLP = {code, name}; document.getElementById(inputId).value = name; document.getElementById(suggestionId).style.display = 'none'; setTimeout(() => document.getElementById(focusId).focus(), 50); }
         document.querySelectorAll('.nav').forEach((n, i, a) => n.addEventListener('keydown', (e) => { if(e.key === 'Enter') { e.preventDefault(); if(i < a.length-1) a[i+1].focus(); else addTag(); } }));
         document.querySelectorAll('.navLP').forEach((n, i, a) => n.addEventListener('keydown', (e) => { if(e.key === 'Enter') { e.preventDefault(); if(i < a.length-1) a[i+1].focus(); else addLPTag(); } }));
         function addTag() {
-            const name = document.getElementById('searchField').value, oldP = document.getElementById('pOld').value, newP = document.getElementById('pNew').value;
-            const size = document.getElementById('pSize').value, promo = document.getElementById('pPromo').value, qty = parseInt(document.getElementById('pQty').value);
-            if (!name || !newP) return;
-            const [reais, cents] = newP.split(','), barcode = selectedItem ? selectedItem.code : "0000000000000";
-            const vOld = parseFloat(oldP.replace(',', '.')), vNew = parseFloat(newP.replace(',', '.')), perc = (vOld > vNew) ? Math.round(((vOld - vNew) / vOld) * 100) : 0;
+            const name = document.getElementById('searchField').value, oldP = document.getElementById('pOld').value, newP = document.getElementById('pNew').value, size = document.getElementById('pSize').value, promo = document.getElementById('pPromo').value, qty = parseInt(document.getElementById('pQty').value); if (!name || !newP) return;
+            const [reais, cents] = newP.split(','), barcode = selectedItem ? selectedItem.code : "0000000000000", vOld = parseFloat(oldP.replace(',', '.')), vNew = parseFloat(newP.replace(',', '.')), perc = (vOld > vNew) ? Math.round(((vOld - vNew) / vOld) * 100) : 0;
             let area = (size === 'size-70mm') ? document.getElementById('thermalArea') : (size.includes('size-A') ? document.getElementById('posterArea') : document.getElementById('gondolaArea'));
             for (let i = 0; i < qty; i++) {
                 const tagId = "bc-" + Date.now() + i, div = document.createElement('div'); div.className = `tag ${size}`;
-                const headerContent = (size.includes('size-A')) ? `<img src="logo.png" class="logo-interna" onerror="this.outerHTML='<b>SOUZA FARMA</b>'">` : `<b>SOUZA FARMA</b>`;
+                const headerContent = (size.includes('size-A')) ? `<img src="logo.png" class="logo-interna" onerror="this.outerHTML='<b>SOUZA FARMA</b>'"><br>SOUZA FARMA - FARMÁCIA DO TRABALHADOR` : `<b>SOUZA FARMA</b>`;
                 div.innerHTML = `<button class="delete-btn" onclick="this.parentElement.remove()">X</button><div class="farmacia-header">${headerContent}</div>${promo ? `<div class="promo-banner">${promo}</div>` : ''}<div class="tag-title">${name.toUpperCase()}</div><div class="info-row"><div class="old-price-label">${(oldP && oldP !== '0,00') ? 'DE R$ '+oldP : ''}</div>${perc > 0 ? `<div class="perc-badge-outer">-${perc}%</div>` : ''}</div><div class="price-box"><span class="label-por">POR</span><div class="main-price"><small style="font-size:0.35em;">R$</small>${reais}<small style="font-size:0.4em; text-decoration:underline;">,${cents||'00'}</small></div></div><div class="footer-barcode"><svg id="${tagId}"></svg></div>`;
                 area.appendChild(div); JsBarcode(`#${tagId}`, barcode, { format: "CODE128", width: size.includes('A')?3:1.2, height: size.includes('A')?120:35, displayValue: true, fontSize: size.includes('A')?40:10 });
             }
