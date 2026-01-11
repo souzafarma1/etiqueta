@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Souza Farma - Sistema v55</title>
+    <title>SOUZA FARMA - OFICIAL ONLINE</title>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -11,43 +11,44 @@
     <style>
         :root { --primary: #e30613; --secondary: #fff200; }
         body { font-family: 'Arial Black', sans-serif; background: #cbd5e1; padding: 20px; }
-        .no-print { background: white; padding: 20px; border-radius: 12px; max-width: 1100px; margin: 0 auto 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .tabs { display: flex; gap: 5px; margin-bottom: 15px; border-bottom: 2px solid #cbd5e1; }
-        .tab-btn { padding: 12px 20px; border: none; background: #e2e8f0; cursor: pointer; border-radius: 8px 8px 0 0; font-weight: 900; }
+        .no-print { background: white; padding: 25px; border-radius: 12px; max-width: 1000px; margin: 0 auto 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        
+        /* CABEÇALHO E CONTROLES DE PLANILHA */
+        .header-main { text-align:center; margin-bottom: 20px; }
+        .admin-zone { background:#f1f5f9; padding:15px; border-radius:10px; border:2px dashed #94a3b8; display:flex; gap:10px; align-items:center; justify-content:center; flex-wrap:wrap; margin-bottom: 20px; }
+        
+        /* BOTÕES */
+        .btn { padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: 900; border: none; text-transform: uppercase; }
+        .btn-import { background: #1e293b; color: white; }
+        .btn-danger { background: #dc2626; color: white; }
+        .btn-add { background: #16a34a; color: white; flex: 2; }
+        .btn-print { background: var(--primary); color: white; }
+        .btn-clear { background: #64748b; color: white; }
+
+        .tabs { display: flex; gap: 5px; margin-bottom: 15px; }
+        .tab-btn { padding: 12px; background: #e2e8f0; border: none; border-radius: 8px 8px 0 0; cursor: pointer; font-weight: bold; }
         .tab-btn.active { background: var(--primary); color: white; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
         
-        .db-zone { background:#f1f5f9; padding:20px; border-radius:10px; margin-bottom:20px; border:2px dashed #94a3b8; }
-        .status-box { padding: 5px 10px; border-radius: 5px; font-weight: bold; font-size: 12px; }
+        .grid-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+        input, select { padding: 12px; border: 2px solid #cbd5e1; border-radius: 8px; font-weight: bold; width: 100%; box-sizing: border-box; }
         
-        .grid-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
-        .field { display: flex; flex-direction: column; position: relative; }
-        input, select { padding: 12px; border: 2px solid #cbd5e1; border-radius: 8px; font-weight: bold; }
-        
-        #suggestions, #suggestionsLP { position: absolute; top: 100%; left: 0; width: 100%; background: white; border: 1px solid #94a3b8; z-index: 2000; display: none; }
+        #suggestions, #suggestionsLP { position: absolute; width: 100%; background: white; border: 1px solid #94a3b8; z-index: 2000; display: none; }
         .suggestion-item { padding: 12px; cursor: pointer; border-bottom: 1px solid #eee; }
 
-        .btn-group { grid-column: span 2; display: flex; gap: 10px; margin-top: 15px; }
-        .btn-add { background: #16a34a; color: white; border: none; padding: 15px; border-radius: 8px; cursor: pointer; font-weight: 900; flex: 2; }
-        .btn-print { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 8px; cursor: pointer; font-weight: 900; flex: 1; }
-        .btn-clear { background: #64748b; color: white; border: none; padding: 15px; border-radius: 8px; cursor: pointer; font-weight: 900; flex: 1; }
-
-        #printArea { background: white; width: 100%; }
-        .tag { background: white; border: 2px solid #000; position: relative; display: flex; flex-direction: column; text-align: center; page-break-inside: avoid; margin-bottom: 10px; box-sizing: border-box; }
+        /* DESIGN ETIQUETAS */
+        .tag { background: white; border: 2px solid #000; position: relative; text-align: center; page-break-inside: avoid; margin-bottom: 10px; box-sizing: border-box; display: flex; flex-direction: column; }
         .size-70mm { width: 70mm; padding: 5px; }
-        .size-A5 { width: 14.8cm; height: 21cm; padding: 1cm; margin: 0 auto 10px !important; }
         .size-A4P { width: 21cm; height: 29.7cm; padding: 1.5cm; margin: 0 auto 10px !important; }
-        
-        .promo-tag-lp { background: white; border: 12px solid var(--primary); width: 21cm; height: 28.2cm; padding: 0.5cm; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; page-break-after: always; }
-        .delete-btn { position: absolute; top: 2px; left: 2px; background: #000; color: #fff; border: none; border-radius: 50%; width: 30px; height: 30px; font-weight: bold; cursor: pointer; z-index: 100; }
+        .promo-tag-lp { background: white; border: 12px solid var(--primary); width: 21cm; height: 28cm; padding: 0.5cm; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; page-break-after: always; }
+        .delete-btn { position: absolute; top: 2px; left: 2px; background: #000; color: #fff; border-radius: 50%; width: 30px; height: 30px; border: none; cursor: pointer; z-index: 100; }
 
-        @media print { .no-print, .delete-btn { display: none !important; } }
+        @media print { .no-print, .delete-btn { display: none !important; } body { padding: 0; background: white; } }
     </style>
 </head>
 <body>
     <script>
-        // Configuração Souza Farma
         const firebaseConfig = {
             apiKey: "AIzaSyBfxAE5NnNQ2JKn8iX8-s8lz7M_CVQG6DI",
             authDomain: "etiqueta-70cbf.firebaseapp.com",
@@ -62,22 +63,16 @@
     </script>
 
     <div class="no-print">
-        <div style="text-align:center; padding: 10px;">
+        <div class="header-main">
             <img src="logo.png" style="max-height: 80px;" onerror="this.style.display='none'"><br>
             <b style="color:var(--primary); font-size: 20px;">SOUZA FARMA - FARMÁCIA DO TRABALHADOR</b>
         </div>
 
-        <div class="db-zone">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                <b>ESTADO DO BANCO:</b>
-                <span id="excelStatus" class="status-box" style="background:#e2e8f0;">VERIFICANDO...</span>
-            </div>
-            <div style="display:flex; gap:10px;">
-                <input type="file" id="fileInput" accept=".xlsx, .xls" style="display:none;" onchange="handleExcel(event)">
-                <button onclick="document.getElementById('fileInput').click()" style="background:#1e293b; color:white; padding:10px; border-radius:5px; cursor:pointer;">ESCOLHER PLANILHA</button>
-                <button onclick="clearDatabase()" style="background:#dc2626; color:white; padding:10px; border-radius:5px; border:none; cursor:pointer;">APAGAR BANCO</button>
-                <button onclick="testConn()" style="background:#16a34a; color:white; padding:10px; border-radius:5px; border:none; cursor:pointer;">TESTAR CONEXÃO</button>
-            </div>
+        <div class="admin-zone">
+            <div id="excelStatus" style="font-weight:bold; color:#1e293b; margin-right: 15px;">SINCRO: VERIFICANDO...</div>
+            <input type="file" id="fileInput" accept=".xlsx, .xls" style="display:none;" onchange="handleExcel(event)">
+            <button class="btn btn-import" onclick="document.getElementById('fileInput').click()">ATUALIZAR PRODUTOS (EXCEL)</button>
+            <button class="btn btn-danger" onclick="clearDatabase()">APAGAR BANCO</button>
         </div>
 
         <div class="tabs">
@@ -87,26 +82,34 @@
 
         <div id="etiquetas" class="tab-content active">
             <div class="grid-form">
-                <div class="field" style="grid-column: span 2;"><label>PRODUTO</label><input type="text" id="searchField" placeholder="Busque aqui..."><div id="suggestions"></div></div>
+                <div class="field" style="grid-column: span 2;">
+                    <label>BUSCAR PRODUTO (NOME OU BIPE)</label>
+                    <input type="text" id="searchField" placeholder="Digite aqui...">
+                    <div id="suggestions"></div>
+                </div>
                 <div class="field"><label>PREÇO POR</label><input type="text" id="pNew" placeholder="0,00"></div>
-                <div class="field"><label>TAMANHO</label><select id="pSize"><option value="size-70mm">Térmica 70mm</option><option value="size-A5">Cartaz A5</option><option value="size-A4P">Cartaz A4</option></select></div>
-                <div class="field"><label>QTD</label><input type="number" id="pQty" value="1"></div>
+                <div class="field"><label>TAMANHO</label>
+                    <select id="pSize"><option value="size-70mm">Térmica 70mm</option><option value="size-A4P">Cartaz A4</option></select>
+                </div>
+                <div class="field"><label>QUANTIDADE</label><input type="number" id="pQty" value="1"></div>
                 <div class="btn-group">
-                    <button class="btn-add" onclick="addTag()">ADICIONAR</button>
-                    <button class="btn-print" onclick="window.print()">IMPRIMIR</button>
-                    <button class="btn-clear" onclick="clearScreen()">LIMPAR TELA</button>
+                    <button class="btn btn-add" onclick="addTag()">ADICIONAR</button>
+                    <button class="btn btn-print" onclick="window.print()">IMPRIMIR</button>
+                    <button class="btn btn-clear" onclick="clearScreen()">LIMPAR TELA</button>
                 </div>
             </div>
         </div>
 
         <div id="promocoes" class="tab-content">
             <div class="grid-form">
-                <div class="field" style="grid-column: span 2;"><label>PRODUTO</label><input type="text" id="lpProd" placeholder="Busque..."><div id="suggestionsLP"></div></div>
-                <div class="field"><label>LEVE</label><input type="number" id="lpLeve" value="3" oninput="calcLP()"></div>
-                <div class="field"><label>PAGUE</label><input type="number" id="lpPague" value="2" oninput="calcLP()"></div>
+                <div class="field" style="grid-column: span 2;">
+                    <label>PRODUTO PROMOÇÃO</label>
+                    <input type="text" id="lpProd" placeholder="Busque o produto...">
+                    <div id="suggestionsLP"></div>
+                </div>
                 <div class="field"><label>VALOR UNIT.</label><input type="text" id="lpUnit" oninput="calcLP()" placeholder="0,00"></div>
-                <div class="field"><label>VALOR FINAL</label><input type="text" id="lpFinal" readonly></div>
-                <div class="btn-group"><button class="btn-add" onclick="addLPTag()">GERAR CARTAZ</button></div>
+                <div class="field"><label>SAI POR (KIT)</label><input type="text" id="lpFinal" readonly></div>
+                <div class="btn-group"><button class="btn btn-add" onclick="addLPTag()">GERAR CARTAZ</button></div>
             </div>
         </div>
     </div>
@@ -117,59 +120,42 @@
         let dbLocal = [];
         let selectedItem = null;
 
-        // Sincronização Garantida
+        // Conecta ao Firebase
         database.ref('produtos').on('value', (s) => {
             const val = s.val();
             dbLocal = val ? Object.values(val) : [];
-            const st = document.getElementById('excelStatus');
-            st.innerText = val ? `✅ ONLINE (${dbLocal.length} PRODUTOS)` : "⚠️ BANCO VAZIO";
-            st.style.background = val ? "#dcfce7" : "#fee2e2";
-        }, (error) => {
-            alert("Erro de Permissão: Vá no Firebase > Realtime Database > Regras e mude para true.");
+            document.getElementById('excelStatus').innerText = val ? `✅ ONLINE (${dbLocal.length} ITENS)` : "⚠️ BANCO VAZIO";
         });
 
-        function testConn() {
-            database.ref('teste').set({data: Date.now()})
-                .then(() => alert("Conexão OK! O Banco de Dados está funcionando."))
-                .catch(e => alert("Erro de Conexão: " + e.message));
-        }
-
+        // Processar Excel
         function handleExcel(e) {
-            const file = e.target.files[0];
             const reader = new FileReader();
-            reader.onload = function(evt) {
-                try {
-                    const data = new Uint8Array(evt.target.result);
-                    const wb = XLSX.read(data, {type: 'array'});
-                    const json = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
-                    if(json.length > 0) {
-                        database.ref('produtos').set(json).then(() => alert("Planilha Importada!"));
-                    }
-                } catch(err) { alert("Erro ao ler Excel."); }
+            reader.onload = (evt) => {
+                const data = new Uint8Array(evt.target.result);
+                const workbook = XLSX.read(data, {type: 'array'});
+                const json = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+                database.ref('produtos').set(json).then(() => alert("Sincronizado!"));
             };
-            reader.readAsArrayBuffer(file);
+            reader.readAsArrayBuffer(e.target.files[0]);
         }
 
-        function clearDatabase() { if(confirm("Apagar banco online?")) database.ref('produtos').remove(); }
+        function clearDatabase() { if(confirm("Apagar banco?")) database.ref('produtos').remove(); }
         function clearScreen() { document.getElementById('thermalArea').innerHTML = ""; document.getElementById('posterArea').innerHTML = ""; }
 
+        // Pesquisa
         function search(id, sug) {
             document.getElementById(id).addEventListener('input', (e) => {
                 const v = e.target.value.toUpperCase();
-                const sugDiv = document.getElementById(sug);
-                if(v.length < 2) { sugDiv.style.display = 'none'; return; }
+                const div = document.getElementById(sug);
+                if(v.length < 2) { div.style.display = 'none'; return; }
                 const matches = dbLocal.filter(i => String(Object.values(i)[0]).includes(v) || String(Object.values(i)[2]).toUpperCase().includes(v));
                 if(matches.length > 0) {
-                    sugDiv.innerHTML = matches.slice(0,10).map(m => `
-                        <div class="suggestion-item" onclick="select('${Object.values(m)[0]}','${Object.values(m)[2]}','${id}','${sug}')">
-                            <b>${Object.values(m)[0]}</b> - ${Object.values(m)[2]}
-                        </div>`).join('');
-                    sugDiv.style.display = 'block';
+                    div.innerHTML = matches.slice(0,10).map(m => `<div class="suggestion-item" onclick="select('${Object.values(m)[0]}','${Object.values(m)[2]}','${id}','${sug}')"><b>${Object.values(m)[0]}</b> - ${Object.values(m)[2]}</div>`).join('');
+                    div.style.display = 'block';
                 }
             });
         }
-        search('searchField', 'suggestions');
-        search('lpProd', 'suggestionsLP');
+        search('searchField', 'suggestions'); search('lpProd', 'suggestionsLP');
 
         function select(c, n, id, sug) {
             selectedItem = {code: c, name: n};
@@ -185,11 +171,7 @@
             for(let i=0; i<q; i++){
                 const id = "bc"+Date.now()+i;
                 const div = document.createElement('div'); div.className = `tag ${s}`;
-                div.innerHTML = `<button class="delete-btn" onclick="this.parentElement.remove()">X</button>
-                    <div style="font-size:10px; padding:5px;">SOUZA FARMA</div>
-                    <div style="padding:5px; font-weight:bold;">${n.toUpperCase()}</div>
-                    <div style="color:red; font-size:40px; font-weight:900;">R$ ${p}</div>
-                    <div style="padding:10px; display:flex; justify-content:center;"><svg id="${id}"></svg></div>`;
+                div.innerHTML = `<button class="delete-btn" onclick="this.parentElement.remove()">X</button><div style="font-size:10px; padding:5px;">SOUZA FARMA</div><div style="font-weight:bold; padding:5px;">${n.toUpperCase()}</div><div style="color:red; font-size:40px; font-weight:900;">R$ ${p}</div><div style="padding:10px; display:flex; justify-content:center;"><svg id="${id}"></svg></div>`;
                 area.appendChild(div);
                 JsBarcode("#"+id, bc, {format:"CODE128", width:s.includes('A')?3:1.2, height:s.includes('A')?100:30, displayValue:true});
             }
@@ -199,19 +181,13 @@
             const n = document.getElementById('lpProd').value, f = document.getElementById('lpFinal').value, bc = selectedItem ? selectedItem.code : "00000000";
             const id = "lp"+Date.now();
             const div = document.createElement('div'); div.className = 'promo-tag-lp';
-            div.innerHTML = `<button class="delete-btn" onclick="this.parentElement.remove()">X</button>
-                <div class="lp-header-box"><h1 style="font-size:100px; color:white; margin:0;">OFERTA</h1></div>
-                <div class="lp-prod-name">${n.toUpperCase()}</div>
-                <div class="lp-yellow-box"><span style="font-size:30px; font-weight:bold;">A UNIDADE SAI POR:</span><br>
-                <span style="font-size:90px; color:red; font-weight:900;">R$ ${f}</span></div>
-                <div style="margin-top:auto;"><svg id="${id}"></svg></div>
-                <div style="padding:20px; font-weight:bold;">SOUZA FARMA - FARMÁCIA DO TRABALHADOR</div>`;
+            div.innerHTML = `<button class="delete-btn" onclick="this.parentElement.remove()">X</button><div style="background:black; color:white; width:100%; padding:15px 0;"><h1>OFERTA</h1></div><div style="font-size:60px; font-weight:bold; margin: 30px 0;">${n.toUpperCase()}</div><div style="background:yellow; border:4px solid black; padding:15px; width:90%;"><span style="font-size:30px;">A UNIDADE NO KIT SAI POR:</span><br><span style="font-size:90px; color:red; font-weight:900;">R$ ${f}</span></div><div style="margin-top:auto;"><svg id="${id}"></svg></div><div style="padding:20px; font-weight:bold;">SOUZA FARMA - FARMÁCIA DO TRABALHADOR</div>`;
             document.getElementById('posterArea').appendChild(div);
             JsBarcode("#"+id, bc, {format:"CODE128", width:2.5, height:80, displayValue:true});
         }
 
         function openTab(e, n) { document.querySelectorAll('.tab-content, .tab-btn').forEach(x => x.classList.remove('active')); document.getElementById(n).classList.add('active'); e.currentTarget.classList.add('active'); }
-        function calcLP() { const l = parseInt(document.getElementById('lpLeve').value)||1, p = parseInt(document.getElementById('lpPague').value)||1, u = parseFloat(document.getElementById('lpUnit').value.replace(',','.'))||0; document.getElementById('lpFinal').value = ((p*u)/l).toLocaleString('pt-br',{minimumFractionDigits:2}); }
+        function calcLP() { const u = parseFloat(document.getElementById('lpUnit').value.replace(',','.'))||0; document.getElementById('lpFinal').value = ((2*u)/3).toLocaleString('pt-br',{minimumFractionDigits:2}); }
     </script>
 </body>
 </html>
