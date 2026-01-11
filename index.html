@@ -2,13 +2,12 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Souza Farma Sistema Online</title>
+    <title>Souza Farma - Sistema Oficial</title>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
-    
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
     <style>
         :root { --primary: #e30613; --secondary: #fff200; }
         body { font-family: 'Arial Black', sans-serif; background: #cbd5e1; padding: 20px; margin: 0; }
@@ -18,34 +17,32 @@
         .tab-btn.active { background: var(--primary); color: white; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
+        
+        .db-zone { background:#f8fafc; padding:15px; border-radius:8px; margin-bottom:15px; border:1px solid #cbd5e1; display:flex; align-items:center; gap:15px; }
+        .btn-danger { background: #e30613; color: white; border: none; padding: 10px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        
         .grid-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
         .field { display: flex; flex-direction: column; position: relative; }
         label { font-size: 10px; font-weight: bold; color: #444; margin-bottom: 4px; }
         input, select { padding: 10px; border: 2px solid #ccc; border-radius: 6px; font-weight: bold; }
-        #suggestions, #suggestionsLP { position: absolute; top: 100%; left: 0; width: 100%; background: white; border: 1px solid #ccc; z-index: 2000; max-height: 200px; overflow-y: auto; display: none; border-radius: 0 0 8px 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-        .suggestion-item { padding: 10px; cursor: pointer; font-size: 13px; border-bottom: 1px solid #eee; }
         
-        .db-controls { background:#f8fafc; padding:15px; border-radius:8px; margin-bottom:15px; border:1px solid #cbd5e1; display:flex; align-items:center; gap:15px; }
-        .btn-clear-db { background: #e30613; color: white; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        #suggestions, #suggestionsLP { position: absolute; top: 100%; left: 0; width: 100%; background: white; border: 1px solid #ccc; z-index: 2000; max-height: 200px; overflow-y: auto; display: none; }
+        .suggestion-item { padding: 10px; cursor: pointer; font-size: 13px; border-bottom: 1px solid #eee; }
 
         .btn-group { grid-column: span 2; display: flex; gap: 10px; margin-top: 10px; }
-        .btn-add { background: #16a34a; color: white; border: none; padding: 15px; border-radius: 6px; cursor: pointer; font-weight: 900; flex: 2; font-size: 16px; }
+        .btn-add { background: #16a34a; color: white; border: none; padding: 15px; border-radius: 6px; cursor: pointer; font-weight: 900; flex: 2; }
         .btn-print { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 6px; cursor: pointer; font-weight: 900; flex: 1; }
-        .btn-clear-labels { background: #64748b; color: white; border: none; padding: 15px; border-radius: 6px; cursor: pointer; font-weight: 900; flex: 1; }
+        .btn-clear { background: #64748b; color: white; border: none; padding: 15px; border-radius: 6px; cursor: pointer; font-weight: 900; flex: 1; }
 
-        #printArea { display: block; width: 100%; max-width: 21cm; margin: 0 auto; background: white; }
-        .tag { background: white; border: 2px solid #000; position: relative; overflow: hidden; display: flex; flex-direction: column; box-sizing: border-box; text-align: center; page-break-inside: avoid; margin-bottom: 10px; }
-        .logo-interna { max-height: 60px; width: auto; padding: 5px; }
-        .main-price { color: var(--primary); font-weight: 900; display: flex; align-items: flex-start; line-height: 0.85; font-size: 40px; justify-content: center; }
-        .label-por { font-size: 10px; margin-right: 2px; align-self: center; color: #000; }
-        .delete-btn { position: absolute; top: 1px; left: 1px; background: #000; color: #fff; border: none; border-radius: 50%; width: 25px; height: 25px; font-weight: bold; cursor: pointer; }
+        .tag { background: white; border: 2px solid #000; position: relative; display: flex; flex-direction: column; text-align: center; page-break-inside: avoid; margin-bottom: 10px; }
+        .size-70mm { width: 70mm; padding: 5px; }
+        .size-A5 { width: 14.8cm; height: 21cm; padding: 0.6cm; margin: 0 auto 10px !important; }
+        .size-A4P { width: 21cm; height: 29.7cm; padding: 1cm; margin: 0 auto 10px !important; }
         
         .promo-tag-lp { background: white; border: 12px solid var(--primary); width: 21cm; height: 28.2cm; padding: 0.3cm; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; page-break-after: always; }
-        .lp-header-box { background: #000; color: #fff; width: calc(100% + 0.6cm); padding: 12px 0; margin-bottom: 10px; }
-        .lp-prod-name { font-size: 60px; height: 120px; display: flex; align-items: center; justify-content: center; text-transform: uppercase; font-weight: 900; margin: 40px 0; }
-        .lp-yellow-box { background: var(--secondary); border: 4px solid #000; padding: 12px; margin: 15px 0; width: 95%; }
+        .delete-btn { position: absolute; top: 1px; left: 1px; background: #000; color: #fff; border: none; border-radius: 50%; width: 25px; height: 25px; font-weight: bold; cursor: pointer; }
 
-        @media print { .no-print, .delete-btn { display: none !important; } body { background: white; padding: 0; } .tag, .promo-tag-lp { border: 2px solid #000 !important; } }
+        @media print { .no-print, .delete-btn { display: none !important; } }
     </style>
 </head>
 <body>
@@ -62,7 +59,7 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
     </script>
-    
+
     <div class="no-print" style="text-align:center; padding: 15px;">
         <img src="logo.png" style="max-height: 80px; width: auto;" onerror="this.style.display='none'"><br>
         <b style="color:var(--primary); font-size: 18px;">SOUZA FARMA - FARMÁCIA DO TRABALHADOR</b>
@@ -73,125 +70,126 @@
             <button class="tab-btn active" onclick="openTab(event, 'etiquetas')">ETIQUETAS PADRÃO</button>
             <button class="tab-btn" onclick="openTab(event, 'promocoes')">PROMOÇÕES (LEVE/PAGUE)</button>
         </div>
+        
         <div id="etiquetas" class="tab-content active">
-            <div class="db-controls">
+            <div class="db-zone">
                 <div style="flex-grow:1;">
-                    <label>📂 ATUALIZAR PLANILHA (EXCEL):</label><br>
-                    <input type="file" onchange="handleExcel(event)">
-                    <span id="excelStatus"></span>
+                    <label>📂 SELECIONAR PLANILHA (EXCEL):</label><br>
+                    <input type="file" id="fileInput" onchange="handleExcel(event)">
+                    <span id="excelStatus" style="font-weight:bold; color:green;"></span>
                 </div>
-                <button class="btn-clear-db" onclick="clearDatabase()">APAGAR BANCO ATUAL</button>
+                <button class="btn-danger" onclick="clearDatabase()">LIMPAR BANCO ONLINE</button>
             </div>
+
             <div class="grid-form">
-                <div class="field" style="grid-column: span 2;"><label>PRODUTO (BIPE OU BUSQUE)</label><input type="text" id="searchField" class="nav" placeholder="Digite ou bipe..." autocomplete="off"><div id="suggestions"></div></div>
-                <div class="field"><label>PREÇO DE</label><input type="text" id="pOld" class="nav" placeholder="0,00"></div>
-                <div class="field"><label>PREÇO POR</label><input type="text" id="pNew" class="nav" placeholder="0,00"></div>
-                <div class="field"><label>TAMANHO</label><select id="pSize" class="nav"><option value="size-70mm">Térmica 70mm</option><option value="size-A5">Cartaz A5</option><option value="size-A4P">Cartaz A4</option></select></div>
-                <div class="field"><label>CAMPANHA</label><select id="pPromo" class="nav"><option value="OFERTA">OFERTA</option><option value="MEGA OFERTA">MEGA OFERTA</option><option value="IMBATÍVEL">IMBATÍVEL</option><option value="SÓ HOJE">SÓ HOJE</option></select></div>
-                <div class="field"><label>QTD</label><input type="number" id="pQty" class="nav" value="1"></div>
+                <div class="field" style="grid-column: span 2;"><label>BUSCAR PRODUTO</label><input type="text" id="searchField" placeholder="Digite nome ou bipe..."> <div id="suggestions"></div></div>
+                <div class="field"><label>PREÇO DE</label><input type="text" id="pOld" placeholder="0,00"></div>
+                <div class="field"><label>PREÇO POR</label><input type="text" id="pNew" placeholder="0,00"></div>
+                <div class="field"><label>TAMANHO</label><select id="pSize"><option value="size-70mm">Térmica 70mm</option><option value="size-A5">Cartaz A5</option><option value="size-A4P">Cartaz A4</option></select></div>
+                <div class="field"><label>CAMPANHA</label><select id="pPromo"><option value="OFERTA">OFERTA</option><option value="MEGA OFERTA">MEGA OFERTA</option><option value="IMBATÍVEL">IMBATÍVEL</option></select></div>
+                <div class="field"><label>QTD</label><input type="number" id="pQty" value="1"></div>
                 <div class="btn-group">
                     <button class="btn-add" onclick="addTag()">ADICIONAR</button>
                     <button class="btn-print" onclick="window.print()">IMPRIMIR</button>
-                    <button class="btn-clear-labels" onclick="clearLabels()">LIMPAR TELA</button>
+                    <button class="btn-clear" onclick="clearScreen()">LIMPAR TELA</button>
                 </div>
             </div>
         </div>
+
         <div id="promocoes" class="tab-content">
             <div class="grid-form">
-                <div class="field" style="grid-column: span 2;"><label>PRODUTO (BIPE OU BUSQUE NOME)</label><input type="text" id="lpProd" class="navLP" placeholder="Bipe ou digite..." autocomplete="off"><div id="suggestionsLP"></div></div>
-                <div class="field"><label>LEVE</label><input type="number" id="lpLeve" class="navLP" value="3" oninput="calcLP()"></div>
-                <div class="field"><label>PAGUE</label><input type="number" id="lpPague" class="navLP" value="2" oninput="calcLP()"></div>
-                <div class="field"><label>VALOR UN. (R$)</label><input type="text" id="lpUnit" class="navLP" placeholder="0,00" oninput="calcLP()"></div>
-                <div class="field"><label>VALIDADE</label><input type="text" id="lpData" class="navLP" placeholder="Validade"></div>
-                <div class="field"><label>TOTAL KIT</label><input type="text" id="lpTotal" readonly></div>
-                <div class="field"><label>SAI POR</label><input type="text" id="lpFinal" readonly></div>
-                <div class="btn-group"><button class="btn-add" onclick="addLPTag()">GERAR CARTAZ</button><button class="btn-print" onclick="window.print()">IMPRIMIR CARTAZ</button></div>
+                <div class="field" style="grid-column: span 2;"><label>PRODUTO PROMOÇÃO</label><input type="text" id="lpProd" placeholder="Busque o produto..."><div id="suggestionsLP"></div></div>
+                <div class="field"><label>LEVE</label><input type="number" id="lpLeve" value="3" oninput="calcLP()"></div>
+                <div class="field"><label>PAGUE</label><input type="number" id="lpPague" value="2" oninput="calcLP()"></div>
+                <div class="field"><label>VALOR UNIT.</label><input type="text" id="lpUnit" oninput="calcLP()" placeholder="0,00"></div>
+                <div class="field"><label>VALOR FINAL</label><input type="text" id="lpFinal" readonly></div>
+                <div class="btn-group"><button class="btn-add" onclick="addLPTag()">GERAR CARTAZ</button></div>
             </div>
         </div>
     </div>
+
     <div id="printArea"><div id="thermalArea"></div><div id="posterArea"></div></div>
 
     <script>
         let dbLocal = [];
-        let selectedItem = null, selectedItemLP = null;
+        let selectedItem = null;
 
-        database.ref('produtos').on('value', (snapshot) => {
-            const data = snapshot.val();
-            dbLocal = data ? Object.values(data) : [];
-            document.getElementById('excelStatus').innerText = `✅ ${dbLocal.length} PRODUTOS SINCRO`;
+        // Sincroniza com Firebase
+        database.ref('produtos').on('value', (s) => {
+            const val = s.val();
+            dbLocal = val ? Object.values(val) : [];
+            document.getElementById('excelStatus').innerText = val ? `✅ ${dbLocal.length} PRODUTOS` : "⚠️ BANCO VAZIO";
         });
 
+        // PROCESSAR EXCEL
         function handleExcel(e) {
+            const file = e.target.files[0];
             const reader = new FileReader();
             reader.onload = (evt) => {
-                const workbook = XLSX.read(evt.target.result, { type: 'binary' });
-                const data = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
-                database.ref('produtos').set(data).then(() => alert("Planilha enviada!"));
+                const bstr = evt.target.result;
+                const wb = XLSX.read(bstr, {type:'binary'});
+                const data = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
+                database.ref('produtos').set(data).then(() => alert("Processado com sucesso!"));
             };
-            reader.readAsBinaryString(e.target.files[0]);
+            reader.readAsBinaryString(file);
         }
 
-        function clearDatabase() {
-            if(confirm("Deseja apagar o banco online para atualizar?")) {
-                database.ref('produtos').remove().then(() => alert("Banco limpo!"));
-            }
-        }
+        function clearDatabase() { if(confirm("Apagar todos os produtos do banco?")) database.ref('produtos').remove(); }
+        function clearScreen() { document.getElementById('thermalArea').innerHTML = ""; document.getElementById('posterArea').innerHTML = ""; }
 
-        function clearLabels() {
-            document.getElementById('thermalArea').innerHTML = "";
-            document.getElementById('posterArea').innerHTML = "";
-        }
-
-        function setupBipe(inputId, focusId, suggestionId) {
+        // BUSCA (Nome ou Código)
+        function setupSearch(inputId, suggestionId, isLP) {
             const input = document.getElementById(inputId);
             input.addEventListener('input', (e) => {
-                const val = e.target.value.toUpperCase();
-                const exact = dbLocal.find(i => String(Object.values(i)[0]) === val);
-                if(exact) { 
-                    if(inputId === 'searchField') selectedItem = {code: Object.values(exact)[0], name: Object.values(exact)[2]};
-                    else selectedItemLP = {code: Object.values(exact)[0], name: Object.values(exact)[2]};
-                    input.value = Object.values(exact)[2];
-                    document.getElementById(suggestionId).style.display = 'none';
-                    setTimeout(() => document.getElementById(focusId).focus(), 50);
-                } else if(val.length >= 2) {
-                    const matches = dbLocal.filter(i => String(Object.values(i)[2]).toUpperCase().includes(val));
-                    if(matches.length > 0) {
-                        document.getElementById(suggestionId).innerHTML = matches.slice(0,10).map(m => `<div class="suggestion-item" onclick="selectItem('${Object.values(m)[0]}', '${Object.values(m)[2]}', '${inputId}', '${focusId}', '${suggestionId}')"><b>${Object.values(m)[0]}</b> - ${Object.values(m)[2]}</div>`).join('');
-                        document.getElementById(suggestionId).style.display = 'block';
-                    }
+                const v = e.target.value.toUpperCase();
+                if(v.length < 2) { document.getElementById(suggestionId).style.display = 'none'; return; }
+                
+                const matches = dbLocal.filter(i => String(Object.values(i)[0]).includes(v) || String(Object.values(i)[2]).toUpperCase().includes(v));
+                if(matches.length > 0) {
+                    document.getElementById(suggestionId).innerHTML = matches.slice(0,10).map(m => `
+                        <div class="suggestion-item" onclick="selectItem('${Object.values(m)[0]}','${Object.values(m)[2]}','${inputId}','${suggestionId}')">
+                            <b>${Object.values(m)[0]}</b> - ${Object.values(m)[2]}
+                        </div>`).join('');
+                    document.getElementById(suggestionId).style.display = 'block';
                 }
             });
         }
-        setupBipe('searchField', 'pOld', 'suggestions');
-        setupBipe('lpProd', 'lpLeve', 'suggestionsLP');
+        setupSearch('searchField', 'suggestions', false);
+        setupSearch('lpProd', 'suggestionsLP', true);
 
-        function selectItem(code, name, inputId, focusId, suggestionId) { 
-            if(inputId === 'searchField') selectedItem = {code, name}; else selectedItemLP = {code, name};
-            document.getElementById(inputId).value = name; document.getElementById(suggestionId).style.display = 'none'; setTimeout(() => document.getElementById(focusId).focus(), 50); 
+        function selectItem(code, name, inputId, suggestionId) {
+            selectedItem = {code, name};
+            document.getElementById(inputId).value = name;
+            document.getElementById(suggestionId).style.display = 'none';
         }
 
         function addTag() {
             const name = document.getElementById('searchField').value, oldP = document.getElementById('pOld').value, newP = document.getElementById('pNew').value, size = document.getElementById('pSize').value, promo = document.getElementById('pPromo').value, qty = parseInt(document.getElementById('pQty').value);
-            if (!name || !newP) return;
-            const [reais, cents] = newP.split(','), barcode = selectedItem ? selectedItem.code : "0000000000000";
-            const vOld = parseFloat(oldP.replace(',', '.')), vNew = parseFloat(newP.replace(',', '.')), perc = (vOld > vNew) ? Math.round(((vOld - vNew) / vOld) * 100) : 0;
+            if(!name || !newP) return;
+            const barcode = selectedItem ? selectedItem.code : "00000000";
+            const [rs, cts] = newP.split(',');
             let area = (size === 'size-70mm') ? document.getElementById('thermalArea') : document.getElementById('posterArea');
-            for (let i = 0; i < qty; i++) {
-                const tagId = "bc-" + Date.now() + i, div = document.createElement('div'); div.className = `tag ${size}`;
-                div.innerHTML = `<button class="delete-btn" onclick="this.parentElement.remove()">X</button><div style="font-size:8px; font-weight:bold; padding:5px;">SOUZA FARMA</div>${promo ? `<div style="background:var(--primary); color:var(--secondary); font-size:12px; font-weight:bold; padding:2px;">${promo}</div>` : ''}<div style="font-weight:bold; padding:5px; font-size:11px;">${name.toUpperCase()}</div><div class="main-price"><small style="font-size:12px;">R$</small>${reais}<small style="font-size:14px; text-decoration:underline;">,${cents||'00'}</small></div><div style="padding:5px;"><svg id="${tagId}"></svg></div>`;
-                area.appendChild(div); JsBarcode(`#${tagId}`, barcode, { format: "CODE128", width: size.includes('A')?3:1.2, height: size.includes('A')?120:35, displayValue: true, fontSize: size.includes('A')?40:10 });
+
+            for(let i=0; i<qty; i++){
+                const id = "bc"+Date.now()+i;
+                const div = document.createElement('div'); div.className = `tag ${size}`;
+                div.innerHTML = `<button class="delete-btn" onclick="this.parentElement.remove()">X</button><div style="font-size:10px; padding:5px;">SOUZA FARMA</div><div style="background:red; color:yellow; font-weight:bold;">${promo}</div><div style="padding:5px;">${name.toUpperCase()}</div><div style="color:red; font-size:40px; font-weight:900;">R$ ${rs},${cts||'00'}</div><div style="padding:10px;"><svg id="${id}"></svg></div>`;
+                area.appendChild(div);
+                JsBarcode("#"+id, barcode, {format:"CODE128", width:size.includes('A')?3:1.2, height:size.includes('A')?100:30, displayValue:true});
             }
         }
 
         function addLPTag() {
-            const barcode = selectedItemLP ? selectedItemLP.code : "0000000000000", tagId = "lpbc-" + Date.now();
+            const name = document.getElementById('lpProd').value, final = document.getElementById('lpFinal').value, barcode = selectedItem ? selectedItem.code : "00000000";
+            const id = "lp"+Date.now();
             const div = document.createElement('div'); div.className = 'promo-tag-lp';
-            div.innerHTML = `<button class="delete-btn" onclick="this.parentElement.remove()">X</button><div class="lp-header-box"><span>— MEGA —</span><h1 style="font-size:100px; margin:0;">OFERTA</h1></div><div class="lp-prod-name">${document.getElementById('lpProd').value.toUpperCase()}</div><div class="lp-yellow-box"><span style="font-size:28px; display:block; font-weight:bold;">A UNIDADE SAI POR:</span><span style="font-size:80px; color:var(--primary); font-weight:bold;">R$ ${document.getElementById('lpFinal').value}</span></div><div style="margin-top:auto;"><svg id="${tagId}"></svg></div><div style="font-size:16px; font-weight:bold; border-top:2px solid #000; width:100%; padding:10px;">SOUZA FARMA - FARMÁCIA DO TRABALHADOR</div>`;
-            document.getElementById('posterArea').appendChild(div); JsBarcode(`#${tagId}`, barcode, { format: "CODE128", width: 2.5, height: 75, displayValue: true, fontSize: 30 });
+            div.innerHTML = `<button class="delete-btn" onclick="this.parentElement.remove()">X</button><div class="lp-header-box"><h1 style="font-size:100px; color:white; margin:0;">OFERTA</h1></div><div class="lp-prod-name">${name.toUpperCase()}</div><div class="lp-yellow-box"><span style="font-size:30px; font-weight:bold;">A UNIDADE SAI POR:</span><br><span style="font-size:90px; color:red; font-weight:900;">R$ ${final}</span></div><div style="margin-top:auto;"><svg id="${id}"></svg></div><div style="padding:20px; font-weight:bold;">SOUZA FARMA - FARMÁCIA DO TRABALHADOR</div>`;
+            document.getElementById('posterArea').appendChild(div);
+            JsBarcode("#"+id, barcode, {format:"CODE128", width:2.5, height:80, displayValue:true});
         }
 
-        function openTab(evt, tabName) { document.querySelectorAll('.tab-content, .tab-btn').forEach(el => el.classList.remove('active')); document.getElementById(tabName).classList.add('active'); evt.currentTarget.classList.add('active'); }
-        function calcLP() { const l = parseInt(document.getElementById('lpLeve').value) || 0, p = parseInt(document.getElementById('lpPague').value) || 0, u = parseFloat(document.getElementById('lpUnit').value.replace(',', '.')) || 0; if(l > 0 && u > 0) { const f = (p * u) / l; document.getElementById('lpFinal').value = f.toLocaleString('pt-br', {minimumFractionDigits:2}); document.getElementById('lpTotal').value = (p*u).toLocaleString('pt-br', {minimumFractionDigits:2}); } }
+        function openTab(e, n) { document.querySelectorAll('.tab-content, .tab-btn').forEach(x => x.classList.remove('active')); document.getElementById(n).classList.add('active'); e.currentTarget.classList.add('active'); }
+        function calcLP() { const l = parseInt(document.getElementById('lpLeve').value)||1, p = parseInt(document.getElementById('lpPague').value)||1, u = parseFloat(document.getElementById('lpUnit').value.replace(',','.'))||0; document.getElementById('lpFinal').value = ((p*u)/l).toLocaleString('pt-br',{minimumFractionDigits:2}); }
     </script>
 </body>
 </html>
