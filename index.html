@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>SOUZA FARMA - OFICIAL ONLINE</title>
+    <title>SOUZA FARMA - SISTEMA v57</title>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -12,38 +12,28 @@
         :root { --primary: #e30613; --secondary: #fff200; }
         body { font-family: 'Arial Black', sans-serif; background: #cbd5e1; padding: 20px; }
         .no-print { background: white; padding: 25px; border-radius: 12px; max-width: 1000px; margin: 0 auto 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-        
-        /* CABEÇALHO E CONTROLES DE PLANILHA */
         .header-main { text-align:center; margin-bottom: 20px; }
         .admin-zone { background:#f1f5f9; padding:15px; border-radius:10px; border:2px dashed #94a3b8; display:flex; gap:10px; align-items:center; justify-content:center; flex-wrap:wrap; margin-bottom: 20px; }
-        
-        /* BOTÕES */
         .btn { padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: 900; border: none; text-transform: uppercase; }
         .btn-import { background: #1e293b; color: white; }
         .btn-danger { background: #dc2626; color: white; }
         .btn-add { background: #16a34a; color: white; flex: 2; }
         .btn-print { background: var(--primary); color: white; }
         .btn-clear { background: #64748b; color: white; }
-
         .tabs { display: flex; gap: 5px; margin-bottom: 15px; }
         .tab-btn { padding: 12px; background: #e2e8f0; border: none; border-radius: 8px 8px 0 0; cursor: pointer; font-weight: bold; }
         .tab-btn.active { background: var(--primary); color: white; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-        
         .grid-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
         input, select { padding: 12px; border: 2px solid #cbd5e1; border-radius: 8px; font-weight: bold; width: 100%; box-sizing: border-box; }
-        
-        #suggestions, #suggestionsLP { position: absolute; width: 100%; background: white; border: 1px solid #94a3b8; z-index: 2000; display: none; }
-        .suggestion-item { padding: 12px; cursor: pointer; border-bottom: 1px solid #eee; }
-
-        /* DESIGN ETIQUETAS */
+        #suggestions, #suggestionsLP { position: absolute; width: 100%; background: white; border: 1px solid #94a3b8; z-index: 2000; display: none; max-height: 200px; overflow-y: auto; }
+        .suggestion-item { padding: 12px; cursor: pointer; border-bottom: 1px solid #eee; text-align: left; }
+        #printArea { background: white; width: 100%; }
         .tag { background: white; border: 2px solid #000; position: relative; text-align: center; page-break-inside: avoid; margin-bottom: 10px; box-sizing: border-box; display: flex; flex-direction: column; }
         .size-70mm { width: 70mm; padding: 5px; }
         .size-A4P { width: 21cm; height: 29.7cm; padding: 1.5cm; margin: 0 auto 10px !important; }
-        .promo-tag-lp { background: white; border: 12px solid var(--primary); width: 21cm; height: 28cm; padding: 0.5cm; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; page-break-after: always; }
         .delete-btn { position: absolute; top: 2px; left: 2px; background: #000; color: #fff; border-radius: 50%; width: 30px; height: 30px; border: none; cursor: pointer; z-index: 100; }
-
         @media print { .no-print, .delete-btn { display: none !important; } body { padding: 0; background: white; } }
     </style>
 </head>
@@ -71,8 +61,8 @@
         <div class="admin-zone">
             <div id="excelStatus" style="font-weight:bold; color:#1e293b; margin-right: 15px;">SINCRO: VERIFICANDO...</div>
             <input type="file" id="fileInput" accept=".xlsx, .xls" style="display:none;" onchange="handleExcel(event)">
-            <button class="btn btn-import" onclick="document.getElementById('fileInput').click()">ATUALIZAR PRODUTOS (EXCEL)</button>
-            <button class="btn btn-danger" onclick="clearDatabase()">APAGAR BANCO</button>
+            <button class="btn btn-import" onclick="document.getElementById('fileInput').click()">SUBIR NOVA PLANILHA</button>
+            <button class="btn btn-danger" onclick="clearDatabase()">LIMPAR TUDO</button>
         </div>
 
         <div class="tabs">
@@ -83,8 +73,8 @@
         <div id="etiquetas" class="tab-content active">
             <div class="grid-form">
                 <div class="field" style="grid-column: span 2;">
-                    <label>BUSCAR PRODUTO (NOME OU BIPE)</label>
-                    <input type="text" id="searchField" placeholder="Digite aqui...">
+                    <label>BUSCAR PRODUTO</label>
+                    <input type="text" id="searchField" placeholder="Digite nome ou bipe código...">
                     <div id="suggestions"></div>
                 </div>
                 <div class="field"><label>PREÇO POR</label><input type="text" id="pNew" placeholder="0,00"></div>
@@ -108,7 +98,7 @@
                     <div id="suggestionsLP"></div>
                 </div>
                 <div class="field"><label>VALOR UNIT.</label><input type="text" id="lpUnit" oninput="calcLP()" placeholder="0,00"></div>
-                <div class="field"><label>SAI POR (KIT)</label><input type="text" id="lpFinal" readonly></div>
+                <div class="field"><label>PREÇO UNIT. NO KIT</label><input type="text" id="lpFinal" readonly></div>
                 <div class="btn-group"><button class="btn btn-add" onclick="addLPTag()">GERAR CARTAZ</button></div>
             </div>
         </div>
@@ -120,37 +110,55 @@
         let dbLocal = [];
         let selectedItem = null;
 
-        // Conecta ao Firebase
+        // Escuta o Firebase em tempo real
         database.ref('produtos').on('value', (s) => {
             const val = s.val();
             dbLocal = val ? Object.values(val) : [];
             document.getElementById('excelStatus').innerText = val ? `✅ ONLINE (${dbLocal.length} ITENS)` : "⚠️ BANCO VAZIO";
         });
 
-        // Processar Excel
+        // Função de Processamento Reforçada
         function handleExcel(e) {
+            const file = e.target.files[0];
+            if(!file) return;
             const reader = new FileReader();
-            reader.onload = (evt) => {
-                const data = new Uint8Array(evt.target.result);
-                const workbook = XLSX.read(data, {type: 'array'});
-                const json = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
-                database.ref('produtos').set(json).then(() => alert("Sincronizado!"));
+            reader.onload = function(evt) {
+                try {
+                    const data = new Uint8Array(evt.target.result);
+                    const workbook = XLSX.read(data, {type: 'array'});
+                    const firstSheet = workbook.SheetNames[0];
+                    const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[firstSheet], {header: 1});
+                    
+                    // Limpa e formata os dados para garantir que campos vazios não quebrem o código
+                    const formattedData = jsonData.filter(row => row.length > 0).map(row => ({
+                        0: row[0] || "S/C", // Código
+                        1: row[1] || "",    // Referência
+                        2: row[2] || "PRODUTO SEM NOME" // Nome
+                    }));
+
+                    database.ref('produtos').set(formattedData)
+                        .then(() => {
+                            alert("Planilha processada com sucesso!");
+                            document.getElementById('fileInput').value = "";
+                        });
+                } catch(err) {
+                    alert("Erro ao processar: certifique-se que o arquivo é um Excel .xlsx comum.");
+                }
             };
-            reader.readAsArrayBuffer(e.target.files[0]);
+            reader.readAsArrayBuffer(file);
         }
 
-        function clearDatabase() { if(confirm("Apagar banco?")) database.ref('produtos').remove(); }
+        function clearDatabase() { if(confirm("Deseja apagar todos os produtos?")) database.ref('produtos').remove(); }
         function clearScreen() { document.getElementById('thermalArea').innerHTML = ""; document.getElementById('posterArea').innerHTML = ""; }
 
-        // Pesquisa
         function search(id, sug) {
             document.getElementById(id).addEventListener('input', (e) => {
                 const v = e.target.value.toUpperCase();
                 const div = document.getElementById(sug);
                 if(v.length < 2) { div.style.display = 'none'; return; }
-                const matches = dbLocal.filter(i => String(Object.values(i)[0]).includes(v) || String(Object.values(i)[2]).toUpperCase().includes(v));
+                const matches = dbLocal.filter(i => String(i[0]).includes(v) || String(i[2]).toUpperCase().includes(v));
                 if(matches.length > 0) {
-                    div.innerHTML = matches.slice(0,10).map(m => `<div class="suggestion-item" onclick="select('${Object.values(m)[0]}','${Object.values(m)[2]}','${id}','${sug}')"><b>${Object.values(m)[0]}</b> - ${Object.values(m)[2]}</div>`).join('');
+                    div.innerHTML = matches.slice(0,10).map(m => `<div class="suggestion-item" onclick="select('${m[0]}','${m[2]}','${id}','${sug}')"><b>${m[0]}</b> - ${m[2]}</div>`).join('');
                     div.style.display = 'block';
                 }
             });
