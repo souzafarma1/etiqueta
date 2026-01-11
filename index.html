@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>SOUZA FARMA - SISTEMA v57</title>
+    <title>SOUZA FARMA - SISTEMA v58</title>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -61,7 +61,7 @@
         <div class="admin-zone">
             <div id="excelStatus" style="font-weight:bold; color:#1e293b; margin-right: 15px;">SINCRO: VERIFICANDO...</div>
             <input type="file" id="fileInput" accept=".xlsx, .xls" style="display:none;" onchange="handleExcel(event)">
-            <button class="btn btn-import" onclick="document.getElementById('fileInput').click()">SUBIR NOVA PLANILHA</button>
+            <button class="btn btn-import" onclick="document.getElementById('fileInput').click()">ATUALIZAR PLANILHA</button>
             <button class="btn btn-danger" onclick="clearDatabase()">LIMPAR TUDO</button>
         </div>
 
@@ -73,15 +73,13 @@
         <div id="etiquetas" class="tab-content active">
             <div class="grid-form">
                 <div class="field" style="grid-column: span 2;">
-                    <label>BUSCAR PRODUTO</label>
-                    <input type="text" id="searchField" placeholder="Digite nome ou bipe código...">
+                    <label>PRODUTO</label>
+                    <input type="text" id="searchField" placeholder="Busque aqui...">
                     <div id="suggestions"></div>
                 </div>
-                <div class="field"><label>PREÇO POR</label><input type="text" id="pNew" placeholder="0,00"></div>
-                <div class="field"><label>TAMANHO</label>
-                    <select id="pSize"><option value="size-70mm">Térmica 70mm</option><option value="size-A4P">Cartaz A4</option></select>
-                </div>
-                <div class="field"><label>QUANTIDADE</label><input type="number" id="pQty" value="1"></div>
+                <div class="field"><label>PREÇO</label><input type="text" id="pNew" placeholder="0,00"></div>
+                <div class="field"><label>TAMANHO</label><select id="pSize"><option value="size-70mm">Térmica 70mm</option><option value="size-A4P">Cartaz A4</option></select></div>
+                <div class="field"><label>QTD</label><input type="number" id="pQty" value="1"></div>
                 <div class="btn-group">
                     <button class="btn btn-add" onclick="addTag()">ADICIONAR</button>
                     <button class="btn btn-print" onclick="window.print()">IMPRIMIR</button>
@@ -92,13 +90,9 @@
 
         <div id="promocoes" class="tab-content">
             <div class="grid-form">
-                <div class="field" style="grid-column: span 2;">
-                    <label>PRODUTO PROMOÇÃO</label>
-                    <input type="text" id="lpProd" placeholder="Busque o produto...">
-                    <div id="suggestionsLP"></div>
-                </div>
+                <div class="field" style="grid-column: span 2;"><label>BUSCAR PRODUTO</label><input type="text" id="lpProd" placeholder="Busque..."><div id="suggestionsLP"></div></div>
                 <div class="field"><label>VALOR UNIT.</label><input type="text" id="lpUnit" oninput="calcLP()" placeholder="0,00"></div>
-                <div class="field"><label>PREÇO UNIT. NO KIT</label><input type="text" id="lpFinal" readonly></div>
+                <div class="field"><label>KIT SAI POR</label><input type="text" id="lpFinal" readonly></div>
                 <div class="btn-group"><button class="btn btn-add" onclick="addLPTag()">GERAR CARTAZ</button></div>
             </div>
         </div>
@@ -110,45 +104,38 @@
         let dbLocal = [];
         let selectedItem = null;
 
-        // Escuta o Firebase em tempo real
         database.ref('produtos').on('value', (s) => {
             const val = s.val();
             dbLocal = val ? Object.values(val) : [];
             document.getElementById('excelStatus').innerText = val ? `✅ ONLINE (${dbLocal.length} ITENS)` : "⚠️ BANCO VAZIO";
         });
 
-        // Função de Processamento Reforçada
+        // FUNÇÃO DE LEITURA BINÁRIA (A MAIS ESTÁVEL)
         function handleExcel(e) {
             const file = e.target.files[0];
-            if(!file) return;
             const reader = new FileReader();
             reader.onload = function(evt) {
-                try {
-                    const data = new Uint8Array(evt.target.result);
-                    const workbook = XLSX.read(data, {type: 'array'});
-                    const firstSheet = workbook.SheetNames[0];
-                    const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[firstSheet], {header: 1});
-                    
-                    // Limpa e formata os dados para garantir que campos vazios não quebrem o código
-                    const formattedData = jsonData.filter(row => row.length > 0).map(row => ({
-                        0: row[0] || "S/C", // Código
-                        1: row[1] || "",    // Referência
-                        2: row[2] || "PRODUTO SEM NOME" // Nome
-                    }));
+                const data = evt.target.result;
+                const workbook = XLSX.read(data, {type: 'binary'});
+                const sheet = workbook.Sheets[workbook.SheetNames[0]];
+                const json = XLSX.utils.sheet_to_json(sheet, {header: 1});
+                
+                // Formata para o Firebase (Coluna A e Coluna C)
+                const finalData = json.filter(r => r.length > 0).map(r => ({
+                    0: r[0] || "0000",
+                    1: r[1] || "",
+                    2: r[2] || "SEM NOME"
+                }));
 
-                    database.ref('produtos').set(formattedData)
-                        .then(() => {
-                            alert("Planilha processada com sucesso!");
-                            document.getElementById('fileInput').value = "";
-                        });
-                } catch(err) {
-                    alert("Erro ao processar: certifique-se que o arquivo é um Excel .xlsx comum.");
-                }
+                database.ref('produtos').set(finalData).then(() => {
+                    alert("Planilha carregada!");
+                    document.getElementById('fileInput').value = "";
+                });
             };
-            reader.readAsArrayBuffer(file);
+            reader.readAsBinaryString(file);
         }
 
-        function clearDatabase() { if(confirm("Deseja apagar todos os produtos?")) database.ref('produtos').remove(); }
+        function clearDatabase() { if(confirm("Apagar banco?")) database.ref('produtos').remove(); }
         function clearScreen() { document.getElementById('thermalArea').innerHTML = ""; document.getElementById('posterArea').innerHTML = ""; }
 
         function search(id, sug) {
