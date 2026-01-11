@@ -36,6 +36,8 @@
         .price-box { background: var(--secondary); padding: 4px; border-top: 1px solid #000; border-bottom: 1px solid #000; display: flex; justify-content: center; align-items: center; }
         .main-price { color: var(--primary); font-weight: 900; display: flex; align-items: flex-start; line-height: 0.85; font-size: 40px; }
         .label-por { font-size: 10px; margin-right: 2px; align-self: center; color: #000; }
+
+        /* ABA PROMOÇÃO - AJUSTADO PARA PÁGINA ÚNICA */
         .promo-tag-lp { background: white; border: 12px solid var(--primary); width: 21cm; height: 28.2cm; padding: 0.3cm; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; color: #000; margin: 0 auto 5px; page-break-after: always; }
         .lp-header-box { background: #000; color: #fff; width: calc(100% + 0.6cm); margin-top: -0.3cm; padding: 12px 0; margin-bottom: 10px; }
         .lp-header-box h1 { font-size: 110px; margin: 0; line-height: 0.8; letter-spacing: -3px; }
@@ -48,6 +50,7 @@
         .lp-barcode-container { background: white; padding: 2px 0; width: 100%; display: flex; justify-content: center; margin-top: auto; }
         .lp-barcode-container svg { height: 75px; max-width: 75%; }
         .lp-footer { border-top: 3px solid #000; width: 100%; padding-top: 5px; font-size: 18px; font-weight: bold; padding-bottom: 10px; }
+
         .btn-group { grid-column: span 2; display: flex; flex-wrap: wrap; gap: 10px; margin-top: 5px; }
         .btn-add { background: #16a34a; color: white; border: none; padding: 15px; border-radius: 6px; cursor: pointer; font-weight: 900; flex: 2; font-size: 16px; }
         .btn-print { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 6px; cursor: pointer; font-weight: 900; flex: 1; }
@@ -81,7 +84,11 @@
             <button class="tab-btn" onclick="openTab(event, 'promocoes')">PROMOÇÕES (LEVE/PAGUE)</button>
         </div>
         <div id="etiquetas" class="tab-content active">
-            <div style="background:#f8fafc; padding:12px; border-radius:8px; margin-bottom:15px; border:1px solid #cbd5e1;"><label>📂 IMPORTAR EXCEL:</label><input type="file" onchange="handleExcel(event)"><span id="excelStatus"></span></div>
+            <div style="background:#f8fafc; padding:12px; border-radius:8px; margin-bottom:15px; border:1px solid #cbd5e1;">
+                <label>📂 IMPORTAR PRODUTOS (EXCEL):</label>
+                <input type="file" onchange="handleExcel(event)">
+                <span id="excelStatus"></span>
+            </div>
             <div class="grid-form">
                 <div class="field" style="grid-column: span 2;"><label>PRODUTO (BIPE OU BUSQUE)</label><input type="text" id="searchField" class="nav" placeholder="Digite ou bipe..." autocomplete="off"><div id="suggestions"></div></div>
                 <div class="field"><label>PREÇO DE</label><input type="text" id="pOld" class="nav" placeholder="0,00"></div>
@@ -118,12 +125,18 @@
             document.getElementById('excelStatus').innerText = `✅ ${dbLocal.length} PRODUTOS ONLINE`;
         });
 
+        // FUNÇÃO PARA PROCESSAR PLANILHA E ENVIAR AO FIREBASE 
         function handleExcel(e) {
             const reader = new FileReader();
             reader.onload = (evt) => {
-                const data = XLSX.utils.sheet_to_json(XLSX.read(evt.target.result, { type: 'binary' }).Sheets[XLSX.read(evt.target.result, { type: 'binary' }).SheetNames[0]]);
+                const workbook = XLSX.read(evt.target.result, { type: 'binary' });
+                const data = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+                
+                // Envia para o Realtime Database
                 database.ref('produtos').set(data).then(() => {
                     alert("Planilha processada e enviada com sucesso!");
+                }).catch(err => {
+                    alert("Erro ao enviar: " + err.message);
                 });
             };
             reader.readAsBinaryString(e.target.files[0]);
@@ -157,7 +170,7 @@
             document.getElementById(inputId).value = name; document.getElementById(suggestionId).style.display = 'none'; setTimeout(() => document.getElementById(focusId).focus(), 50); 
         }
 
-        document.querySelectorAll('.nav, .navLP').forEach((n, i, a) => n.addEventListener('keydown', (e) => { if(e.key === 'Enter') { e.preventDefault(); if(i < a.length-1) a[i+1].focus(); } }));
+        document.querySelectorAll('.nav, .navLP').forEach((n, i, a) => n.addEventListener('keydown', (e) => { if(e.key === 'Enter') { e.preventDefault(); if(i < a.length-1) a[i+1].focus(); else { if(n.classList.contains('nav')) addTag(); else addLPTag(); } } }));
 
         function addTag() {
             const name = document.getElementById('searchField').value, oldP = document.getElementById('pOld').value, newP = document.getElementById('pNew').value, size = document.getElementById('pSize').value, promo = document.getElementById('pPromo').value, qty = parseInt(document.getElementById('pQty').value);
@@ -166,7 +179,8 @@
             let area = (size === 'size-70mm') ? document.getElementById('thermalArea') : document.getElementById('posterArea');
             for (let i = 0; i < qty; i++) {
                 const tagId = "bc-" + Date.now() + i, div = document.createElement('div'); div.className = `tag ${size}`;
-                div.innerHTML = `<button class="delete-btn" onclick="this.parentElement.remove()">X</button><div class="farmacia-header"><img src="logo.png" class="logo-interna" onerror="this.outerHTML='<b>SOUZA FARMA</b>'"><br>SOUZA FARMA - FARMÁCIA DO TRABALHADOR</div>${promo ? `<div class="promo-banner">${promo}</div>` : ''}<div class="tag-title">${name.toUpperCase()}</div><div class="info-row"><div class="old-price-label">${(oldP && oldP !== '0,00') ? 'DE R$ '+oldP : ''}</div>${perc > 0 ? `<div class="perc-badge-outer">-${perc}%</div>` : ''}</div><div class="price-box"><span class="label-por">POR</span><div class="main-price"><small style="font-size:0.35em;">R$</small>${reais}<small style="font-size:0.4em; text-decoration:underline;">,${cents||'00'}</small></div></div><div class="footer-barcode"><svg id="${tagId}"></svg></div>`;
+                const headerContent = `<img src="logo.png" class="logo-interna" onerror="this.outerHTML='<b>SOUZA FARMA</b>'"><br>SOUZA FARMA - FARMÁCIA DO TRABALHADOR`;
+                div.innerHTML = `<button class="delete-btn" onclick="this.parentElement.remove()">X</button><div class="farmacia-header">${headerContent}</div>${promo ? `<div class="promo-banner">${promo}</div>` : ''}<div class="tag-title">${name.toUpperCase()}</div><div class="info-row"><div class="old-price-label">${(oldP && oldP !== '0,00') ? 'DE R$ '+oldP : ''}</div>${perc > 0 ? `<div class="perc-badge-outer">-${perc}%</div>` : ''}</div><div class="price-box"><span class="label-por">POR</span><div class="main-price"><small style="font-size:0.35em;">R$</small>${reais}<small style="font-size:0.4em; text-decoration:underline;">,${cents||'00'}</small></div></div><div class="footer-barcode"><svg id="${tagId}"></svg></div>`;
                 area.appendChild(div); JsBarcode(`#${tagId}`, barcode, { format: "CODE128", width: size.includes('A')?3:1.2, height: size.includes('A')?120:35, displayValue: true, fontSize: size.includes('A')?40:10 });
             }
         }
