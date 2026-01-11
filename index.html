@@ -2,47 +2,39 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Souza Farma v42 - Edição Logo</title>
+    <title>Souza Farma v53 - Preço De Ajustado</title>
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root { --primary: #e30613; --secondary: #fff200; }
         body { font-family: 'Arial Black', sans-serif; background: #cbd5e1; padding: 20px; margin: 0; }
-        
-        /* Painel de Controle */
         .no-print { background: white; padding: 20px; border-radius: 12px; max-width: 1100px; margin: 0 auto 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .tabs { display: flex; gap: 5px; margin-bottom: 15px; border-bottom: 2px solid #cbd5e1; }
+        .tab-btn { padding: 12px 20px; border: none; background: #e2e8f0; cursor: pointer; border-radius: 8px 8px 0 0; font-weight: 900; }
+        .tab-btn.active { background: var(--primary); color: white; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
         .grid-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
         .field { display: flex; flex-direction: column; position: relative; }
         label { font-size: 10px; font-weight: bold; color: #444; margin-bottom: 4px; }
         input, select { padding: 10px; border: 2px solid #ccc; border-radius: 6px; font-weight: bold; }
-
-        .suggestions { position: absolute; top: 100%; left: 0; right: 0; background: white; border: 2px solid #000; z-index: 1000; max-height: 200px; overflow-y: auto; }
-        .suggestion-item { padding: 10px; cursor: pointer; border-bottom: 1px solid #eee; font-size: 12px; font-weight: bold; }
-        .suggestion-item.selected { background: #3b82f6; color: white; }
-
         .btn-group { grid-column: span 2; display: flex; flex-wrap: wrap; gap: 10px; margin-top: 5px; }
         .btn-add { background: #16a34a; color: white; border: none; padding: 15px; border-radius: 6px; cursor: pointer; font-weight: 900; flex: 2; font-size: 16px; }
         .btn-print { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 6px; cursor: pointer; font-weight: 900; flex: 1; }
-        .btn-pdf { background: #2563eb; color: white; border: none; padding: 15px; border-radius: 6px; cursor: pointer; font-weight: 900; flex: 1; }
         .btn-clear { background: #64748b; color: white; border: none; padding: 15px; border-radius: 6px; cursor: pointer; font-weight: 900; flex: 1; }
 
-        /* Área de Impressão */
         #printArea { display: block; width: 100%; max-width: 21cm; margin: 0 auto; }
         .gondola-container { display: flex; flex-wrap: wrap; gap: 2px; justify-content: flex-start; page-break-after: always; }
-
         .tag { background: white; border: 2px solid #000; position: relative; overflow: hidden; display: flex; flex-direction: column; box-sizing: border-box; text-align: center; page-break-inside: avoid; }
         .farmacia-header { font-size: 7px; font-weight: 900; color: #000; padding: 4px; border-bottom: 1px solid #eee; text-transform: uppercase; display: flex; justify-content: center; align-items: center; }
-
-        /* Estilo da Logo Interna */
         .logo-interna { max-height: 80px; width: auto; padding: 10px; }
 
-        /* Tamanhos */
         .size-6x4 { width: 6cm; height: 4cm; margin: 1px; }
         .size-8x6 { width: 8cm; height: 6cm; margin: 1px; }
         .size-A5 { width: 14.8cm; height: 21cm; padding: 1.2cm; page-break-after: always; margin: 0 auto 10px !important; }
         .size-A4P { width: 21cm; height: 29.7cm; padding: 1.5cm; page-break-after: always; margin: 0 auto 10px !important; }
-        .size-70mm { width: 70mm; padding-left: 0.3cm; padding-right: 0.3cm; border: 1px dashed #999; margin: 0 0 5px 0 !important; display: flex !important; page-break-after: auto !important; }
+        .size-70mm { width: 70mm; padding-left: 0.3cm; padding-right: 0.3cm; border: 1px dashed #999; margin: 0 0 5px 0 !important; display: flex !important; }
 
         .tag-title { flex-grow: 1; display: flex; align-items: center; justify-content: center; font-weight: 900; padding: 4px; line-height: 1.1; text-transform: uppercase; font-size: 11px; }
         .size-A5 .tag-title { font-size: 45px; min-height: 120px; }
@@ -56,6 +48,12 @@
         .size-A5 .perc-badge-outer, .size-A4P .perc-badge-outer { font-size: 40px; padding: 15px 35px; margin: 10px auto; }
 
         .price-box { background: var(--secondary); padding: 4px; border-top: 1px solid #000; border-bottom: 1px solid #000; display: flex; flex-direction: column; align-items: center; }
+        
+        /* Ajuste do Preço De para A4/A5 */
+        .old-price { font-size: 10px; font-weight: bold; text-decoration: line-through; }
+        .size-A5 .old-price { font-size: 32px; }
+        .size-A4P .old-price { font-size: 45px; }
+
         .main-price { color: var(--primary); font-weight: 900; display: flex; align-items: flex-start; line-height: 0.85; font-size: 40px; }
         .size-A5 .main-price { font-size: 170px; }
         .size-A4P .main-price { font-size: 240px; }
@@ -65,190 +63,128 @@
         .size-A5 .footer-barcode { height: 140px; }
         .size-A4P .footer-barcode { height: 180px; }
 
-        .delete-btn { position: absolute; top: 1px; left: 1px; background: #000; color: #fff; border: none; cursor: pointer; border-radius: 50%; width: 18px; height: 18px; font-weight: bold; z-index: 100; display: flex; align-items: center; justify-content: center; font-size: 10px; }
-        
-        @media print {
-            .no-print, .delete-btn { display: none !important; }
-            body { background: white; padding: 0; }
-            #printArea { width: 100%; max-width: 21cm; margin: 0; }
-            .tag { border: 1px solid #000; }
-            .size-70mm { border: none; padding-left: 0.3cm; width: 70mm; margin: 0 !important; }
-            @page { margin: 0.5cm; }
-        }
+        .promo-tag-lp { background: white; border: 12px solid var(--primary); width: 21cm; height: 29.7cm; padding: 0.8cm; page-break-after: always; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; color: #000; margin: 0 auto 10px; }
+        .lp-header-box { background: #000; color: #fff; width: calc(100% + 1.6cm); margin-top: -0.8cm; padding: 15px 0; margin-bottom: 20px; }
+        .lp-header-box h1 { font-size: 110px; margin: 0; line-height: 0.8; letter-spacing: -3px; }
+        .lp-header-box span { font-size: 35px; display: block; letter-spacing: 10px; font-weight: 900; }
+        .lp-prod-name { font-size: 60px; height: 180px; display: flex; align-items: center; justify-content: center; text-transform: uppercase; font-weight: 900; margin: 10px 0; }
+        .lp-leve-pague { display: flex; gap: 20px; margin: 15px 0; }
+        .lp-box { padding: 15px 35px; border-radius: 10px; font-size: 55px; font-weight: 900; }
+        .lp-yellow-box { background: var(--secondary); border: 4px solid #000; padding: 20px; margin: 15px 0; width: 95%; }
+        .lp-yellow-box b { font-size: 110px; color: var(--primary); }
+        .lp-footer { margin-top: auto; border-top: 3px solid #000; width: 100%; padding-top: 15px; font-size: 22px; font-weight: bold; }
+        .delete-btn { position: absolute; top: 1px; left: 1px; background: #000; color: #fff; border: none; cursor: pointer; border-radius: 50%; width: 20px; height: 20px; font-weight: bold; z-index: 1000; }
+
+        @media print { .no-print, .delete-btn { display: none !important; } body { background: white; padding: 0; } @page { margin: 0; size: A4; } }
     </style>
 </head>
 <body>
-
     <div class="no-print">
-        <div style="text-align:center; margin-bottom:15px;">
-            <img src="logo.png" alt="SOUZA FARMA" style="max-height: 80px; width: auto;" onerror="this.style.display='none'">
-            <h3 style="color:var(--primary); margin: 10px 0;">SISTEMA DE ETIQUETAS v42</h3>
+        <div class="tabs">
+            <button class="tab-btn active" onclick="openTab(event, 'etiquetas')">ETIQUETAS PADRÃO</button>
+            <button class="tab-btn" onclick="openTab(event, 'promocoes')">PROMOÇÕES (LEVE/PAGUE)</button>
         </div>
-        
-        <div style="background:#f8fafc; padding:12px; border-radius:8px; margin-bottom:15px; border:1px solid #cbd5e1; display: flex; align-items: center; gap: 10px;">
-            <label>📂 EXCEL:</label>
-            <input type="file" id="excelFile" accept=".xlsx, .xls" onchange="handleExcel(event)">
-            <span id="excelStatus" style="color:green; font-weight:bold;"></span>
+        <div id="etiquetas" class="tab-content active">
+            <div style="text-align:center; margin-bottom:15px;"><img src="logo.png" style="max-height: 80px; width: auto;" onerror="this.style.display='none'"><h3 style="color:var(--primary); margin: 10px 0;">SOUZA FARMA - FARMÁCIA DO TRABALHADOR</h3></div>
+            <div style="background:#f8fafc; padding:12px; border-radius:8px; margin-bottom:15px; border:1px solid #cbd5e1; display: flex; align-items: center; gap: 10px;"><label>📂 EXCEL:</label><input type="file" onchange="handleExcel(event)"><span id="excelStatus" style="color:green; font-weight:bold;"></span></div>
+            <div class="grid-form">
+                <div class="field" style="grid-column: span 2;"><label>PRODUTO (BIPE O CÓDIGO)</label><input type="text" id="searchField" class="nav" placeholder="Bipe aqui..."></div>
+                <div class="field"><label>PREÇO DE</label><input type="text" id="pOld" class="nav" placeholder="0,00"></div>
+                <div class="field"><label>PREÇO POR</label><input type="text" id="pNew" class="nav" placeholder="0,00"></div>
+                <div class="field"><label>TAMANHO</label><select id="pSize" class="nav"><option value="size-70mm">Térmica (70mm)</option><option value="size-6x4">Gôndola (6x4)</option><option value="size-8x6">Gôndola (8x6)</option><option value="size-A5">Cartaz (A5)</option><option value="size-A4P">Cartaz (A4)</option></select></div>
+                <div class="field"><label>CAMPANHA</label><select id="pPromo" class="nav"><option value="OFERTA">OFERTA</option><option value="IMBATÍVEL">IMBATÍVEL</option><option value="SÓ HOJE">SÓ HOJE</option><option value="">Sem Frase</option></select></div>
+                <div class="field"><label>QTD</label><input type="number" id="pQty" class="nav" value="1"></div>
+                <div class="btn-group"><button class="btn-add" id="btnAddTag" onclick="addTag()">ADICIONAR</button><button class="btn-print" onclick="window.print()">IMPRIMIR</button><button class="btn-clear" onclick="clearAll()">LIMPAR TUDO</button></div>
+            </div>
         </div>
-
-        <div class="grid-form">
-            <div class="field" style="grid-column: span 2;">
-                <label>PRODUTO (BIPE O CÓDIGO)</label>
-                <input type="text" id="searchField" class="nav" placeholder="Bipe aqui..." autocomplete="off">
-                <div id="suggestions" class="suggestions" style="display:none;"></div>
-            </div>
-            <div class="field"><label>PREÇO DE</label><input type="text" id="pOld" class="nav" placeholder="0,00"></div>
-            <div class="field"><label>PREÇO POR</label><input type="text" id="pNew" class="nav" placeholder="0,00"></div>
-            <div class="field">
-                <label>TAMANHO</label>
-                <select id="pSize" class="nav">
-                    <option value="size-70mm">Térmica (70mm)</option>
-                    <option value="size-6x4">Gôndola (6x4)</option>
-                    <option value="size-8x6">Gôndola (8x6)</option>
-                    <option value="size-A5">Cartaz (A5)</option>
-                    <option value="size-A4P">Cartaz (A4)</option>
-                </select>
-            </div>
-            <div class="field">
-                <label>CAMPANHA</label>
-                <select id="pPromo" class="nav">
-                    <option value="OFERTA">OFERTA</option>
-                    <option value="IMBATÍVEL">IMBATÍVEL</option>
-                    <option value="SÓ HOJE">SÓ HOJE</option>
-                    <option value="">Sem Frase</option>
-                </select>
-            </div>
-            <div class="field"><label>QTD</label><input type="number" id="pQty" class="nav" value="1" min="1"></div>
-            <div class="btn-group">
-                <button class="btn-add" onclick="addTag()">ADICIONAR</button>
-                <button class="btn-print" onclick="window.print()">IMPRIMIR</button>
-                <button class="btn-pdf" onclick="generatePDF()">GERAR PDF</button>
-                <button class="btn-clear" onclick="clearAll()">LIMPAR TUDO</button>
+        <div id="promocoes" class="tab-content">
+            <div style="text-align:center; margin-bottom:15px;"><h3 style="color:var(--primary);">SOUZA FARMA - FARMÁCIA DO TRABALHADOR</h3></div>
+            <div class="grid-form">
+                <div class="field" style="grid-column: span 2;"><label>PRODUTO (BIPE O CÓDIGO)</label><input type="text" id="lpProd" class="navLP" placeholder="Bipe ou digite..."></div>
+                <div class="field"><label>LEVE</label><input type="number" id="lpLeve" class="navLP" value="3" oninput="calcLP()"></div>
+                <div class="field"><label>PAGUE</label><input type="number" id="lpPague" class="navLP" value="2" oninput="calcLP()"></div>
+                <div class="field"><label>VALOR UN. (R$)</label><input type="text" id="lpUnit" class="navLP" placeholder="0,00" oninput="calcLP()"></div>
+                <div class="field"><label>VALIDADE</label><input type="text" id="lpData" class="navLP" placeholder="Validade"></div>
+                <div class="field"><label>TOTAL KIT (R$)</label><input type="text" id="lpTotal" readonly></div>
+                <div class="field"><label>SAI POR (R$)</label><input type="text" id="lpFinal" readonly></div>
+                <div class="btn-group"><button class="btn-add" id="btnAddLP" onclick="addLPTag()">GERAR CARTAZ</button><button class="btn-print" onclick="window.print()">IMPRIMIR</button></div>
             </div>
         </div>
     </div>
-
-    <div id="printArea">
-        <div id="thermalArea"></div>
-        <div id="gondolaArea" class="gondola-container"></div>
-        <div id="posterArea"></div>
-    </div>
-
+    <div id="printArea"><div id="thermalArea"></div><div id="gondolaArea" class="gondola-container"></div><div id="posterArea"></div></div>
     <script>
         let db = JSON.parse(localStorage.getItem('souza_farma_db')) || [];
         if(db.length > 0) document.getElementById('excelStatus').innerText = `✅ ${db.length} SALVOS`;
-
         let selectedItem = null;
+
         const searchInput = document.getElementById('searchField');
-        const suggestBox = document.getElementById('suggestions');
-
-        searchInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                const exact = db.find(i => String(Object.values(i)[0]) === searchInput.value);
-                if(exact) { selectProduct(Object.values(exact)[2], Object.values(exact)[0]); }
-                document.getElementById('pOld').focus();
-                e.preventDefault();
-            }
-        });
-
         searchInput.addEventListener('input', (e) => {
             const val = e.target.value;
-            if (val.length < 3) { suggestBox.style.display = 'none'; return; }
-            const filtered = db.filter(item => Object.values(item).some(v => String(v).toLowerCase().includes(val.toLowerCase()))).slice(0, 8);
-            suggestBox.innerHTML = filtered.map(item => `<div class="suggestion-item" onclick="selectProduct('${Object.values(item)[2]}', '${Object.values(item)[0]}')">${Object.values(item)[2]} - ${Object.values(item)[0]}</div>`).join('');
-            suggestBox.style.display = filtered.length ? 'block' : 'none';
+            const exact = db.find(i => String(Object.values(i)[0]) === val);
+            if(exact) { 
+                selectedItem = exact; searchInput.value = Object.values(exact)[2];
+                setTimeout(() => document.getElementById('pOld').focus(), 50);
+            }
         });
-
         document.querySelectorAll('.nav').forEach((input, index, arr) => {
             input.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' && input.id !== 'searchField') {
-                    if (index < arr.length - 1) arr[index + 1].focus();
-                    else addTag();
+                if (e.key === 'Enter') {
                     e.preventDefault();
+                    if (input.id === 'searchField') return;
+                    if (index < arr.length - 1) arr[index + 1].focus();
+                    else document.getElementById('btnAddTag').click();
                 }
             });
         });
 
-        function handleExcel(e) {
-            const file = e.target.files[0];
-            const reader = new FileReader();
-            reader.onload = function(evt) {
-                const workbook = XLSX.read(evt.target.result, { type: 'binary' });
-                db = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
-                localStorage.setItem('souza_farma_db', JSON.stringify(db));
-                document.getElementById('excelStatus').innerText = `✅ ${db.length} SALVOS`;
-            };
-            reader.readAsBinaryString(file);
-        }
+        const lpSearch = document.getElementById('lpProd');
+        lpSearch.addEventListener('input', (e) => {
+            const val = e.target.value;
+            const res = db.find(i => String(Object.values(i)[0]) === val);
+            if(res) { lpSearch.value = Object.values(res)[2]; setTimeout(() => document.getElementById('lpLeve').focus(), 50); }
+        });
+        document.querySelectorAll('.navLP').forEach((input, index, arr) => {
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (input.id === 'lpProd') return;
+                    if (index < arr.length - 1) arr[index + 1].focus();
+                    else document.getElementById('btnAddLP').click();
+                }
+            });
+        });
 
-        function selectProduct(name, barcode) {
-            selectedItem = db.find(i => Object.values(i)[2] === name || Object.values(i)[0] === barcode);
-            searchInput.value = name; suggestBox.style.display = 'none';
-            document.getElementById('pOld').focus();
-        }
-
-        function clearAll() {
-            if(confirm("Deseja apagar todas as etiquetas?")) {
-                document.getElementById('thermalArea').innerHTML = "";
-                document.getElementById('gondolaArea').innerHTML = "";
-                document.getElementById('posterArea').innerHTML = "";
-            }
-        }
-
-        function generatePDF() {
-            const element = document.getElementById('printArea');
-            const opt = { margin: 5, filename: 'etiquetas.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
-            html2pdf().from(element).set(opt).save();
-        }
+        function handleExcel(e) { const reader = new FileReader(); reader.onload = (evt) => { const workbook = XLSX.read(evt.target.result, { type: 'binary' }); db = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]); localStorage.setItem('souza_farma_db', JSON.stringify(db)); document.getElementById('excelStatus').innerText = `✅ ${db.length} SALVOS`; }; reader.readAsBinaryString(e.target.files[0]); }
+        function openTab(evt, tabName) { document.querySelectorAll('.tab-content, .tab-btn').forEach(el => el.classList.remove('active')); document.getElementById(tabName).classList.add('active'); evt.currentTarget.classList.add('active'); }
+        function calcLP() { const leve = parseInt(document.getElementById('lpLeve').value) || 0; const pague = parseInt(document.getElementById('lpPague').value) || 0; const unit = parseFloat(document.getElementById('lpUnit').value.replace(',', '.')) || 0; if(leve > 0 && unit > 0) { const total = pague * unit; const final = total / leve; document.getElementById('lpTotal').value = total.toLocaleString('pt-br', {minimumFractionDigits: 2}); document.getElementById('lpFinal').value = final.toLocaleString('pt-br', {minimumFractionDigits: 2}); } }
+        function clearAll() { if(confirm("Limpar tudo?")) { document.getElementById('thermalArea').innerHTML = ""; document.getElementById('gondolaArea').innerHTML = ""; document.getElementById('posterArea').innerHTML = ""; } }
 
         function addTag() {
-            const name = searchInput.value;
-            const oldP = document.getElementById('pOld').value;
-            const newP = document.getElementById('pNew').value;
-            const size = document.getElementById('pSize').value;
-            const promo = document.getElementById('pPromo').value;
-            const qty = parseInt(document.getElementById('pQty').value);
-
-            if (!name || !newP) return;
-
-            const vOld = parseFloat(oldP.replace(',', '.'));
-            const vNew = parseFloat(newP.replace(',', '.'));
-            const perc = (vOld > vNew) ? Math.round(((vOld - vNew) / vOld) * 100) : 0;
-            const [reais, cents] = newP.split(',');
-            const barcode = selectedItem ? Object.values(selectedItem)[0] : "0000000000000";
-
-            let targetArea;
-            if (size === 'size-70mm') targetArea = document.getElementById('thermalArea');
-            else if (size === 'size-6x4' || size === 'size-8x6') targetArea = document.getElementById('gondolaArea');
-            else targetArea = document.getElementById('posterArea');
-
+            const name = searchInput.value; const oldP = document.getElementById('pOld').value; const newP = document.getElementById('pNew').value; const size = document.getElementById('pSize').value; const promo = document.getElementById('pPromo').value; const qty = parseInt(document.getElementById('pQty').value); if (!name || !newP) return;
+            const vOld = parseFloat(oldP.replace(',', '.')); const vNew = parseFloat(newP.replace(',', '.')); const perc = (vOld > vNew) ? Math.round(((vOld - vNew) / vOld) * 100) : 0; const [reais, cents] = newP.split(','); const barcode = selectedItem ? Object.values(selectedItem)[0] : "0000000000000";
+            let targetArea = (size === 'size-70mm') ? document.getElementById('thermalArea') : (size.includes('size-A') ? document.getElementById('posterArea') : document.getElementById('gondolaArea'));
             for (let i = 0; i < qty; i++) {
-                const tagId = "bc-" + Date.now() + i;
-                const div = document.createElement('div');
-                div.className = `tag ${size}`;
-                
-                // Lógica de cabeçalho: Imagem para A4/A5, Texto para as outras
-                const headerContent = (size === 'size-A4P' || size === 'size-A5') 
-                    ? `<img src="logo.png" class="logo-interna" onerror="this.outerHTML='<b>SOUZA FARMA</b>'">`
-                    : `<b>SOUZA FARMA - FARMÁCIA DO TRABALHADOR</b>`;
-
-                div.innerHTML = `
-                    <button class="delete-btn" onclick="this.parentElement.remove()">X</button>
-                    <div class="farmacia-header">${headerContent}</div>
-                    ${promo ? `<div class="promo-banner">${promo}</div>` : ''}
-                    <div class="tag-title">${name.toUpperCase()}</div>
-                    ${perc > 0 ? `<div class="perc-badge-outer">-${perc}%</div>` : ''}
-                    <div class="price-box">
-                        <div style="font-size:10px; font-weight:bold; text-decoration:line-through; height:12px; width:100%">${(oldP && oldP !== '0,00') ? 'DE R$ ' + oldP + ' POR' : ''}</div>
-                        <div class="main-price"><small style="font-size:0.35em; margin-top:10px; margin-right:2px">R$</small>${reais}<small style="font-size:0.4em; text-decoration:underline; margin-top:2px">,${cents||'00'}</small></div>
-                    </div>
-                    <div class="footer-barcode"><svg id="${tagId}"></svg></div>
-                `;
-                targetArea.appendChild(div);
-                JsBarcode(`#${tagId}`, String(barcode), { format: "CODE128", width: 1.2, height: 35, displayValue: true, fontSize: 10 });
+                const tagId = "bc-" + Date.now() + i; const div = document.createElement('div'); div.className = `tag ${size}`; const headerContent = (size.includes('size-A')) ? `<img src="logo.png" class="logo-interna" onerror="this.outerHTML='<b>SOUZA FARMA - FARMÁCIA DO TRABALHADOR</b>'">` : `<b>SOUZA FARMA - FARMÁCIA DO TRABALHADOR</b>`;
+                div.innerHTML = `<button class="delete-btn" onclick="this.parentElement.remove()">X</button><div class="farmacia-header">${headerContent}</div>${promo ? `<div class="promo-banner">${promo}</div>` : ''}<div class="tag-title">${name.toUpperCase()}</div>${perc > 0 ? `<div class="perc-badge-outer">-${perc}%</div>` : ''}<div class="price-box"><div class="old-price">${(oldP && oldP !== '0,00') ? 'DE R$ ' + oldP + ' POR' : ''}</div><div class="main-price"><small style="font-size:0.35em; margin-top:10px;">R$</small>${reais}<small style="font-size:0.4em; text-decoration:underline;">,${cents||'00'}</small></div></div><div class="footer-barcode"><svg id="${tagId}"></svg></div>`;
+                targetArea.appendChild(div); JsBarcode(`#${tagId}`, String(barcode), { format: "CODE128", width: 1.2, height: 35, displayValue: true, fontSize: 10 });
             }
-            searchInput.value = ""; document.getElementById('pOld').value = ""; document.getElementById('pNew').value = "";
-            searchInput.focus();
+            searchInput.value = ""; document.getElementById('pOld').value = ""; document.getElementById('pNew').value = ""; searchInput.focus();
+        }
+
+        function addLPTag() {
+            const div = document.createElement('div'); div.className = 'promo-tag-lp';
+            div.innerHTML = `
+                <button class="delete-btn" onclick="this.parentElement.remove()">X</button>
+                <div class="lp-header-box"><span>— MEGA —</span><h1>OFERTA</h1></div>
+                <div class="lp-prod-name">${document.getElementById('lpProd').value.toUpperCase()}</div>
+                <div class="lp-leve-pague"><div class="lp-box" style="background:#000; color:#fff;">LEVE ${document.getElementById('lpLeve').value}</div><div class="lp-box" style="background:var(--primary); color:#fff;">PAGUE ${document.getElementById('lpPague').value}</div></div>
+                <div style="font-size:32px; margin-top:10px;">VALOR DA UNIDADE: R$ ${document.getElementById('lpUnit').value}</div>
+                <div style="font-size:38px; margin: 10px 0;">VALOR TOTAL DO KIT: <b>R$ ${document.getElementById('lpTotal').value}</b></div>
+                <div class="lp-yellow-box"><span style="font-size:28px; display:block; font-weight:bold;">NA COMPRA DE ${document.getElementById('lpLeve').value}, A UNIDADE SAI POR:</span>R$ <b>${document.getElementById('lpFinal').value}</b></div>
+                <div class="lp-footer">SOUZA FARMA - FARMÁCIA DO TRABALHADOR<br>OFERTA VÁLIDA: ${document.getElementById('lpData').value.toUpperCase()}</div>
+            `;
+            document.getElementById('posterArea').appendChild(div);
+            document.getElementById('lpProd').value = ""; document.getElementById('lpUnit').value = ""; document.getElementById('lpProd').focus();
         }
     </script>
 </body>
