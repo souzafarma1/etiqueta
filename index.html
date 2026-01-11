@@ -40,8 +40,6 @@
 
         .size-70mm { width: 70mm; padding-left: 0.3cm; padding-right: 0.3cm; border: 1px dashed #999; margin-left: 0 !important; margin-right: auto !important; margin-bottom: 5px !important; }
         .gondola-container { display: flex; flex-wrap: wrap; gap: 0; justify-content: flex-start; padding: 1cm; box-sizing: border-box; }
-        .size-6x4 { width: 6cm; height: 4cm; margin: 0; border: 1px solid #000; }
-        .size-8x6 { width: 8cm; height: 6cm; margin: 0; border: 1px solid #000; }
         
         .size-A5 { width: 14.8cm; height: 21cm; padding: 0.6cm; margin: 0 auto 10px !important; }
         .size-A4P { width: 21cm; height: 29.7cm; padding: 1cm; margin: 0 auto 10px !important; }
@@ -99,7 +97,6 @@
 </head>
 <body>
     <script>
-        // CONFIGURAÇÃO DO FIREBASE (Necessária para funcionar online)
         const firebaseConfig = {
             apiKey: "AIzaSyBfxAE5NnNQ2JKn8iX8-s8lz7M_CVQG6DI",
             authDomain: "etiqueta-70cbf.firebaseapp.com",
@@ -112,9 +109,13 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
     </script>
-    <div class="no-print" style="text-align:center; padding: 10px;">
-        <img src="logo.png" style="max-height: 80px; width: auto;" onerror="this.outerHTML='<h3 style=\'color:var(--primary); margin: 10px 0;\'>SOUZA FARMA - FARMÁCIA DO TRABALHADOR</h3>'">
-        <b style="color:var(--primary); font-size: 16px;">SOUZA FARMA - FARMÁCIA DO TRABALHADOR</b>
+    <div class="no-print" style="text-align:center; padding: 15px;">
+        <div style="display: block; margin-bottom: 10px;">
+            <img src="logo.png" style="max-height: 80px; width: auto;" onerror="this.style.display='none'">
+        </div>
+        <div style="display: block;">
+            <b style="color:var(--primary); font-size: 18px; display: block; text-align: center; width: 100%;">SOUZA FARMA - FARMÁCIA DO TRABALHADOR</b>
+        </div>
     </div>
     <div class="no-print">
         <div class="tabs">
@@ -123,10 +124,10 @@
         </div>
         <div id="etiquetas" class="tab-content active">
             <div style="background:#f8fafc; padding:12px; border-radius:8px; margin-bottom:15px; border:1px solid #cbd5e1;">
-                <label>📂 ATUALIZAR BANCO (EXCEL):</label>
+                <label>📂 ATUALIZAR PLANILHA ONLINE (EXCEL):</label>
                 <input type="file" onchange="handleExcel(event)">
                 <span id="excelStatus"></span>
-                <button onclick="if(confirm('Apagar banco online?')) database.ref('produtos').remove()" style="float:right; background:#000; color:#fff; border:none; padding:5px 10px; border-radius:5px; cursor:pointer; font-size:10px;">LIMPAR BANCO</button>
+                <button onclick="if(confirm('Limpar banco online?')) database.ref('produtos').remove()" style="float:right; background:#000; color:#fff; border:none; padding:5px 10px; border-radius:5px; cursor:pointer; font-size:10px;">LIMPAR BANCO</button>
             </div>
             <div class="grid-form">
                 <div class="field" style="grid-column: span 2;">
@@ -174,7 +175,6 @@
         let selectedItem = null;
         let selectedItemLP = null;
 
-        // SINCRONIZAÇÃO EM TEMPO REAL
         database.ref('produtos').on('value', (snapshot) => {
             const data = snapshot.val();
             db = data ? Object.values(data) : [];
@@ -236,7 +236,7 @@
             for (let i = 0; i < qty; i++) {
                 const tagId = "bc-" + Date.now() + i;
                 const div = document.createElement('div'); div.className = `tag ${size}`;
-                const headerContent = (size.includes('size-A')) ? `<img src="logo.png" class="logo-interna" onerror="this.outerHTML='<b>SOUZA FARMA - FARMÁCIA DO TRABALHADOR</b>'">` : `<b>SOUZA FARMA</b>`;
+                const headerContent = (size.includes('size-A')) ? `<img src="logo.png" class="logo-interna" onerror="this.outerHTML='<b>SOUZA FARMA</b>'">` : `<b>SOUZA FARMA</b>`;
                 div.innerHTML = `<button class="delete-btn" onclick="this.parentElement.remove()">X</button><div class="farmacia-header">${headerContent}</div>${promo ? `<div class="promo-banner">${promo}</div>` : ''}<div class="tag-title">${name.toUpperCase()}</div><div class="info-row"><div class="old-price-label">${(oldP && oldP !== '0,00') ? 'DE R$ '+oldP : ''}</div>${perc > 0 ? `<div class="perc-badge-outer">-${perc}%</div>` : ''}</div><div class="price-box"><span class="label-por">POR</span><div class="main-price"><small style="font-size:0.35em;">R$</small>${reais}<small style="font-size:0.4em; text-decoration:underline;">,${cents||'00'}</small></div></div><div class="footer-barcode"><svg id="${tagId}"></svg></div>`;
                 document.getElementById(area).appendChild(div);
                 JsBarcode(`#${tagId}`, barcode, { format: "CODE128", width: size.includes('A')?3:1.2, height: size.includes('A')?120:35, displayValue: true, fontSize: size.includes('A')?40:10 });
@@ -268,7 +268,6 @@
         function calcLP() { const l = parseInt(document.getElementById('lpLeve').value) || 0; const p = parseInt(document.getElementById('lpPague').value) || 0; const u = parseFloat(document.getElementById('lpUnit').value.replace(',', '.')) || 0; if(l > 0 && u > 0) { const f = (p * u) / l; document.getElementById('lpFinal').value = f.toLocaleString('pt-br', {minimumFractionDigits:2, maximumFractionDigits:2}); document.getElementById('lpTotal').value = (p*u).toLocaleString('pt-br', {minimumFractionDigits:2}); } }
         function openTab(evt, tabName) { document.querySelectorAll('.tab-content, .tab-btn').forEach(el => el.classList.remove('active')); document.getElementById(tabName).classList.add('active'); evt.currentTarget.classList.add('active'); }
         
-        // ENVIO DA PLANILHA PARA O BANCO ONLINE
         function handleExcel(e) { 
             const reader = new FileReader(); 
             reader.onload = (evt) => { 
