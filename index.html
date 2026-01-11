@@ -29,6 +29,7 @@
         .info-row { display: flex; justify-content: space-between; align-items: center; padding: 0 8px; min-height: 25px; background: white; }
         .old-price-label { color: #000; font-size: 9px; font-weight: bold; text-decoration: line-through; }
         .perc-badge-outer { background: #000; color: #fff; font-size: 11px; padding: 2px 5px; border-radius: 4px; font-weight: 900; }
+        .size-70mm { width: 70mm; padding-left: 0.3cm; padding-right: 0.3cm; border: 1px dashed #999; margin-bottom: 5px !important; }
         .gondola-container { display: flex; flex-wrap: wrap; gap: 0; justify-content: flex-start; padding: 1cm; box-sizing: border-box; }
         .size-6x4 { width: 6cm; height: 4cm; margin: 0; border: 1px solid #000; }
         .size-8x6 { width: 8cm; height: 6cm; margin: 0; border: 1px solid #000; }
@@ -45,6 +46,7 @@
         .lp-header-box h1 { font-size: 110px; margin: 0; line-height: 0.8; letter-spacing: -3px; }
         .lp-header-box span { font-size: 35px; display: block; letter-spacing: 10px; font-weight: 900; }
         .lp-prod-name { font-size: 60px; height: 140px; display: flex; align-items: center; justify-content: center; text-transform: uppercase; font-weight: 900; margin: 30px 0 25px; line-height: 1; }
+        .lp-leve-pague { display: flex; gap: 15px; margin: 15px 0; }
         .lp-box { padding: 10px 30px; border-radius: 10px; font-size: 50px; font-weight: 900; }
         .lp-yellow-box { background: var(--secondary); border: 4px solid #000; padding: 12px; margin: 15px 0; width: 95%; }
         .lp-yellow-box b { font-size: 85px; color: var(--primary); }
@@ -61,7 +63,6 @@
 </head>
 <body>
     <script>
-        // Configurações do seu Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyBfxAE5NnNQ2JKn8iX8-s8lz7M_CVQG6DI",
             authDomain: "etiqueta-70cbf.firebaseapp.com",
@@ -72,14 +73,15 @@
         };
         firebase.initializeApp(firebaseConfig);
     </script>
-
+    <div class="no-print" style="text-align:center; padding: 10px;">
+        <img src="logo.png" style="max-height: 80px; width: auto;" onerror="this.outerHTML='<b>SOUZA FARMA</b>'">
+    </div>
     <div class="no-print">
         <div class="tabs">
             <button class="tab-btn active" onclick="openTab(event, 'etiquetas')">ETIQUETAS PADRÃO</button>
             <button class="tab-btn" onclick="openTab(event, 'promocoes')">PROMOÇÕES (LEVE/PAGUE)</button>
         </div>
         <div id="etiquetas" class="tab-content active">
-            <div style="text-align:center; margin-bottom:15px;"><h3 style="color:var(--primary); margin: 10px 0;">SOUZA FARMA - FARMÁCIA DO TRABALHADOR</h3></div>
             <div style="background:#f8fafc; padding:12px; border-radius:8px; margin-bottom:15px; border:1px solid #cbd5e1;"><label>📂 EXCEL:</label><input type="file" onchange="handleExcel(event)"><span id="excelStatus"></span></div>
             <div class="grid-form">
                 <div class="field" style="grid-column: span 2;"><label>PRODUTO (BIPE OU BUSQUE)</label><input type="text" id="searchField" class="nav" placeholder="Digite ou bipe..." autocomplete="off"><div id="suggestions"></div></div>
@@ -92,7 +94,6 @@
             </div>
         </div>
         <div id="promocoes" class="tab-content">
-            <div style="text-align:center; margin-bottom:15px;"><h3 style="color:var(--primary);">SOUZA FARMA - FARMÁCIA DO TRABALHADOR</h3></div>
             <div class="grid-form">
                 <div class="field" style="grid-column: span 2;"><label>PRODUTO (BIPE OU BUSQUE NOME)</label><input type="text" id="lpProd" class="navLP" placeholder="Bipe ou digite..." autocomplete="off"><div id="suggestionsLP"></div></div>
                 <div class="field"><label>LEVE</label><input type="number" id="lpLeve" class="navLP" value="3" oninput="calcLP()"></div>
@@ -161,7 +162,6 @@
         function handleExcel(e) { const reader = new FileReader(); reader.onload = (evt) => { db = XLSX.utils.sheet_to_json(XLSX.read(evt.target.result, { type: 'binary' }).Sheets[XLSX.read(evt.target.result, { type: 'binary' }).SheetNames[0]]); localStorage.setItem('souza_farma_db', JSON.stringify(db)); location.reload(); }; reader.readAsBinaryString(e.target.files[0]); }
         function openTab(evt, tabName) { document.querySelectorAll('.tab-content, .tab-btn').forEach(el => el.classList.remove('active')); document.getElementById(tabName).classList.add('active'); evt.currentTarget.classList.add('active'); }
         function calcLP() { const l = parseInt(document.getElementById('lpLeve').value) || 0, p = parseInt(document.getElementById('lpPague').value) || 0, u = parseFloat(document.getElementById('lpUnit').value.replace(',', '.')) || 0; if(l > 0 && u > 0) { const f = (p * u) / l; document.getElementById('lpFinal').value = f.toLocaleString('pt-br', {minimumFractionDigits:2}); document.getElementById('lpTotal').value = (p*u).toLocaleString('pt-br', {minimumFractionDigits:2}); } }
-        function clearAll() { if(confirm("Limpar Tudo?")) { document.getElementById('thermalArea').innerHTML = ""; document.getElementById('gondolaArea').innerHTML = ""; document.getElementById('posterArea').innerHTML = ""; } }
     </script>
 </body>
 </html>
