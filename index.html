@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Souza Farma v91 - Estabilizado Final</title>
+    <title>Souza Farma v92 - Final Estabilizado</title>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     
@@ -44,28 +44,29 @@
         .size-6x4 { width: 6cm !important; height: 4cm !important; margin: 0; border: 1px solid #000; display: flex !important; flex-direction: column !important; }
         .size-8x6 { width: 8cm !important; height: 6cm !important; margin: 0; border: 1px solid #000; display: flex !important; flex-direction: column !important; }
         
-        /* AJUSTE EXCLUSIVO 17x9cm: CENTRALIZAÇÃO E ESPAÇO PARA O NOME */
-        .size-17x8 { width: 17cm !important; height: 9cm !important; border: 2px solid #000; margin: 0 auto 5px !important; padding: 0.1cm; display: flex !important; flex-direction: column !important; justify-content: space-between !important; }
+        /* AJUSTE FINAL 17x9cm: TOPO E BASE COMPACTADOS */
+        .size-17x8 { width: 17cm !important; height: 9cm !important; border: 2px solid #000; margin: 0 auto 5px !important; padding: 0; display: flex !important; flex-direction: column !important; justify-content: space-between !important; }
 
         .size-A5 { width: 14.8cm; height: 21cm; padding: 0.6cm; margin: 0 auto 10px !important; }
         .size-A4P { width: 21cm; height: 29.7cm; padding: 1cm; margin: 0 auto 10px !important; }
         .logo-interna { max-height: 80px; width: auto; padding: 5px; }
 
         .farmacia-header { font-size: 7px; font-weight: 900; color: #000; padding: 4px; border-bottom: 1px solid #eee; text-transform: uppercase; display: flex; justify-content: center; align-items: center; }
-        .size-6x4 .farmacia-header { padding: 2px; font-size: 6px; }
+        /* Logo mais em cima na 17x9 */
+        .size-17x8 .farmacia-header { padding: 0; border: none; }
+        .size-17x8 .logo-interna { max-height: 70px; padding: 2px; }
 
         .tag-title { flex-grow: 1; display: flex; align-items: center; justify-content: center; font-weight: 900; padding: 2px 4px; line-height: 1.1; text-transform: uppercase; font-size: 11px; overflow: hidden; }
         .size-6x4 .tag-title { font-size: 9.5px; height: 20px; line-height: 0.95; padding-top: 5px; }
         .size-8x6 .tag-title { font-size: 14px; }
         
-        /* CENTRALIZAÇÃO NA 17x9 */
-        .size-17x8 .tag-title { font-size: 32px; height: 2.2cm; line-height: 1.1; margin: 5px 0; }
+        /* CENTRALIZAÇÃO DO NOME NA 17x9 */
+        .size-17x8 .tag-title { font-size: 34px; line-height: 1; height: 2.8cm !important; margin: 0; }
 
         .promo-banner { background: var(--primary); color: var(--secondary); font-size: 12px; font-weight: 900; padding: 3px; border-bottom: 1px solid #000; text-transform: uppercase; }
         .size-6x4 .promo-banner { font-size: 10px; padding: 2px; }
-        
-        /* Redução da Campanha apenas na 17x9 */
-        .size-17x8 .promo-banner { font-size: 28px; padding: 4px; }
+        /* Campanha subida na 17x9 */
+        .size-17x8 .promo-banner { font-size: 26px; padding: 4px; border-top: 1px solid #000; }
         
         .size-A5 .promo-banner { font-size: 55px; padding: 15px; border-bottom: 5px solid #000; }
         .size-A4P .promo-banner { font-size: 75px; padding: 25px; border-bottom: 5px solid #000; }
@@ -73,10 +74,8 @@
         .price-box { background: var(--secondary); padding: 4px; border-top: 1px solid #000; border-bottom: 1px solid #000; display: flex; justify-content: center; align-items: center; }
         .main-price { color: var(--primary); font-weight: 900; display: flex; align-items: flex-start; line-height: 0.85; font-size: 40px; }
         .size-6x4 .main-price { font-size: 36px; }
-        
-        /* Redução do Preço Por apenas na 17x9 */
-        .size-17x8 .main-price { font-size: 85px; }
-        
+        /* Preço reduzido para liberar espaço na 17x9 */
+        .size-17x8 .main-price { font-size: 80px; }
         .label-por { font-size: 10px; margin-right: 2px; align-self: center; color: #000; }
 
         .size-A5 .tag-title { font-size: 45px; } .size-A4P .tag-title { font-size: 55px; }
@@ -84,13 +83,13 @@
         .size-A5 .old-price-label { font-size: 28px; } .size-A4P .old-price-label { font-size: 38px; }
         .size-A5 .perc-badge-outer { font-size: 40px; padding: 8px 15px; } .size-A4P .perc-badge-outer { font-size: 45px; padding: 12px 20px; }
         .size-A5 .label-por { font-size: 30px; } .size-A4P .label-por { font-size: 40px; }
-        .size-17x8 .old-price-label, .size-17x8 .label-por { font-size: 22px; }
+        .size-17x8 .old-price-label, .size-17x8 .label-por { font-size: 20px; }
 
         .footer-barcode { background: white; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 5px 0; }
         .footer-barcode svg { max-width: 95%; height: auto; }
         .size-6x4 .footer-barcode { height: 28px; padding: 1px 0; }
         .size-8x6 .footer-barcode { height: 45px; }
-        .size-17x8 .footer-barcode { height: 60px; }
+        .size-17x8 .footer-barcode { height: 45px; margin-top: 0; }
         .size-A5 .footer-barcode { height: 140px; } .size-A4P .footer-barcode { height: 180px; }
 
         /* ABA PROMOÇÃO - ORIGINAL MANTIDA */
@@ -121,15 +120,7 @@
 </head>
 <body>
     <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyBfxAE5NnNQ2JKn8iX8-s8lz7M_CVQG6DI",
-            authDomain: "etiqueta-70cbf.firebaseapp.com",
-            databaseURL: "https://etiqueta-70cbf-default-rtdb.firebaseio.com/",
-            projectId: "etiqueta-70cbf",
-            storageBucket: "etiqueta-70cbf.firebasestorage.app",
-            messagingSenderId: "899263207040",
-            appId: "1:899263207040:web:7103a5f0fb49ca15f1b865"
-        };
+        const firebaseConfig = { apiKey: "AIzaSyBfxAE5NnNQ2JKn8iX8-s8lz7M_CVQG6DI", authDomain: "etiqueta-70cbf.firebaseapp.com", databaseURL: "https://etiqueta-70cbf-default-rtdb.firebaseio.com/", projectId: "etiqueta-70cbf", storageBucket: "etiqueta-70cbf.firebasestorage.app", messagingSenderId: "899263207040", appId: "1:899263207040:web:7103a5f0fb49ca15f1b865" };
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
     </script>
@@ -221,7 +212,7 @@
                 const tagId = "bc-" + Date.now() + i, div = document.createElement('div'); div.className = `tag ${size}`;
                 const headerContent = (size.includes('size-17') || size.includes('size-A')) ? `<img src="logo.png" class="logo-interna" onerror="this.outerHTML='<b>SOUZA FARMA</b>'">` : `<b>SOUZA FARMA</b>`;
                 div.innerHTML = `<button class="delete-btn" onclick="this.parentElement.remove()">X</button><div class="farmacia-header">${headerContent}</div>${promo ? `<div class="promo-banner">${promo}</div>` : ''}<div class="tag-title">${name.toUpperCase()}</div><div class="info-row"><div class="old-price-label">${(oldP && oldP !== '0,00') ? 'DE R$ '+oldP : ''}</div>${perc > 0 ? `<div class="perc-badge-outer">-${perc}%</div>` : ''}</div><div class="price-box"><span class="label-por">POR</span><div class="main-price"><small style="font-size:0.35em;">R$</small>${reais}<small style="font-size:0.4em; text-decoration:underline;">,${cents||'00'}</small></div></div><div class="footer-barcode"><svg id="${tagId}"></svg></div>`;
-                document.getElementById(area).appendChild(div); JsBarcode(`#${tagId}`, barcode, { format: "CODE128", width: size.includes('A') || size.includes('17')?3:1.1, height: size.includes('A')?120:size.includes('17')?75:size==='size-6x4'?22:30, displayValue: true, fontSize: size.includes('A')?40:size.includes('17')?30:10 });
+                document.getElementById(area).appendChild(div); JsBarcode(`#${tagId}`, barcode, { format: "CODE128", width: size.includes('A') || size.includes('17')?3:1.1, height: size.includes('A')?120:size.includes('17')?70:size==='size-6x4'?22:30, displayValue: true, fontSize: size.includes('A')?40:size.includes('17')?30:10 });
             }
             if(!reuseItem) { historyData.unshift({name, old: oldP, new: newP, code: barcode}); updateHistory(); document.getElementById('searchField').value = ""; document.getElementById('pOld').value = ""; document.getElementById('pNew').value = ""; document.getElementById('searchField').focus(); }
         }
