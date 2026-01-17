@@ -2,12 +2,13 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Souza Farma v90 - Final Estabilizado</title>
+    <title>Souza Farma v91 - Estabilizado Final</title>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root { --primary: #e30613; --secondary: #fff200; }
         body { font-family: 'Arial Black', sans-serif; background: #cbd5e1; padding: 20px; margin: 0; }
@@ -37,39 +38,45 @@
         .old-price-label { color: #000; font-size: 9px; font-weight: bold; text-decoration: line-through; }
         .perc-badge-outer { background: #000; color: #fff; font-size: 11px; padding: 2px 5px; border-radius: 4px; font-weight: 900; }
 
-        .size-70mm { width: 70mm; padding: 0.3cm; border: 1px dashed #999; margin-bottom: 5px !important; }
+        .size-70mm { width: 70mm; padding-left: 0.3cm; padding-right: 0.3cm; border: 1px dashed #999; margin-left: 0 !important; margin-right: auto !important; margin-bottom: 5px !important; }
         .gondola-container { display: flex; flex-wrap: wrap; gap: 0; justify-content: flex-start; padding: 1cm; box-sizing: border-box; }
         
         .size-6x4 { width: 6cm !important; height: 4cm !important; margin: 0; border: 1px solid #000; display: flex !important; flex-direction: column !important; }
         .size-8x6 { width: 8cm !important; height: 6cm !important; margin: 0; border: 1px solid #000; display: flex !important; flex-direction: column !important; }
         
-        /* AJUSTE FINAL 17x9cm: PRIORIDADE TOTAL AO ESPAÇO DO NOME */
+        /* AJUSTE EXCLUSIVO 17x9cm: CENTRALIZAÇÃO E ESPAÇO PARA O NOME */
         .size-17x8 { width: 17cm !important; height: 9cm !important; border: 2px solid #000; margin: 0 auto 5px !important; padding: 0.1cm; display: flex !important; flex-direction: column !important; justify-content: space-between !important; }
 
         .size-A5 { width: 14.8cm; height: 21cm; padding: 0.6cm; margin: 0 auto 10px !important; }
         .size-A4P { width: 21cm; height: 29.7cm; padding: 1cm; margin: 0 auto 10px !important; }
-        .logo-interna { max-height: 75px; width: auto; padding: 3px; }
+        .logo-interna { max-height: 80px; width: auto; padding: 5px; }
 
-        .farmacia-header { font-size: 7px; font-weight: 900; color: #000; padding: 2px; border-bottom: 1px solid #eee; text-transform: uppercase; display: flex; justify-content: center; align-items: center; }
-        .size-17x8 .farmacia-header { border: none; }
+        .farmacia-header { font-size: 7px; font-weight: 900; color: #000; padding: 4px; border-bottom: 1px solid #eee; text-transform: uppercase; display: flex; justify-content: center; align-items: center; }
         .size-6x4 .farmacia-header { padding: 2px; font-size: 6px; }
 
         .tag-title { flex-grow: 1; display: flex; align-items: center; justify-content: center; font-weight: 900; padding: 2px 4px; line-height: 1.1; text-transform: uppercase; font-size: 11px; overflow: hidden; }
         .size-6x4 .tag-title { font-size: 9.5px; height: 20px; line-height: 0.95; padding-top: 5px; }
+        .size-8x6 .tag-title { font-size: 14px; }
         
-        /* CENTRALIZAÇÃO DO NOME NA 17x9 */
-        .size-17x8 .tag-title { font-size: 34px; line-height: 1; min-height: 1.8cm; margin: 0; padding: 0 10px; }
+        /* CENTRALIZAÇÃO NA 17x9 */
+        .size-17x8 .tag-title { font-size: 32px; height: 2.2cm; line-height: 1.1; margin: 5px 0; }
 
         .promo-banner { background: var(--primary); color: var(--secondary); font-size: 12px; font-weight: 900; padding: 3px; border-bottom: 1px solid #000; text-transform: uppercase; }
         .size-6x4 .promo-banner { font-size: 10px; padding: 2px; }
-        .size-17x8 .promo-banner { font-size: 28px; padding: 4px; margin-bottom: 5px; }
+        
+        /* Redução da Campanha apenas na 17x9 */
+        .size-17x8 .promo-banner { font-size: 28px; padding: 4px; }
+        
         .size-A5 .promo-banner { font-size: 55px; padding: 15px; border-bottom: 5px solid #000; }
         .size-A4P .promo-banner { font-size: 75px; padding: 25px; border-bottom: 5px solid #000; }
 
         .price-box { background: var(--secondary); padding: 4px; border-top: 1px solid #000; border-bottom: 1px solid #000; display: flex; justify-content: center; align-items: center; }
         .main-price { color: var(--primary); font-weight: 900; display: flex; align-items: flex-start; line-height: 0.85; font-size: 40px; }
         .size-6x4 .main-price { font-size: 36px; }
-        .size-17x8 .main-price { font-size: 95px; }
+        
+        /* Redução do Preço Por apenas na 17x9 */
+        .size-17x8 .main-price { font-size: 85px; }
+        
         .label-por { font-size: 10px; margin-right: 2px; align-self: center; color: #000; }
 
         .size-A5 .tag-title { font-size: 45px; } .size-A4P .tag-title { font-size: 55px; }
@@ -82,9 +89,11 @@
         .footer-barcode { background: white; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 5px 0; }
         .footer-barcode svg { max-width: 95%; height: auto; }
         .size-6x4 .footer-barcode { height: 28px; padding: 1px 0; }
-        .size-17x8 .footer-barcode { height: 50px; margin-top: auto; }
+        .size-8x6 .footer-barcode { height: 45px; }
+        .size-17x8 .footer-barcode { height: 60px; }
         .size-A5 .footer-barcode { height: 140px; } .size-A4P .footer-barcode { height: 180px; }
 
+        /* ABA PROMOÇÃO - ORIGINAL MANTIDA */
         .promo-tag-lp { background: white; border: 12px solid var(--primary); width: 21cm; height: 27.5cm; padding: 0.3cm; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; color: #000; margin: 0 auto 5px; page-break-after: always; }
         .lp-header-box { background: #000; color: #fff; width: calc(100% + 0.6cm); margin-top: -0.3cm; padding: 12px 0; margin-bottom: 15px; }
         .lp-header-box h1 { font-size: 110px; margin: 0; line-height: 0.8; letter-spacing: -3px; }
@@ -99,6 +108,7 @@
         .lp-footer { border-top: 3px solid #000; width: 100%; padding-top: 5px; font-size: 18px; font-weight: bold; padding-bottom: 10px; }
 
         .delete-btn { position: absolute; top: 1px; left: 1px; background: #000; color: #fff; border: none; border-radius: 50%; width: 25px; height: 25px; font-weight: bold; z-index: 1000; cursor: pointer; }
+        .hist-chip { display: inline-block; background: #e2e8f0; padding: 5px 10px; border-radius: 15px; font-size: 10px; margin: 2px; cursor: pointer; font-weight: bold; }
 
         @media print { 
             .no-print, .delete-btn { display: none !important; } 
@@ -111,7 +121,15 @@
 </head>
 <body>
     <script>
-        const firebaseConfig = { apiKey: "AIzaSyBfxAE5NnNQ2JKn8iX8-s8lz7M_CVQG6DI", authDomain: "etiqueta-70cbf.firebaseapp.com", databaseURL: "https://etiqueta-70cbf-default-rtdb.firebaseio.com/", projectId: "etiqueta-70cbf", storageBucket: "etiqueta-70cbf.firebasestorage.app", messagingSenderId: "899263207040", appId: "1:899263207040:web:7103a5f0fb49ca15f1b865" };
+        const firebaseConfig = {
+            apiKey: "AIzaSyBfxAE5NnNQ2JKn8iX8-s8lz7M_CVQG6DI",
+            authDomain: "etiqueta-70cbf.firebaseapp.com",
+            databaseURL: "https://etiqueta-70cbf-default-rtdb.firebaseio.com/",
+            projectId: "etiqueta-70cbf",
+            storageBucket: "etiqueta-70cbf.firebasestorage.app",
+            messagingSenderId: "899263207040",
+            appId: "1:899263207040:web:7103a5f0fb49ca15f1b865"
+        };
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
     </script>
