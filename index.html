@@ -243,8 +243,48 @@
         function updateHistory() { document.getElementById('histDisplay').innerHTML = historyData.slice(0, 6).map((h, i) => `<span class="hist-chip" onclick='addTag(historyData[${i}])'>${h.name}</span>`).join(''); }
         function calcLP() { const l = parseInt(document.getElementById('lpLeve').value) || 0, p = parseInt(document.getElementById('lpPague').value) || 0, u = parseFloat(document.getElementById('lpUnit').value.replace(',', '.')) || 0; if(l > 0 && u > 0) { const f = (p * u) / l; document.getElementById('lpFinal').value = f.toLocaleString('pt-br', {minimumFractionDigits:2, maximumFractionDigits:2}); document.getElementById('lpTotal').value = (p*u).toLocaleString('pt-br', {minimumFractionDigits:2}); } }
         function openTab(evt, tabName) { document.querySelectorAll('.tab-content, .tab-btn').forEach(el => el.classList.remove('active')); document.getElementById(tabName).classList.add('active'); evt.currentTarget.classList.add('active'); }
-        function handleExcel(e) { const reader = new FileReader(); reader.onload = (evt) => { const workbook = XLSX.read(evt.target.result, { type: 'binary' }); const products = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]); database.ref('produtos').set(products).then(() => alert("Sincronizado!")); }; reader.readAsBinaryString(e.target.files[0]); }
-        function clearAll() { if(confirm("Limpar Tudo?")) { document.getElementById('thermalArea').innerHTML = ""; document.getElementById('gondolaArea').innerHTML = ""; document.getElementById('posterArea').innerHTML = ""; historyData = []; updateHistory(); } }
+      // Substitua suas funções antigas por estas:
+
+function handleExcel(e) {
+    const senha = prompt("Digite a senha de administrador para atualizar o estoque:");
+    if (senha !== 'souzafarma2026') return alert("Senha incorreta!");
+
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+        const workbook = XLSX.read(evt.target.result, { type: 'binary' });
+        const products = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+        
+        // Envia a chave de autorização junto com os produtos
+        database.ref('/').update({
+            produtos: products,
+            auth_key: 'souzafarma2026'
+        }).then(() => alert("Sincronizado com sucesso!"));
+    };
+    reader.readAsBinaryString(e.target.files[0]);
+}
+
+function clearAll() {
+    if(confirm("Deseja realmente limpar todas as etiquetas da tela?")) {
+        document.getElementById('thermalArea').innerHTML = "";
+        document.getElementById('gondolaArea').innerHTML = "";
+        document.getElementById('posterArea').innerHTML = "";
+        historyData = [];
+        updateHistory();
+    }
+}
+
+// Nova função para limpar o banco online com segurança
+function limparBancoOnline() {
+    const senha = prompt("Digite a senha para APAGAR o banco de dados online:");
+    if (senha === 'souzafarma2026') {
+        database.ref('/').update({
+            produtos: null,
+            auth_key: 'souzafarma2026'
+        }).then(() => alert("Banco limpo!"));
+    } else {
+        alert("Senha incorreta!");
+    }
+}
     </script>
 </body>
 </html>
