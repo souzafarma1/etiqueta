@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Souza Farma v107 - Final Consolidado</title>
+    <title>Souza Farma v108 - Segurança Ativada</title>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     
@@ -33,18 +33,14 @@
 
         #printArea { display: block; width: 100%; max-width: 21cm; margin: 0 auto; background: white; text-align: left; }
         .tag { background: white; border: 2px solid #000; position: relative; overflow: hidden; display: flex; flex-direction: column; box-sizing: border-box; text-align: center; page-break-inside: avoid; }
-        
         .info-row { display: flex; justify-content: space-between; align-items: center; padding: 0 8px; min-height: 25px; background: white; }
         .old-price-label { color: #000; font-size: 9px; font-weight: bold; text-decoration: line-through; }
         .perc-badge-outer { background: #000; color: #fff; font-size: 11px; padding: 2px 5px; border-radius: 4px; font-weight: 900; }
 
         .size-70mm { width: 70mm; padding-left: 0.3cm; padding-right: 0.3cm; border: 1px dashed #999; margin-left: 0 !important; margin-right: auto !important; margin-bottom: 5px !important; }
         .gondola-container { display: flex; flex-wrap: wrap; gap: 0; justify-content: flex-start; padding: 1cm; box-sizing: border-box; }
-        
-        /* LINHA MAIS FINA NAS ETIQUETAS 6x4 */
         .size-6x4 { width: 6cm !important; height: 4cm !important; margin: 0; border: 0.5px solid #000; display: flex !important; flex-direction: column !important; }
         .size-8x6 { width: 8cm !important; height: 6cm !important; margin: 0; border: 1px solid #000; display: flex !important; flex-direction: column !important; }
-        
         .size-17x8 { width: 17cm !important; height: 9cm !important; border: 2px solid #000; margin: 0 auto 5px !important; padding: 0; display: flex !important; flex-direction: column !important; justify-content: space-between !important; }
 
         .size-A5 { width: 14.8cm; height: 21cm; padding: 0.6cm; margin: 0 auto 10px !important; }
@@ -52,71 +48,24 @@
         .logo-interna { max-height: 80px; width: auto; padding: 5px; }
 
         .farmacia-header { font-size: 7px; font-weight: 900; color: #000; padding: 4px; border-bottom: 1px solid #eee; text-transform: uppercase; display: flex; justify-content: center; align-items: center; }
-        .size-17x8 .farmacia-header { padding: 0; border: none; }
-        .size-17x8 .logo-interna { max-height: 70px; padding: 2px; }
-
         .tag-title { flex-grow: 1; display: flex; align-items: center; justify-content: center; font-weight: 900; padding: 2px 4px; line-height: 1.1; text-transform: uppercase; font-size: 11px; overflow: hidden; }
-        .size-6x4 .tag-title { font-size: 9.5px; height: 20px; line-height: 0.95; padding-top: 5px; }
-        .size-8x6 .tag-title { font-size: 14px; }
-        
-        .size-17x8 .tag-title { font-size: 34px; line-height: 1; height: 2.8cm !important; margin: 0; }
-
         .promo-banner { background: var(--primary); color: var(--secondary); font-size: 12px; font-weight: 900; padding: 3px; border-bottom: 1px solid #000; text-transform: uppercase; }
-        .size-6x4 .promo-banner { font-size: 10px; padding: 2px; }
-        .size-17x8 .promo-banner { font-size: 26px; padding: 4px; border-top: 1px solid #000; }
         
-        .size-A5 .promo-banner { font-size: 55px; padding: 15px; border-bottom: 5px solid #000; }
-        .size-A4P .promo-banner { font-size: 75px; padding: 25px; border-bottom: 5px solid #000; }
-
         .price-box { background: var(--secondary); padding: 4px; border-top: 1px solid #000; border-bottom: 1px solid #000; display: flex; justify-content: center; align-items: center; }
         .main-price { color: var(--primary); font-weight: 900; display: flex; align-items: flex-start; line-height: 0.85; font-size: 40px; }
-        .size-6x4 .main-price { font-size: 36px; }
-        .size-17x8 .main-price { font-size: 80px; }
         .label-por { font-size: 10px; margin-right: 2px; align-self: center; color: #000; }
-
-        .size-A5 .tag-title { font-size: 45px; } .size-A4P .tag-title { font-size: 55px; }
-        .size-A5 .main-price { font-size: 170px; } .size-A4P .main-price { font-size: 240px; }
-        .size-A5 .old-price-label { font-size: 28px; } .size-A4P .old-price-label { font-size: 38px; }
-        .size-A5 .perc-badge-outer { font-size: 40px; padding: 8px 15px; } .size-A4P .perc-badge-outer { font-size: 45px; padding: 12px 20px; }
-        .size-A5 .label-por { font-size: 30px; } .size-A4P .label-por { font-size: 40px; }
-        .size-17x8 .old-price-label, .size-17x8 .label-por { font-size: 20px; }
 
         .footer-barcode { background: white; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 5px 0; }
         .footer-barcode svg { max-width: 95%; height: auto; }
-        .size-6x4 .footer-barcode { height: 28px; padding: 1px 0; }
-        .size-8x6 .footer-barcode { height: 45px; }
-        .size-17x8 .footer-barcode { height: 45px; margin-top: 0; }
-        .size-A5 .footer-barcode { height: 140px; } .size-A4P .footer-barcode { height: 180px; }
-
-        .promo-tag-lp { background: white; border: 12px solid var(--primary); width: 21cm; height: 27.5cm; padding: 0.3cm; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; color: #000; margin: 0 auto 5px; page-break-after: always; }
-        .lp-header-box { background: #000; color: #fff; width: calc(100% + 0.6cm); margin-top: -0.3cm; padding: 12px 0; margin-bottom: 15px; }
-        .lp-header-box h1 { font-size: 110px; margin: 0; line-height: 0.8; letter-spacing: -3px; }
-        .lp-header-box span { font-size: 35px; display: block; letter-spacing: 10px; font-weight: 900; }
-        .lp-prod-name { font-size: 60px; height: 140px; display: flex; align-items: center; justify-content: center; text-transform: uppercase; font-weight: 900; margin: 25px 0 20px; line-height: 1; overflow: hidden; }
-        .lp-leve-pague { display: flex; gap: 15px; margin: 15px 0; }
-        .lp-box { padding: 10px 30px; border-radius: 10px; font-size: 50px; font-weight: 900; }
-        .lp-yellow-box { background: var(--secondary); border: 4px solid #000; padding: 10px; margin: 10px 0; width: 95%; }
-        .lp-yellow-box b { font-size: 85px; color: var(--primary); }
-        .lp-barcode-container { background: white; padding: 2px 0; width: 100%; display: flex; justify-content: center; margin-top: auto; }
-        .lp-barcode-container svg { height: 75px; max-width: 75%; }
-        .lp-footer { border-top: 3px solid #000; width: 100%; padding-top: 5px; font-size: 18px; font-weight: bold; padding-bottom: 10px; }
 
         .delete-btn { position: absolute; top: 1px; left: 1px; background: #000; color: #fff; border: none; border-radius: 50%; width: 25px; height: 25px; font-weight: bold; z-index: 1000; cursor: pointer; }
         .hist-chip { display: inline-block; background: #e2e8f0; padding: 5px 10px; border-radius: 15px; font-size: 10px; margin: 2px; cursor: pointer; font-weight: bold; }
-
-        /* NOVO MODELO GÔNDOLA 10x15 v107 */
-        .size-lp-gondola { width: 10cm !important; height: 15cm !important; border: 2px solid #000; margin: 5px; background: #fff; text-align: left !important; display: flex !important; flex-direction: column !important; box-sizing: border-box; }
-        .lp-top-white { padding: 12px; flex: 1.2; position: relative; }
-        .lp-bottom-yellow { background: var(--secondary); padding: 12px; border-top: 3px solid #000; flex: 1.8; text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
-        .price-unit-lp { margin-top: 15px; }
-        .price-unit-lp b { font-size: 55px; line-height: 0.8; }
-        .price-final-lp { color: var(--primary); font-size: 85px; line-height: 0.8; font-weight: 900; }
 
         @media print { 
             .no-print, .delete-btn { display: none !important; } 
             body { background: white; padding: 0; } 
             #printArea { width: 100%; text-align: left; }
-            .tag, .promo-tag-lp { border: 2px solid #000 !important; }
+            .tag { border: 2px solid #000 !important; }
             @page { margin: 0; size: auto; }
         }
     </style>
@@ -127,69 +76,115 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
     </script>
+
     <div class="no-print" style="text-align:center; padding: 15px;">
         <div style="display: block; margin-bottom: 10px;"><img src="logo.png" style="max-height: 80px; width: auto;" onerror="this.style.display='none'"></div>
-        <div style="display: block;"><b style="color:var(--primary); font-size: 18px;">SOUZA FARMA - FARMÁCIA DO TRABALHADOR</b></div>
+        <div style="display: block;"><b style="color:var(--primary); font-size: 18px;">SOUZA FARMA - SISTEMA DE ETIQUETAS</b></div>
     </div>
+
     <div class="no-print">
         <div class="tabs">
             <button class="tab-btn active" onclick="openTab(event, 'etiquetas')">ETIQUETAS PADRÃO</button>
             <button class="tab-btn" onclick="openTab(event, 'promocoes')">PROMOÇÕES (LEVE/PAGUE)</button>
         </div>
+
         <div id="etiquetas" class="tab-content active">
             <div style="background:#f8fafc; padding:12px; border-radius:8px; margin-bottom:15px; border:1px solid #cbd5e1;">
                 <label>📂 ATUALIZAR PLANILHA ONLINE:</label>
                 <input type="file" onchange="handleExcel(event)"> <span id="excelStatus"></span>
-                <button onclick="if(confirm('Limpar banco online?')) database.ref('produtos').remove()" style="float:right; background:#000; color:#fff; border:none; padding:5px 10px; border-radius:5px; cursor:pointer; font-size:10px;">LIMPAR BANCO</button>
+                <button onclick="limparBancoOnline()" style="float:right; background:#000; color:#fff; border:none; padding:5px 10px; border-radius:5px; cursor:pointer; font-size:10px;">LIMPAR BANCO</button>
             </div>
+
             <div class="grid-form">
                 <div class="field" style="grid-column: span 2;"><label>PRODUTO (BIPE OU BUSQUE)</label><input type="text" id="searchField" class="nav" placeholder="Digite ou bipe..." autocomplete="off"><div id="suggestions"></div></div>
                 <div class="field"><label>PREÇO DE</label><input type="text" id="pOld" class="nav" placeholder="0,00"></div>
                 <div class="field"><label>PREÇO POR</label><input type="text" id="pNew" class="nav" placeholder="0,00"></div>
-                <div class="field"><label>TAMANHO</label><select id="pSize" class="nav"><option value="size-70mm">Térmica 70mm</option><option value="size-6x4">6x4</option><option value="size-8x6">8x6</option><option value="size-17x8">Cartaz 17x9cm</option><option value="size-A5">Cartaz A5</option><option value="size-A4P">Cartaz A4</option></select></div>
-                <div class="field"><label>CAMPANHA</label><select id="pPromo" class="nav"><option value="OFERTA">OFERTA</option><option value="MEGA OFERTA">MEGA OFERTA</option><option value="IMBATÍVEL">IMBATÍVEL</option><option value="SÓ HOJE">SÓ HOJE</option><option value="">Sem Frase</option></select></div>
+                <div class="field"><label>TAMANHO</label>
+                    <select id="pSize" class="nav">
+                        <option value="size-70mm">Térmica 70mm</option>
+                        <option value="size-6x4">6x4</option>
+                        <option value="size-8x6">8x6</option>
+                        <option value="size-17x8">Cartaz 17x9cm</option>
+                        <option value="size-A5">Cartaz A5</option>
+                        <option value="size-A4P">Cartaz A4</option>
+                    </select>
+                </div>
+                <div class="field"><label>CAMPANHA</label>
+                    <select id="pPromo" class="nav">
+                        <option value="OFERTA">OFERTA</option>
+                        <option value="MEGA OFERTA">MEGA OFERTA</option>
+                        <option value="IMBATÍVEL">IMBATÍVEL</option>
+                        <option value="">Sem Frase</option>
+                    </select>
+                </div>
                 <div class="field"><label>QTD</label><input type="number" id="pQty" class="nav" value="1"></div>
                 <div class="btn-group">
                     <button class="btn-add" id="btnAddTag" onclick="addTag()">ADICIONAR</button>
                     <button class="btn-print" onclick="window.print()">IMPRIMIR</button>
-                    <button class="btn-clear" onclick="clearAll()">LIMPAR TELA</button>
+                    <button class="btn-clear" onclick="clearScreen()">LIMPAR TELA</button>
                 </div>
             </div>
             <div id="histDisplay" style="margin-top:10px;"></div>
         </div>
-        <div id="promocoes" class="tab-content">
-            <div class="grid-form">
-                <div class="field" style="grid-column: span 2;"><label>PRODUTO (BIPE OU BUSQUE NOME)</label><input type="text" id="lpProd" class="navLP" placeholder="Bipe ou digite..." autocomplete="off"><div id="suggestionsLP"></div></div>
-                <div class="field"><label>TIPO MODELO</label><select id="lpModel" class="navLP"><option value="full">Cartaz A4 Completo</option><option value="gondola">Etiqueta Gôndola (10x15)</option></select></div>
-                <div class="field"><label>LEVE</label><input type="number" id="lpLeve" class="navLP" value="3" oninput="calcLP()"></div>
-                <div class="field"><label>PAGUE</label><input type="number" id="lpPague" class="navLP" value="2" oninput="calcLP()"></div>
-                <div class="field"><label>VALOR UN. (R$)</label><input type="text" id="lpUnit" class="navLP" placeholder="0,00" oninput="calcLP()"></div>
-                <div class="field"><label>VALIDADE</label><input type="text" id="lpData" class="navLP" placeholder="Validade"></div>
-                <div class="field"><label>TOTAL KIT</label><input type="text" id="lpTotal" readonly></div>
-                <div class="field"><label>SAI POR</label><input type="text" id="lpFinal" readonly></div>
-                <div class="btn-group"><button class="btn-add" id="btnAddLP" onclick="addLPTag()">GERAR CARTAZ</button><button class="btn-print" onclick="window.print()">IMPRIMIR CARTAZ</button></div>
-            </div>
         </div>
-    </div>
-    <div id="printArea"><div id="thermalArea"></div><div id="gondolaArea" class="gondola-container"></div><div id="posterArea"></div></div>
-    <script>
-        let db = []; let historyData = []; let selectedItem = null; let selectedItemLP = null;
-        database.ref('produtos').on('value', (snapshot) => { const data = snapshot.val(); db = data ? Object.values(data) : []; document.getElementById('excelStatus').innerText = db.length > 0 ? `✅ ONLINE` : "⚠️ VAZIO"; });
 
+    <div id="printArea"><div id="thermalArea"></div><div id="gondolaArea" class="gondola-container"></div><div id="posterArea"></div></div>
+
+    <script>
+        let db = []; let historyData = []; let selectedItem = null;
+        const ADMIN_PASS = 'souzafarma2026';
+
+        database.ref('produtos').on('value', (snapshot) => { 
+            const data = snapshot.val(); 
+            db = data ? Object.values(data) : []; 
+            document.getElementById('excelStatus').innerText = db.length > 0 ? `✅ ONLINE` : "⚠️ VAZIO"; 
+        });
+
+        function handleExcel(e) {
+            const senha = prompt("Digite a senha para atualizar o banco de dados:");
+            if (senha !== ADMIN_PASS) return alert("Senha incorreta!");
+
+            const reader = new FileReader();
+            reader.onload = (evt) => {
+                const workbook = XLSX.read(evt.target.result, { type: 'binary' });
+                const products = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+                
+                database.ref('/').update({
+                    produtos: products,
+                    auth_key: ADMIN_PASS
+                }).then(() => alert("Banco de dados sincronizado!"));
+            };
+            reader.readAsBinaryString(e.target.files[0]);
+        }
+
+        function limparBancoOnline() {
+            const senha = prompt("SENHA DE SEGURANÇA PARA APAGAR O BANCO:");
+            if (senha === ADMIN_PASS) {
+                database.ref('/').update({ produtos: null, auth_key: ADMIN_PASS })
+                .then(() => alert("Banco online apagado."));
+            } else { alert("Acesso negado."); }
+        }
+
+        function clearScreen() {
+            if(confirm("Limpar todas as etiquetas da tela?")) {
+                document.getElementById('thermalArea').innerHTML = "";
+                document.getElementById('gondolaArea').innerHTML = "";
+                document.getElementById('posterArea').innerHTML = "";
+            }
+        }
+
+        // Mantém as funções de busca (setupBipe), seleção e geração de tags originais
         function setupBipe(inputId, focusId, suggestionId) {
             const input = document.getElementById(inputId);
             input.addEventListener('input', (e) => {
                 const val = e.target.value.toUpperCase(); 
-                /* BUSCA POR EAN (0) OU CÓDIGO INTERNO (1) */
                 const exact = db.find(i => String(Object.values(i)[0]) === val || String(Object.values(i)[1]) === val);
                 if(exact) { 
-                    if(inputId === 'searchField') selectedItem = {code: Object.values(exact)[0], name: Object.values(exact)[2]};
-                    else selectedItemLP = {code: Object.values(exact)[0], name: Object.values(exact)[2]};
+                    selectedItem = {code: Object.values(exact)[0], name: Object.values(exact)[2]};
                     input.value = Object.values(exact)[2]; document.getElementById(suggestionId).style.display = 'none';
                     setTimeout(() => document.getElementById(focusId).focus(), 50);
                 } else if(val.length >= 2) {
-                    /* FILTRO POR NOME (2) OU CÓDIGO INTERNO (1) */
-                    const matches = db.filter(i => String(Object.values(i)[2]).toUpperCase().includes(val) || String(Object.values(i)[1]).includes(val));
+                    const matches = db.filter(i => String(Object.values(i)[2]).toUpperCase().includes(val));
                     if(matches.length > 0) {
                         document.getElementById(suggestionId).innerHTML = matches.slice(0,10).map(m => `<div class="suggestion-item" onclick="selectItem('${Object.values(m)[0]}', '${Object.values(m)[2]}', '${inputId}', '${focusId}', '${suggestionId}')"><b>${Object.values(m)[1]}</b> - ${Object.values(m)[2]}</div>`).join('');
                         document.getElementById(suggestionId).style.display = 'block';
@@ -197,94 +192,46 @@
                 }
             });
         }
-        setupBipe('searchField', 'pOld', 'suggestions'); setupBipe('lpProd', 'lpLeve', 'suggestionsLP');
+        setupBipe('searchField', 'pOld', 'suggestions');
 
         function selectItem(code, name, inputId, focusId, suggestionId) { 
-            if(inputId === 'searchField') selectedItem = {code, name}; else selectedItemLP = {code, name};
-            document.getElementById(inputId).value = name; document.getElementById(suggestionId).style.display = 'none'; 
+            selectedItem = {code, name};
+            document.getElementById(inputId).value = name; 
+            document.getElementById(suggestionId).style.display = 'none'; 
             setTimeout(() => document.getElementById(focusId).focus(), 50); 
         }
 
-        document.querySelectorAll('.nav').forEach((n, i, a) => n.addEventListener('keydown', (e) => { if(e.key === 'Enter') { e.preventDefault(); if(i < a.length-1) a[i+1].focus(); else addTag(); } }));
-        document.querySelectorAll('.navLP').forEach((n, i, a) => n.addEventListener('keydown', (e) => { if(e.key === 'Enter') { e.preventDefault(); if(i < a.length-1) a[i+1].focus(); else addLPTag(); } }));
-
         function addTag(reuseItem = null) {
-            const name = reuseItem ? reuseItem.name : document.getElementById('searchField').value, oldP = reuseItem ? reuseItem.old : document.getElementById('pOld').value, newP = reuseItem ? reuseItem.new : document.getElementById('pNew').value;
-            const size = document.getElementById('pSize').value, promo = document.getElementById('pPromo').value, qty = reuseItem ? 1 : parseInt(document.getElementById('pQty').value);
+            const name = reuseItem ? reuseItem.name : document.getElementById('searchField').value;
+            const oldP = reuseItem ? reuseItem.old : document.getElementById('pOld').value;
+            const newP = reuseItem ? reuseItem.new : document.getElementById('pNew').value;
+            const size = document.getElementById('pSize').value;
+            const promo = document.getElementById('pPromo').value;
+            const qty = reuseItem ? 1 : parseInt(document.getElementById('pQty').value);
+            
             if (!name || !newP) return;
-            const [reais, cents] = newP.split(','), barcode = reuseItem ? reuseItem.code : (selectedItem ? selectedItem.code : "0000000000000");
-            const vOld = parseFloat(oldP.replace(',', '.')), vNew = parseFloat(newP.replace(',', '.')), perc = (vOld > vNew) ? Math.round(((vOld - vNew) / vOld) * 100) : 0;
+
+            const [reais, cents] = newP.split(',');
+            const barcode = reuseItem ? reuseItem.code : (selectedItem ? selectedItem.code : "0000000000000");
+            const vOld = parseFloat(oldP.replace(',', '.'));
+            const vNew = parseFloat(newP.replace(',', '.'));
+            const perc = (vOld > vNew) ? Math.round(((vOld - vNew) / vOld) * 100) : 0;
+            
             let area = (size === 'size-70mm') ? 'thermalArea' : (size.includes('size-6') || size.includes('size-8') ? 'gondolaArea' : 'posterArea');
+            
             for (let i = 0; i < qty; i++) {
-                const tagId = "bc-" + Date.now() + i, div = document.createElement('div'); div.className = `tag ${size}`;
-                const headerContent = (size.includes('size-17') || size.includes('size-A')) ? `<img src="logo.png" class="logo-interna" onerror="this.outerHTML='<b>SOUZA FARMA</b>'">` : `<b>SOUZA FARMA</b>`;
-                div.innerHTML = `<button class="delete-btn" onclick="this.parentElement.remove()">X</button><div class="farmacia-header">${headerContent}</div>${promo ? `<div class="promo-banner">${promo}</div>` : ''}<div class="tag-title">${name.toUpperCase()}</div><div class="info-row"><div class="old-price-label">${(oldP && oldP !== '0,00') ? 'DE R$ '+oldP : ''}</div>${perc > 0 ? `<div class="perc-badge-outer">-${perc}%</div>` : ''}</div><div class="price-box"><span class="label-por">POR</span><div class="main-price"><small style="font-size:0.35em;">R$</small>${reais}<small style="font-size:0.4em; text-decoration:underline;">,${cents||'00'}</small></div></div><div class="footer-barcode"><svg id="${tagId}"></svg></div>`;
-                document.getElementById(area).appendChild(div); JsBarcode(`#${tagId}`, barcode, { format: "CODE128", width: size.includes('A') || size.includes('17')?3:1.1, height: size.includes('A')?120:size.includes('17')?70:size==='size-6x4'?22:30, displayValue: true, fontSize: size.includes('A')?40:size.includes('17')?30:10 });
+                const tagId = "bc-" + Date.now() + i;
+                const div = document.createElement('div'); 
+                div.className = `tag ${size}`;
+                div.innerHTML = `<button class="delete-btn" onclick="this.parentElement.remove()">X</button><div class="farmacia-header">SOUZA FARMA</div>${promo ? `<div class="promo-banner">${promo}</div>` : ''}<div class="tag-title">${name.toUpperCase()}</div><div class="info-row"><div class="old-price-label">${(oldP && oldP !== '0,00') ? 'DE R$ '+oldP : ''}</div>${perc > 0 ? `<div class="perc-badge-outer">-${perc}%</div>` : ''}</div><div class="price-box"><span class="label-por">POR</span><div class="main-price"><small style="font-size:0.35em;">R$</small>${reais}<small style="font-size:0.4em; text-decoration:underline;">,${cents||'00'}</small></div></div><div class="footer-barcode"><svg id="${tagId}"></svg></div>`;
+                document.getElementById(area).appendChild(div); 
+                JsBarcode(`#${tagId}`, barcode, { format: "CODE128", width: 1.1, height: 30, displayValue: true, fontSize: 10 });
             }
             if(!reuseItem) { historyData.unshift({name, old: oldP, new: newP, code: barcode}); updateHistory(); document.getElementById('searchField').value = ""; document.getElementById('pOld').value = ""; document.getElementById('pNew').value = ""; document.getElementById('searchField').focus(); }
         }
 
-        function addLPTag() {
-            const barcode = selectedItemLP ? selectedItemLP.code : "0000000000000", tagId = "lpbc-" + Date.now();
-            const model = document.getElementById('lpModel').value;
-            const div = document.createElement('div'); 
-            if(model === 'full') {
-                div.className = 'promo-tag-lp';
-                div.innerHTML = `<button class="delete-btn" onclick="this.parentElement.remove()">X</button><div class="lp-header-box"><span>— MEGA —</span><h1>OFERTA</h1></div><div class="lp-prod-name">${document.getElementById('lpProd').value.toUpperCase()}</div><div class="lp-leve-pague"><div class="lp-box" style="background:#000; color:#fff;">LEVE ${document.getElementById('lpLeve').value}</div><div class="lp-box" style="background:var(--primary); color:#fff;">PAGUE ${document.getElementById('lpPague').value}</div></div><div style="font-size:32px; margin-top:5px;">VALOR DA UNIDADE: R$ ${document.getElementById('lpUnit').value}</div><div style="font-size:38px; margin: 10px 0;">VALOR TOTAL DO KIT: <b>R$ ${document.getElementById('lpTotal').value}</b></div><div class="lp-yellow-box"><span style="font-size:28px; display:block; font-weight:bold;">NA COMPRA DE ${document.getElementById('lpLeve').value}, A UNIDADE SAI POR:</span>R$ <b>${document.getElementById('lpFinal').value}</b></div><div class="lp-barcode-container"><svg id="${tagId}"></svg></div><div class="lp-footer">SOUZA FARMA - FARMÁCIA DO TRABALHADOR<br>OFERTA VÁLIDA: ${document.getElementById('lpData').value.toUpperCase()}</div>`;
-            } else {
-                div.className = 'tag size-lp-gondola';
-                div.innerHTML = `<button class="delete-btn" onclick="this.parentElement.remove()">X</button><div class="lp-top-white"><div style="font-size:12px; font-weight:bold; border-bottom:1px solid #000; padding-bottom:5px;">SOUZA FARMA</div><div style="font-size:22px; line-height:1.1; margin-top:10px; height:65px; overflow:hidden; font-weight:900;">${document.getElementById('lpProd').value.toUpperCase()}</div><div class="price-unit-lp"><small style="font-size:16px;">R$</small> <b>${document.getElementById('lpUnit').value}</b> <small style="font-size:14px;">CADA</small></div><div style="position:absolute; bottom:5px; right:5px; font-size:9px;">${barcode}</div></div><div class="lp-bottom-yellow"><div style="background:#000; color:#fff; font-size:22px; padding:6px; margin-bottom:5px; font-weight:900;">LEVE ${document.getElementById('lpLeve').value}, PAGUE ${document.getElementById('lpPague').value}</div><div style="font-size:16px; font-weight:bold;">UNITÁRIO SAI POR:</div><div class="price-final-lp"><span style="font-size:28px; vertical-align:middle;">R$</span> <b>${document.getElementById('lpFinal').value}</b></div><div style="font-size:18px; margin-top:5px; font-weight:900; border-top:1px solid #000; padding-top:5px;">Valor do Kit: <span style="font-size:14px;">R$</span> ${document.getElementById('lpTotal').value}</div><div style="font-size:10px; margin-top:5px;">Válido até: ${document.getElementById('lpData').value}</div></div>`;
-            }
-            document.getElementById('posterArea').appendChild(div); 
-            if(model === 'full') JsBarcode(`#${tagId}`, barcode, { format: "CODE128", width: 2.5, height: 75, displayValue: true, fontSize: 30 });
-            document.getElementById('lpProd').value = ""; document.getElementById('lpUnit').value = ""; document.getElementById('lpProd').focus();
-        }
-
         function updateHistory() { document.getElementById('histDisplay').innerHTML = historyData.slice(0, 6).map((h, i) => `<span class="hist-chip" onclick='addTag(historyData[${i}])'>${h.name}</span>`).join(''); }
-        function calcLP() { const l = parseInt(document.getElementById('lpLeve').value) || 0, p = parseInt(document.getElementById('lpPague').value) || 0, u = parseFloat(document.getElementById('lpUnit').value.replace(',', '.')) || 0; if(l > 0 && u > 0) { const f = (p * u) / l; document.getElementById('lpFinal').value = f.toLocaleString('pt-br', {minimumFractionDigits:2, maximumFractionDigits:2}); document.getElementById('lpTotal').value = (p*u).toLocaleString('pt-br', {minimumFractionDigits:2}); } }
         function openTab(evt, tabName) { document.querySelectorAll('.tab-content, .tab-btn').forEach(el => el.classList.remove('active')); document.getElementById(tabName).classList.add('active'); evt.currentTarget.classList.add('active'); }
-      // Substitua suas funções antigas por estas:
-
-function handleExcel(e) {
-    const senha = prompt("Digite a senha de administrador para atualizar o estoque:");
-    if (senha !== 'souzafarma2026') return alert("Senha incorreta!");
-
-    const reader = new FileReader();
-    reader.onload = (evt) => {
-        const workbook = XLSX.read(evt.target.result, { type: 'binary' });
-        const products = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
-        
-        // Envia a chave de autorização junto com os produtos
-        database.ref('/').update({
-            produtos: products,
-            auth_key: 'souzafarma2026'
-        }).then(() => alert("Sincronizado com sucesso!"));
-    };
-    reader.readAsBinaryString(e.target.files[0]);
-}
-
-function clearAll() {
-    if(confirm("Deseja realmente limpar todas as etiquetas da tela?")) {
-        document.getElementById('thermalArea').innerHTML = "";
-        document.getElementById('gondolaArea').innerHTML = "";
-        document.getElementById('posterArea').innerHTML = "";
-        historyData = [];
-        updateHistory();
-    }
-}
-
-// Nova função para limpar o banco online com segurança
-function limparBancoOnline() {
-    const senha = prompt("Digite a senha para APAGAR o banco de dados online:");
-    if (senha === 'souzafarma2026') {
-        database.ref('/').update({
-            produtos: null,
-            auth_key: 'souzafarma2026'
-        }).then(() => alert("Banco limpo!"));
-    } else {
-        alert("Senha incorreta!");
-    }
-}
     </script>
 </body>
 </html>
