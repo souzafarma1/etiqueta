@@ -179,8 +179,18 @@
     <script>
         let db = []; let historyData = []; let selectedItem = null; let selectedItemLP = null;
       database.ref('produtos').on('value', (s) => { 
-    const data = s.val(); db = data ? Object.values(data) : []; 
-    document.getElementById('excelStatus').innerText = db.length > 0 ? `✅ CONSTA NO SISTEMA (${db.length} ITENS) - ATUALIZADO: ${new Date().toLocaleString('pt-br')}` : "⚠️ BANCO VAZIO"; 
+    const data = s.val(); 
+    db = data ? Object.values(data) : []; 
+    
+    // Atualiza o resumo no painel superior
+    const statusTxt = db.length > 0 ? `✅ CONECTADA (${db.length} ITENS)` : "⚠️ BANCO VAZIO";
+    const dataTxt = new Date().toLocaleString('pt-br', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' });
+
+    document.getElementById('txtPlanilha').innerText = `📊 PLANILHA: ${statusTxt}`;
+    document.getElementById('txtUpdate').innerText = `📅 ATUALIZADO EM: ${dataTxt}`;
+    
+    // Atualiza também o status do botão de upload para manter a coerência
+    document.getElementById('excelStatus').innerText = `(${db.length} itens no sistema)`; 
 });
 
         function setupBipe(inputId, focusId, suggestionId) {
@@ -256,4 +266,5 @@
     </script>
 </body>
 </html>
+
 
