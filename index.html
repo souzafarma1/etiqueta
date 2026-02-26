@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Souza Farma v103 - Final Consolidado</title>
+    <title>Souza Farma v107 - Final Consolidado</title>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     
@@ -41,10 +41,10 @@
         .size-70mm { width: 70mm; padding-left: 0.3cm; padding-right: 0.3cm; border: 1px dashed #999; margin-left: 0 !important; margin-right: auto !important; margin-bottom: 5px !important; }
         .gondola-container { display: flex; flex-wrap: wrap; gap: 0; justify-content: flex-start; padding: 1cm; box-sizing: border-box; }
         
-        .size-6x4 { width: 6cm !important; height: 4cm !important; margin: 0; border: 1px solid #000; display: flex !important; flex-direction: column !important; }
+        /* LINHA MAIS FINA NAS ETIQUETAS 6x4 */
+        .size-6x4 { width: 6cm !important; height: 4cm !important; margin: 0; border: 0.5px solid #000; display: flex !important; flex-direction: column !important; }
         .size-8x6 { width: 8cm !important; height: 6cm !important; margin: 0; border: 1px solid #000; display: flex !important; flex-direction: column !important; }
         
-        /* AJUSTE FINAL 17x9cm: TOPO E BASE COMPACTADOS */
         .size-17x8 { width: 17cm !important; height: 9cm !important; border: 2px solid #000; margin: 0 auto 5px !important; padding: 0; display: flex !important; flex-direction: column !important; justify-content: space-between !important; }
 
         .size-A5 { width: 14.8cm; height: 21cm; padding: 0.6cm; margin: 0 auto 10px !important; }
@@ -52,7 +52,6 @@
         .logo-interna { max-height: 80px; width: auto; padding: 5px; }
 
         .farmacia-header { font-size: 7px; font-weight: 900; color: #000; padding: 4px; border-bottom: 1px solid #eee; text-transform: uppercase; display: flex; justify-content: center; align-items: center; }
-        /* Logo mais em cima na 17x9 */
         .size-17x8 .farmacia-header { padding: 0; border: none; }
         .size-17x8 .logo-interna { max-height: 70px; padding: 2px; }
 
@@ -60,12 +59,10 @@
         .size-6x4 .tag-title { font-size: 9.5px; height: 20px; line-height: 0.95; padding-top: 5px; }
         .size-8x6 .tag-title { font-size: 14px; }
         
-        /* CENTRALIZAÇÃO DO NOME NA 17x9 */
         .size-17x8 .tag-title { font-size: 34px; line-height: 1; height: 2.8cm !important; margin: 0; }
 
         .promo-banner { background: var(--primary); color: var(--secondary); font-size: 12px; font-weight: 900; padding: 3px; border-bottom: 1px solid #000; text-transform: uppercase; }
         .size-6x4 .promo-banner { font-size: 10px; padding: 2px; }
-        /* Campanha subida na 17x9 */
         .size-17x8 .promo-banner { font-size: 26px; padding: 4px; border-top: 1px solid #000; }
         
         .size-A5 .promo-banner { font-size: 55px; padding: 15px; border-bottom: 5px solid #000; }
@@ -74,7 +71,6 @@
         .price-box { background: var(--secondary); padding: 4px; border-top: 1px solid #000; border-bottom: 1px solid #000; display: flex; justify-content: center; align-items: center; }
         .main-price { color: var(--primary); font-weight: 900; display: flex; align-items: flex-start; line-height: 0.85; font-size: 40px; }
         .size-6x4 .main-price { font-size: 36px; }
-        /* Preço reduzido para liberar espaço na 17x9 */
         .size-17x8 .main-price { font-size: 80px; }
         .label-por { font-size: 10px; margin-right: 2px; align-self: center; color: #000; }
 
@@ -92,7 +88,6 @@
         .size-17x8 .footer-barcode { height: 45px; margin-top: 0; }
         .size-A5 .footer-barcode { height: 140px; } .size-A4P .footer-barcode { height: 180px; }
 
-        /* ABA PROMOÇÃO - ORIGINAL MANTIDA */
         .promo-tag-lp { background: white; border: 12px solid var(--primary); width: 21cm; height: 27.5cm; padding: 0.3cm; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; color: #000; margin: 0 auto 5px; page-break-after: always; }
         .lp-header-box { background: #000; color: #fff; width: calc(100% + 0.6cm); margin-top: -0.3cm; padding: 12px 0; margin-bottom: 15px; }
         .lp-header-box h1 { font-size: 110px; margin: 0; line-height: 0.8; letter-spacing: -3px; }
@@ -109,7 +104,7 @@
         .delete-btn { position: absolute; top: 1px; left: 1px; background: #000; color: #fff; border: none; border-radius: 50%; width: 25px; height: 25px; font-weight: bold; z-index: 1000; cursor: pointer; }
         .hist-chip { display: inline-block; background: #e2e8f0; padding: 5px 10px; border-radius: 15px; font-size: 10px; margin: 2px; cursor: pointer; font-weight: bold; }
 
-        /* NOVO MODELO GÔNDOLA 10x15 v103 */
+        /* NOVO MODELO GÔNDOLA 10x15 v107 */
         .size-lp-gondola { width: 10cm !important; height: 15cm !important; border: 2px solid #000; margin: 5px; background: #fff; text-align: left !important; display: flex !important; flex-direction: column !important; box-sizing: border-box; }
         .lp-top-white { padding: 12px; flex: 1.2; position: relative; }
         .lp-bottom-yellow { background: var(--secondary); padding: 12px; border-top: 3px solid #000; flex: 1.8; text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
@@ -127,6 +122,9 @@
     </style>
 </head>
 <body>
+<div class="no-print" id="statusPainel" style="background:#f1f5f9; padding:10px; margin:10px auto; max-width:1100px; border-radius:8px; border:1px solid #cbd5e1; font-size:12px; font-weight:bold;">
+        📊 PLANILHA: Verificando... | 📅 ÚLTIMA ATUALIZAÇÃO: --/--/--
+    </div>
     <script>
         const firebaseConfig = { apiKey: "AIzaSyBfxAE5NnNQ2JKn8iX8-s8lz7M_CVQG6DI", authDomain: "etiqueta-70cbf.firebaseapp.com", databaseURL: "https://etiqueta-70cbf-default-rtdb.firebaseio.com/", projectId: "etiqueta-70cbf", storageBucket: "etiqueta-70cbf.firebasestorage.app", messagingSenderId: "899263207040", appId: "1:899263207040:web:7103a5f0fb49ca15f1b865" };
         firebase.initializeApp(firebaseConfig);
@@ -179,21 +177,28 @@
     <div id="printArea"><div id="thermalArea"></div><div id="gondolaArea" class="gondola-container"></div><div id="posterArea"></div></div>
     <script>
         let db = []; let historyData = []; let selectedItem = null; let selectedItemLP = null;
-        database.ref('produtos').on('value', (snapshot) => { const data = snapshot.val(); db = data ? Object.values(data) : []; document.getElementById('excelStatus').innerText = db.length > 0 ? `✅ ONLINE` : "⚠️ VAZIO"; });
+      database.ref('produtos').on('value', (s) => { 
+    const data = s.val(); db = data ? Object.values(data) : []; 
+    document.getElementById('excelStatus').innerText = db.length > 0 ? `✅ CONSTA NO SISTEMA (${db.length} ITENS) - ATUALIZADO: ${new Date().toLocaleString('pt-br')}` : "⚠️ BANCO VAZIO"; 
+});
 
         function setupBipe(inputId, focusId, suggestionId) {
             const input = document.getElementById(inputId);
             input.addEventListener('input', (e) => {
-                const val = e.target.value.toUpperCase(); const exact = db.find(i => String(Object.values(i)[0]) === val);
+                const val = e.target.value.toUpperCase().trim();
+                if(!val) return;
+                // Busca por EAN (posição 0) ou Interno (posição 1)
+                const exact = db.find(i => String(Object.values(i)[0]) == val || String(Object.values(i)[1]) == val);
                 if(exact) { 
                     if(inputId === 'searchField') selectedItem = {code: Object.values(exact)[0], name: Object.values(exact)[2]};
                     else selectedItemLP = {code: Object.values(exact)[0], name: Object.values(exact)[2]};
-                    input.value = Object.values(exact)[2]; document.getElementById(suggestionId).style.display = 'none';
+                    input.value = Object.values(exact)[2]; 
+                    document.getElementById(suggestionId).style.display = 'none';
                     setTimeout(() => document.getElementById(focusId).focus(), 50);
                 } else if(val.length >= 2) {
-                    const matches = db.filter(i => String(Object.values(i)[2]).toUpperCase().includes(val));
+                   const matches = db.filter(i => String(Object.values(i)[2]).toUpperCase().includes(val) || String(Object.values(i)[1]).includes(val));
                     if(matches.length > 0) {
-                        document.getElementById(suggestionId).innerHTML = matches.slice(0,10).map(m => `<div class="suggestion-item" onclick="selectItem('${Object.values(m)[0]}', '${Object.values(m)[2]}', '${inputId}', '${focusId}', '${suggestionId}')"><b>${Object.values(m)[0]}</b> - ${Object.values(m)[2]}</div>`).join('');
+                        document.getElementById(suggestionId).innerHTML = matches.slice(0,10).map(m => `<div class="suggestion-item" onclick="selectItem('${Object.values(m)[0]}', '${Object.values(m)[2]}', '${inputId}', '${focusId}', '${suggestionId}')"><b>${Object.values(m)[1]}</b> - ${Object.values(m)[2]}</div>`).join('');
                         document.getElementById(suggestionId).style.display = 'block';
                     }
                 }
