@@ -122,9 +122,10 @@
     </style>
 </head>
 <body>
-<div class="no-print" id="statusPainel" style="background:#f1f5f9; padding:10px; margin:10px auto; max-width:1100px; border-radius:8px; border:1px solid #cbd5e1; font-size:12px; font-weight:bold;">
-        📊 PLANILHA: Verificando... | 📅 ÚLTIMA ATUALIZAÇÃO: --/--/--
-    </div>
+<div class="no-print" id="statusPainel" style="background:#f1f5f9; padding:10px; margin:10px auto; max-width:1100px; border-radius:8px; border:1px solid #cbd5e1; font-size:12px; font-weight:bold; display: flex; justify-content: space-between;">
+    <span id="txtPlanilha">📊 PLANILHA: Verificando...</span>
+    <span id="txtUpdate">📅 ÚLTIMA ATUALIZAÇÃO: --/--/--</span>
+</div>
     <script>
         const firebaseConfig = { apiKey: "AIzaSyBfxAE5NnNQ2JKn8iX8-s8lz7M_CVQG6DI", authDomain: "etiqueta-70cbf.firebaseapp.com", databaseURL: "https://etiqueta-70cbf-default-rtdb.firebaseio.com/", projectId: "etiqueta-70cbf", storageBucket: "etiqueta-70cbf.firebasestorage.app", messagingSenderId: "899263207040", appId: "1:899263207040:web:7103a5f0fb49ca15f1b865" };
         firebase.initializeApp(firebaseConfig);
@@ -255,3 +256,4 @@
     </script>
 </body>
 </html>
+
