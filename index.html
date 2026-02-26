@@ -2,11 +2,13 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Souza Farma v110 - Sistema Completo</title>
+    <title>Souza Farma v108 - Segurança Ativada</title>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root { --primary: #e30613; --secondary: #fff200; }
         body { font-family: 'Arial Black', sans-serif; background: #cbd5e1; padding: 20px; margin: 0; }
@@ -32,47 +34,47 @@
         #printArea { display: block; width: 100%; max-width: 21cm; margin: 0 auto; background: white; text-align: left; }
         .tag { background: white; border: 2px solid #000; position: relative; overflow: hidden; display: flex; flex-direction: column; box-sizing: border-box; text-align: center; page-break-inside: avoid; }
         
-        /* AJUSTES PARA CARTAZES GRANDES */
-        .size-A4P { width: 21cm; height: 29.7cm; padding: 1.5cm; margin: 0 auto 10px !important; justify-content: space-between; }
-        .size-A4P .promo-banner { font-size: 50px; padding: 20px; }
-        .size-A4P .tag-title { font-size: 60px; }
-        .size-A4P .old-price-label { font-size: 35px; }
-        .size-A4P .perc-badge-outer { font-size: 40px; padding: 10px 20px; }
-        .size-A4P .main-price { font-size: 220px; }
-        .size-A4P .label-por { font-size: 40px; }
+        /* AJUSTES DE TAMANHO PARA A4 E A5 SEM MUDAR O ESTILO */
+        .size-A4P { width: 21cm; height: 29.7cm; padding: 1cm; margin: 0 auto 10px !important; justify-content: space-around; }
+        .size-A4P .promo-banner { font-size: 45px !important; padding: 15px !important; }
+        .size-A4P .tag-title { font-size: 55px !important; }
+        .size-A4P .main-price { font-size: 200px !important; }
+        .size-A4P .old-price-label { font-size: 30px !important; }
+        .size-A4P .perc-badge-outer { font-size: 35px !important; padding: 10px 15px !important; }
 
-        .size-A5 { width: 14.8cm; height: 21cm; padding: 1cm; margin: 0 auto 10px !important; justify-content: space-between; }
-        .size-A5 .promo-banner { font-size: 35px; padding: 15px; }
-        .size-A5 .tag-title { font-size: 40px; }
-        .size-A5 .old-price-label { font-size: 25px; }
-        .size-A5 .perc-badge-outer { font-size: 28px; padding: 8px 15px; }
-        .size-A5 .main-price { font-size: 140px; }
-        .size-A5 .label-por { font-size: 25px; }
+        .size-A5 { width: 14.8cm; height: 21cm; padding: 0.6cm; margin: 0 auto 10px !important; justify-content: space-around; }
+        .size-A5 .promo-banner { font-size: 30px !important; padding: 10px !important; }
+        .size-A5 .tag-title { font-size: 38px !important; }
+        .size-A5 .main-price { font-size: 130px !important; }
+        .size-A5 .old-price-label { font-size: 22px !important; }
+        .size-A5 .perc-badge-outer { font-size: 26px !important; }
 
-        /* OUTROS TAMANHOS */
-        .size-70mm { width: 70mm; padding: 0.3cm; border: 1px dashed #999; margin-bottom: 5px !important; }
+        .size-70mm { width: 70mm; padding-left: 0.3cm; padding-right: 0.3cm; border: 1px dashed #999; margin-bottom: 5px !important; }
+        .gondola-container { display: flex; flex-wrap: wrap; gap: 0; justify-content: flex-start; padding: 1cm; box-sizing: border-box; }
         .size-6x4 { width: 6cm !important; height: 4cm !important; border: 0.5px solid #000; }
         .size-8x6 { width: 8cm !important; height: 6cm !important; border: 1px solid #000; }
-        .size-17x8 { width: 17cm !important; height: 9cm !important; border: 2px solid #000; margin: 0 auto 5px !important; }
+        .size-17x8 { width: 17cm !important; height: 9cm !important; border: 2px solid #000; margin: 0 auto 5px !important; justify-content: space-between !important; }
 
-        .info-row { display: flex; justify-content: space-between; align-items: center; padding: 0 15px; min-height: 30px; }
-        .old-price-label { color: #000; font-weight: bold; text-decoration: line-through; }
-        .perc-badge-outer { background: #000; color: #fff; border-radius: 6px; font-weight: 900; }
-        .farmacia-header { font-size: 8px; font-weight: 900; color: #000; padding: 5px; border-bottom: 1px solid #eee; text-transform: uppercase; }
-        .tag-title { flex-grow: 1; display: flex; align-items: center; justify-content: center; font-weight: 900; padding: 5px; text-transform: uppercase; font-size: 12px; }
-        .promo-banner { background: var(--primary); color: var(--secondary); font-weight: 900; border-bottom: 2px solid #000; text-transform: uppercase; }
-        .price-box { background: var(--secondary); border-top: 2px solid #000; border-bottom: 2px solid #000; display: flex; justify-content: center; align-items: center; }
-        .main-price { color: var(--primary); font-weight: 900; display: flex; align-items: flex-start; line-height: 0.85; }
-        
-        .delete-btn { position: absolute; top: 5px; left: 5px; background: #000; color: #fff; border: none; border-radius: 50%; width: 30px; height: 30px; font-weight: bold; z-index: 1000; cursor: pointer; }
+        .info-row { display: flex; justify-content: space-between; align-items: center; padding: 0 8px; min-height: 25px; background: white; }
+        .old-price-label { color: #000; font-size: 9px; font-weight: bold; text-decoration: line-through; }
+        .perc-badge-outer { background: #000; color: #fff; font-size: 11px; padding: 2px 5px; border-radius: 4px; font-weight: 900; }
+        .farmacia-header { font-size: 7px; font-weight: 900; color: #000; padding: 4px; border-bottom: 1px solid #eee; text-transform: uppercase; }
+        .tag-title { flex-grow: 1; display: flex; align-items: center; justify-content: center; font-weight: 900; padding: 2px 4px; line-height: 1.1; text-transform: uppercase; font-size: 11px; overflow: hidden; }
+        .promo-banner { background: var(--primary); color: var(--secondary); font-size: 12px; font-weight: 900; padding: 3px; border-bottom: 1px solid #000; text-transform: uppercase; }
+        .price-box { background: var(--secondary); padding: 4px; border-top: 1px solid #000; border-bottom: 1px solid #000; display: flex; justify-content: center; align-items: center; }
+        .main-price { color: var(--primary); font-weight: 900; display: flex; align-items: flex-start; line-height: 0.85; font-size: 40px; }
+        .label-por { font-size: 10px; margin-right: 2px; align-self: center; color: #000; }
+        .footer-barcode { background: white; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 5px 0; }
+        .footer-barcode svg { max-width: 95%; height: auto; }
+        .delete-btn { position: absolute; top: 1px; left: 1px; background: #000; color: #fff; border: none; border-radius: 50%; width: 25px; height: 25px; font-weight: bold; z-index: 1000; cursor: pointer; }
         .hist-chip { display: inline-block; background: #e2e8f0; padding: 5px 10px; border-radius: 15px; font-size: 10px; margin: 2px; cursor: pointer; font-weight: bold; }
 
         @media print { 
             .no-print, .delete-btn { display: none !important; } 
             body { background: white; padding: 0; } 
             #printArea { width: 100%; text-align: left; }
-            .tag { border: 2px solid #000 !important; page-break-after: always; }
-            @page { margin: 0; }
+            .tag { border: 2px solid #000 !important; }
+            @page { margin: 0; size: auto; }
         }
     </style>
 </head>
@@ -84,7 +86,8 @@
     </script>
 
     <div class="no-print" style="text-align:center; padding: 15px;">
-        <b style="color:var(--primary); font-size: 20px;">SOUZA FARMA - GESTÃO TOTAL</b>
+        <div style="display: block; margin-bottom: 10px;"><img src="logo.png" style="max-height: 80px; width: auto;" onerror="this.style.display='none'"></div>
+        <div style="display: block;"><b style="color:var(--primary); font-size: 18px;">SOUZA FARMA - SISTEMA DE ETIQUETAS</b></div>
     </div>
 
     <div class="no-print">
@@ -94,6 +97,12 @@
         </div>
 
         <div id="etiquetas" class="tab-content active">
+            <div style="background:#f8fafc; padding:12px; border-radius:8px; margin-bottom:15px; border:1px solid #cbd5e1;">
+                <label>📂 ATUALIZAR PLANILHA ONLINE:</label>
+                <input type="file" onchange="handleExcel(event)"> <span id="excelStatus"></span>
+                <button onclick="limparBancoOnline()" style="float:right; background:#000; color:#fff; border:none; padding:5px 10px; border-radius:5px; cursor:pointer; font-size:10px;">LIMPAR BANCO</button>
+            </div>
+
             <div class="grid-form">
                 <div class="field" style="grid-column: span 2;"><label>PRODUTO (BIPE OU BUSQUE)</label><input type="text" id="searchField" class="nav" placeholder="Digite ou bipe..." autocomplete="off"><div id="suggestions"></div></div>
                 <div class="field"><label>PREÇO DE</label><input type="text" id="pOld" class="nav" placeholder="0,00"></div>
@@ -103,6 +112,7 @@
                         <option value="size-70mm">Térmica 70mm</option>
                         <option value="size-6x4">6x4</option>
                         <option value="size-8x6">8x6</option>
+                        <option value="size-17x8">Cartaz 17x9cm</option>
                         <option value="size-A5">Cartaz A5</option>
                         <option value="size-A4P">Cartaz A4</option>
                     </select>
@@ -117,9 +127,9 @@
                 </div>
                 <div class="field"><label>QTD</label><input type="number" id="pQty" class="nav" value="1"></div>
                 <div class="btn-group">
-                    <button class="btn-add" onclick="addTag('padrao')">ADICIONAR</button>
+                    <button class="btn-add" id="btnAddTag" onclick="addTag()">ADICIONAR</button>
                     <button class="btn-print" onclick="window.print()">IMPRIMIR</button>
-                    <button class="btn-clear" onclick="clearScreen()">LIMPAR</button>
+                    <button class="btn-clear" onclick="clearScreen()">LIMPAR TELA</button>
                 </div>
             </div>
             <div id="histDisplay" style="margin-top:10px;"></div>
@@ -128,8 +138,8 @@
         <div id="promocoes" class="tab-content">
             <div class="grid-form">
                 <div class="field" style="grid-column: span 2;"><label>PRODUTO PROMOÇÃO</label><input type="text" id="searchPromo" placeholder="Busque o produto..." autocomplete="off"><div id="suggestionsLP"></div></div>
-                <div class="field"><label>LEVE QUANTOS?</label><input type="number" id="pLeve" value="3"></div>
-                <div class="field"><label>PAGUE QUANTOS?</label><input type="number" id="pPague" value="2"></div>
+                <div class="field"><label>LEVE</label><input type="number" id="pLeve" value="3"></div>
+                <div class="field"><label>PAGUE</label><input type="number" id="pPague" value="2"></div>
                 <div class="field"><label>PREÇO UNITÁRIO</label><input type="text" id="pUnit" placeholder="0,00"></div>
                 <div class="field"><label>TAMANHO</label>
                     <select id="pSizePromo">
@@ -138,7 +148,7 @@
                     </select>
                 </div>
                 <div class="btn-group">
-                    <button class="btn-add" style="background:#000" onclick="addTag('promo')">GERAR CARTAZ PROMOÇÃO</button>
+                    <button class="btn-add" style="background:#000" onclick="addPromoTag()">GERAR PROMOÇÃO</button>
                 </div>
             </div>
         </div>
@@ -146,7 +156,7 @@
 
     <div id="printArea">
         <div id="thermalArea"></div>
-        <div id="gondolaArea" style="display:flex; flex-wrap:wrap;"></div>
+        <div id="gondolaArea" class="gondola-container"></div>
         <div id="posterArea"></div>
     </div>
 
@@ -154,108 +164,102 @@
         let db = []; let historyData = []; let selectedItem = null;
         const ADMIN_PASS = 'souzafarma2026';
 
-        database.ref('produtos').on('value', (s) => { db = s.val() ? Object.values(s.val()) : []; });
+        database.ref('produtos').on('value', (snapshot) => { 
+            const data = snapshot.val(); 
+            db = data ? Object.values(data) : []; 
+            document.getElementById('excelStatus').innerText = db.length > 0 ? `✅ ONLINE` : "⚠️ VAZIO"; 
+        });
 
-        function openTab(evt, tabName) {
-            document.querySelectorAll('.tab-content, .tab-btn').forEach(el => el.classList.remove('active'));
-            document.getElementById(tabName).classList.add('active');
-            evt.currentTarget.classList.add('active');
+        function handleExcel(e) {
+            const senha = prompt("Digite a senha:");
+            if (senha !== ADMIN_PASS) return;
+            const reader = new FileReader();
+            reader.onload = (evt) => {
+                const workbook = XLSX.read(evt.target.result, { type: 'binary' });
+                const products = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+                database.ref('/').update({ produtos: products, auth_key: ADMIN_PASS }).then(() => alert("Sincronizado!"));
+            };
+            reader.readAsBinaryString(e.target.files[0]);
         }
 
-        // Busca Universal
-        function setupSearch(inputId, suggestId, focusId) {
+        function limparBancoOnline() {
+            const senha = prompt("SENHA:");
+            if (senha === ADMIN_PASS) database.ref('/').update({ produtos: null });
+        }
+
+        function clearScreen() { if(confirm("Limpar tela?")) { location.reload(); } }
+
+        function setupBipe(inputId, focusId, suggestionId) {
             const input = document.getElementById(inputId);
             input.addEventListener('input', (e) => {
-                const val = e.target.value.toUpperCase();
+                const val = e.target.value.toUpperCase(); 
                 const exact = db.find(i => String(Object.values(i)[0]) === val || String(Object.values(i)[1]) === val);
-                if(exact) {
+                if(exact) { 
                     selectedItem = {code: Object.values(exact)[0], name: Object.values(exact)[2]};
-                    input.value = Object.values(exact)[2];
-                    document.getElementById(suggestId).style.display = 'none';
-                    if(focusId) document.getElementById(focusId).focus();
+                    input.value = Object.values(exact)[2]; 
+                    document.getElementById(suggestionId).style.display = 'none';
+                    if(focusId) setTimeout(() => document.getElementById(focusId).focus(), 50);
                 } else if(val.length >= 2) {
                     const matches = db.filter(i => String(Object.values(i)[2]).toUpperCase().includes(val));
-                    document.getElementById(suggestId).innerHTML = matches.slice(0,10).map(m => `<div class="suggestion-item" onclick="selectItem('${Object.values(m)[0]}', '${Object.values(m)[2]}', '${inputId}', '${focusId}', '${suggestId}')">${Object.values(m)[2]}</div>`).join('');
-                    document.getElementById(suggestId).style.display = 'block';
+                    document.getElementById(suggestionId).innerHTML = matches.slice(0,10).map(m => `<div class="suggestion-item" onclick="selectItem('${Object.values(m)[0]}', '${Object.values(m)[2]}', '${inputId}', '${focusId}', '${suggestionId}')"><b>${Object.values(m)[1]}</b> - ${Object.values(m)[2]}</div>`).join('');
+                    document.getElementById(suggestionId).style.display = 'block';
                 }
             });
         }
-        setupSearch('searchField', 'suggestions', 'pOld');
-        setupSearch('searchPromo', 'suggestionsLP', 'pUnit');
+        setupBipe('searchField', 'pOld', 'suggestions');
+        setupBipe('searchPromo', 'pUnit', 'suggestionsLP');
 
-        function selectItem(code, name, inputId, focusId, suggestId) {
+        function selectItem(code, name, inputId, focusId, suggestionId) { 
             selectedItem = {code, name};
-            document.getElementById(inputId).value = name;
-            document.getElementById(suggestId).style.display = 'none';
-            if(focusId) setTimeout(() => document.getElementById(focusId).focus(), 50);
+            document.getElementById(inputId).value = name; 
+            document.getElementById(suggestionId).style.display = 'none'; 
+            if(focusId) setTimeout(() => document.getElementById(focusId).focus(), 50); 
         }
 
-        function addTag(tipo) {
-            const area = document.getElementById('posterArea');
-            let div = document.createElement('div');
-            let tagId = "bc-" + Date.now();
-
-            if(tipo === 'padrao') {
-                const name = document.getElementById('searchField').value;
-                const oldP = document.getElementById('pOld').value;
-                const newP = document.getElementById('pNew').value;
-                const size = document.getElementById('pSize').value;
-                const promo = document.getElementById('pPromo').value;
-                const qty = parseInt(document.getElementById('pQty').value);
-                const [r, c] = newP.split(',');
-                const vOld = parseFloat(oldP.replace(',','.'));
-                const vNew = parseFloat(newP.replace(',','.'));
-                const perc = (vOld > vNew) ? Math.round(((vOld-vNew)/vOld)*100) : 0;
-                let targetArea = (size.includes('size-A') || size.includes('17x8')) ? 'posterArea' : (size.includes('size-70') ? 'thermalArea' : 'gondolaArea');
-
-                for(let i=0; i<qty; i++) {
-                    const clone = document.createElement('div');
-                    clone.className = `tag ${size}`;
-                    clone.innerHTML = `
-                        <button class="delete-btn" onclick="this.parentElement.remove()">X</button>
-                        <div class="farmacia-header">SOUZA FARMA</div>
-                        ${promo ? `<div class="promo-banner">${promo}</div>` : ''}
-                        <div class="tag-title">${name.toUpperCase()}</div>
-                        <div class="info-row">
-                            <div class="old-price-label">${oldP ? 'DE R$ '+oldP : ''}</div>
-                            ${perc > 0 ? `<div class="perc-badge-outer">-${perc}%</div>` : ''}
-                        </div>
-                        <div class="price-box">
-                            <span class="label-por">POR R$</span>
-                            <div class="main-price">${r}<small style="font-size:0.4em">,${c||'00'}</small></div>
-                        </div>
-                        <div class="footer-barcode"><svg id="${tagId+i}"></svg></div>`;
-                    document.getElementById(targetArea).appendChild(clone);
-                    JsBarcode(`#${tagId+i}`, selectedItem?.code || "00000000", {width:1.2, height:30});
-                }
-            } else {
-                // LÓGICA LEVE PAGUE
-                const name = document.getElementById('searchPromo').value;
-                const leve = document.getElementById('pLeve').value;
-                const pague = document.getElementById('pPague').value;
-                const unit = parseFloat(document.getElementById('pUnit').value.replace(',','.'));
-                const size = document.getElementById('pSizePromo').value;
-                const cada = ((pague * unit) / leve).toFixed(2).replace('.',',');
-
+        function addTag(reuseItem = null) {
+            const name = reuseItem ? reuseItem.name : document.getElementById('searchField').value;
+            const oldP = reuseItem ? reuseItem.old : document.getElementById('pOld').value;
+            const newP = reuseItem ? reuseItem.new : document.getElementById('pNew').value;
+            const size = document.getElementById('pSize').value;
+            const promo = document.getElementById('pPromo').value;
+            const qty = reuseItem ? 1 : parseInt(document.getElementById('pQty').value);
+            
+            if (!name || !newP) return;
+            const [reais, cents] = newP.split(',');
+            const barcode = reuseItem ? reuseItem.code : (selectedItem ? selectedItem.code : "0000000000000");
+            const vOld = parseFloat(oldP.replace(',', '.'));
+            const vNew = parseFloat(newP.replace(',', '.'));
+            const perc = (vOld > vNew) ? Math.round(((vOld - vNew) / vOld) * 100) : 0;
+            
+            let area = (size.includes('size-A') || size.includes('17x8')) ? 'posterArea' : (size === 'size-70mm' ? 'thermalArea' : 'gondolaArea');
+            
+            for (let i = 0; i < qty; i++) {
+                const tagId = "bc-" + Date.now() + i;
+                const div = document.createElement('div'); 
                 div.className = `tag ${size}`;
-                div.innerHTML = `
-                    <button class="delete-btn" onclick="this.parentElement.remove()">X</button>
-                    <div class="promo-banner" style="background:#000; color:#fff">OFERTA ESPECIAL</div>
-                    <div class="tag-title" style="font-size: 50px;">${name.toUpperCase()}</div>
-                    <div style="font-size: 70px; color:red; margin: 10px 0;">LEVE ${leve} PAGUE ${pague}</div>
-                    <div class="price-box">
-                        <div style="flex-direction:column; display:flex;">
-                            <span style="font-size:25px">CADA UM SAI POR:</span>
-                            <div class="main-price" style="font-size:180px">R$ ${cada}</div>
-                        </div>
-                    </div>
-                    <div style="font-size:20px; padding:20px;">Preço unitário: R$ ${unit.toFixed(2).replace('.',',')}</div>
-                `;
-                area.appendChild(div);
+                div.innerHTML = `<button class="delete-btn" onclick="this.parentElement.remove()">X</button><div class="farmacia-header">SOUZA FARMA</div>${promo ? `<div class="promo-banner">${promo}</div>` : ''}<div class="tag-title">${name.toUpperCase()}</div><div class="info-row"><div class="old-price-label">${(oldP && oldP !== '0,00') ? 'DE R$ '+oldP : ''}</div>${perc > 0 ? `<div class="perc-badge-outer">-${perc}%</div>` : ''}</div><div class="price-box"><span class="label-por">POR</span><div class="main-price"><small style="font-size:0.35em;">R$</small>${reais}<small style="font-size:0.4em; text-decoration:underline;">,${cents||'00'}</small></div></div><div class="footer-barcode"><svg id="${tagId}"></svg></div>`;
+                document.getElementById(area).appendChild(div); 
+                JsBarcode(`#${tagId}`, barcode, { format: "CODE128", width: 1.1, height: 30, displayValue: true, fontSize: 10 });
             }
+            if(!reuseItem) { historyData.unshift({name, old: oldP, new: newP, code: barcode}); updateHistory(); document.getElementById('searchField').value = ""; document.getElementById('pOld').value = ""; document.getElementById('pNew').value = ""; document.getElementById('searchField').focus(); }
         }
 
-        function clearScreen() { if(confirm("Limpar?")) location.reload(); }
+        function addPromoTag() {
+            const name = document.getElementById('searchPromo').value;
+            const leve = document.getElementById('pLeve').value;
+            const pague = document.getElementById('pPague').value;
+            const unit = parseFloat(document.getElementById('pUnit').value.replace(',','.'));
+            const size = document.getElementById('pSizePromo').value;
+            const cada = ((pague * unit) / leve).toFixed(2).replace('.',',');
+
+            const div = document.createElement('div');
+            div.className = `tag ${size}`;
+            div.innerHTML = `<button class="delete-btn" onclick="this.parentElement.remove()">X</button><div class="promo-banner" style="background:#000; color:#fff">OFERTA ESPECIAL</div><div class="tag-title">${name.toUpperCase()}</div><div style="font-size: 50px; color:red; margin:15px 0;">LEVE ${leve} PAGUE ${pague}</div><div class="price-box"><div><div style="font-size:20px">CADA SAI POR:</div><div class="main-price">R$ ${cada}</div></div></div><div style="font-size:18px; padding:15px;">Unitário: R$ ${unit.toFixed(2).replace('.',',')}</div>`;
+            document.getElementById('posterArea').appendChild(div);
+        }
+
+        function updateHistory() { document.getElementById('histDisplay').innerHTML = historyData.slice(0, 6).map((h, i) => `<span class="hist-chip" onclick='addTag(historyData[${i}])'>${h.name}</span>`).join(''); }
+        function openTab(evt, tabName) { document.querySelectorAll('.tab-content, .tab-btn').forEach(el => el.classList.remove('active')); document.getElementById(tabName).classList.add('active'); evt.currentTarget.classList.add('active'); }
     </script>
 </body>
 </html>
