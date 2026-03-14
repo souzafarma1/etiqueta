@@ -41,14 +41,7 @@
         .size-70mm { width: 70mm; padding-left: 0.3cm; padding-right: 0.3cm; border: 1px dashed #999; margin-left: 0 !important; margin-right: auto !important; margin-bottom: 5px !important; }
         .gondola-container { display: flex; flex-wrap: wrap; gap: 0; justify-content: flex-start; padding: 1cm; box-sizing: border-box; }
         
-        /* AJUSTE ETIQUETA 6x3: NOME ACIMA DA OFERTA */
         .size-6x3 { width: 6cm !important; height: 3cm !important; margin: 0; border: 0.5px solid #000; display: flex !important; flex-direction: column !important; }
-        .size-6x3 .tag-title { order: 1; font-size: 9px; height: 18px; line-height: 0.9; margin-top: 2px; }
-        .size-6x3 .promo-banner { order: 2; font-size: 10px; padding: 2px; }
-        .size-6x3 .info-row { order: 3; }
-        .size-6x3 .price-box { order: 4; }
-        .size-6x3 .footer-barcode { order: 5; }
-
         .size-6x4 { width: 6cm !important; height: 4cm !important; margin: 0; border: 0.5px solid #000; display: flex !important; flex-direction: column !important; }
         .size-8x6 { width: 8cm !important; height: 6cm !important; margin: 0; border: 1px solid #000; display: flex !important; flex-direction: column !important; }
         
@@ -63,8 +56,19 @@
         .size-17x8 .logo-interna { max-height: 70px; padding: 2px; }
 
         .tag-title { flex-grow: 1; display: flex; align-items: center; justify-content: center; font-weight: 900; padding: 2px 4px; line-height: 1.1; text-transform: uppercase; font-size: 11px; overflow: hidden; }
+        
+        /* AJUSTE 6x3: Ordem alterada para nome acima da oferta */
+        .size-6x3 { display: flex !important; flex-direction: column !important; }
+        .size-6x3 .farmacia-header { order: 1; }
+        .size-6x3 .tag-title { order: 2; font-size: 9px; height: 18px; line-height: 0.9; margin-top: 2px; }
+        .size-6x3 .promo-banner { order: 3; font-size: 10px; padding: 2px; }
+        .size-6x3 .info-row { order: 4; }
+        .size-6x3 .price-box { order: 5; }
+        .size-6x3 .footer-barcode { order: 6; height: 20px; }
+
         .size-6x4 .tag-title { font-size: 9.5px; height: 20px; line-height: 0.95; padding-top: 5px; }
         .size-8x6 .tag-title { font-size: 14px; }
+        
         .size-17x8 .tag-title { font-size: 34px; line-height: 1; height: 2.8cm !important; margin: 0; }
 
         .promo-banner { background: var(--primary); color: var(--secondary); font-size: 12px; font-weight: 900; padding: 3px; border-bottom: 1px solid #000; text-transform: uppercase; position: relative; z-index: 10; }
@@ -90,23 +94,20 @@
 
         .footer-barcode { background: white; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 5px 0; }
         .footer-barcode svg { max-width: 95%; height: auto; }
-        .size-6x3 .footer-barcode { height: 20px; }
         .size-6x4 .footer-barcode { height: 28px; padding: 1px 0; }
         .size-8x6 .footer-barcode { height: 45px; }
         .size-17x8 .footer-barcode { height: 45px; margin-top: 0; }
         .size-A5 .footer-barcode { height: 140px; } .size-A4P .footer-barcode { height: 180px; }
 
-        /* AJUSTE ETIQUETA 6x10,5cm (FOTO) - MARGEM ESQUERDA 0,5cm */
-        .size-6x105 { width: 6cm !important; height: 10.5cm !important; border: 1px solid #000; margin: 5px 5px 5px 0.5cm !important; display: flex !important; flex-direction: column !important; background: #fff; overflow: hidden; position: relative; }
+        /* AJUSTE MODELO 6x10,5cm (FOTO): Margem esquerda de 0.5cm */
+        .size-6x105 { width: 6cm !important; height: 10.5cm !important; border: 1px solid #000; margin: 5px 5px 5px 0.5cm; display: flex !important; flex-direction: column !important; background: #fff; overflow: hidden; position: relative; }
         .photo-blank-space { height: 3cm; border-bottom: 1px dashed #ccc; background: #fff; }
         .photo-content { flex: 1; padding: 5px; display: flex; flex-direction: column; text-align: left; position: relative; }
         .photo-prod-name { font-size: 13px; font-weight: 900; line-height: 1.1; margin-bottom: 10px; text-transform: uppercase; color: #333; }
         .photo-old-price { font-size: 22px; font-weight: 900; color: #333; display: flex; align-items: center; justify-content: flex-end; gap: 5px; margin-right: 10px; }
         .photo-old-price small { font-size: 10px; }
         .photo-yellow-box { background: var(--secondary); margin-top: auto; padding: 8px 5px; border-top: 2px solid #000; text-align: center; }
-        
         .photo-leve-pague { font-size: 22px; font-weight: 900; margin-bottom: 5px; color: var(--dorflex-blue); text-transform: uppercase; }
-        
         .photo-final-price { color: #000; font-size: 48px; font-weight: 900; line-height: 0.8; }
         .photo-kit-val { font-size: 13px; font-weight: 900; margin-top: 8px; }
         .photo-barcode { text-align: right; padding-right: 5px; font-size: 8px; margin-bottom: 2px; }
@@ -120,7 +121,7 @@
         .lp-box { padding: 10px 30px; border-radius: 10px; font-size: 50px; font-weight: 900; }
         .lp-yellow-box { background: var(--secondary); border: 4px solid #000; padding: 10px; margin: 10px 0; width: 95%; }
         .lp-yellow-box b { font-size: 85px; color: var(--primary); }
-        .lp-barcode-container { background: white; padding: 2px 0; width: 100%; display: flex; justify-content: center; margin-top: auto; }
+        .lp-barcode-container { background: white; padding: 2px 0; width: 100%; display: justify-content: center; margin-top: auto; }
         .lp-barcode-container svg { height: 75px; max-width: 75%; }
         .lp-footer { border-top: 3px solid #000; width: 100%; padding-top: 5px; font-size: 18px; font-weight: bold; padding-bottom: 10px; }
 
