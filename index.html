@@ -2,13 +2,12 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Souza Farma v108 - Etiquetas Especiais</title>
+    <title>Souza Farma v109 - Divisão de Abas</title>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root { --primary: #e30613; --secondary: #fff200; }
         body { font-family: 'Arial Black', sans-serif; background: #cbd5e1; padding: 20px; margin: 0; }
@@ -23,7 +22,7 @@
         label { font-size: 10px; font-weight: bold; color: #444; margin-bottom: 4px; }
         input, select { padding: 10px; border: 2px solid #ccc; border-radius: 6px; font-weight: bold; }
         
-        #suggestions, #suggestionsLP { position: absolute; top: 100%; left: 0; width: 100%; background: white; border: 1px solid #ccc; z-index: 2000; max-height: 200px; overflow-y: auto; display: none; border-radius: 0 0 8px 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        #suggestions, #suggestionsLP, #suggestionsFoto { position: absolute; top: 100%; left: 0; width: 100%; background: white; border: 1px solid #ccc; z-index: 2000; max-height: 200px; overflow-y: auto; display: none; border-radius: 0 0 8px 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
         .suggestion-item { padding: 10px; cursor: pointer; font-size: 13px; border-bottom: 1px solid #eee; }
 
         .btn-group { grid-column: span 2; display: flex; flex-wrap: wrap; gap: 10px; margin-top: 5px; }
@@ -31,237 +30,188 @@
         .btn-print { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 6px; cursor: pointer; font-weight: 900; flex: 1; }
         .btn-clear { background: #64748b; color: white; border: none; padding: 15px; border-radius: 6px; cursor: pointer; font-weight: 900; flex: 1; }
 
-        #printArea { display: block; width: 100%; max-width: 21cm; margin: 0 auto; background: white; text-align: left; }
+        #printArea { display: block; width: 100%; max-width: 21cm; margin: 0 auto; background: white; }
         .tag { background: white; border: 2px solid #000; position: relative; overflow: hidden; display: flex; flex-direction: column; box-sizing: border-box; text-align: center; page-break-inside: avoid; }
         
-        .info-row { display: flex; justify-content: space-between; align-items: center; padding: 0 8px; min-height: 25px; background: white; }
-        .old-price-label { color: #000; font-size: 9px; font-weight: bold; text-decoration: line-through; }
-        .perc-badge-outer { background: #000; color: #fff; font-size: 11px; padding: 2px 5px; border-radius: 4px; font-weight: 900; }
-
-        .size-70mm { width: 70mm; padding-left: 0.3cm; padding-right: 0.3cm; border: 1px dashed #999; margin-left: 0 !important; margin-right: auto !important; margin-bottom: 5px !important; }
-        .gondola-container { display: flex; flex-wrap: wrap; gap: 0; justify-content: flex-start; padding: 1cm; box-sizing: border-box; }
+        /* TAMANHOS */
+        .size-70mm { width: 70mm; padding: 0.3cm; border: 1px dashed #999; margin-bottom: 5px; }
+        .size-6x3 { width: 6cm !important; height: 3cm !important; border: 0.5px solid #000; }
+        .size-6x4 { width: 6cm !important; height: 4cm !important; border: 0.5px solid #000; }
+        .size-8x6 { width: 8cm !important; height: 6cm !important; border: 1px solid #000; }
+        .size-17x8 { width: 17cm !important; height: 9cm !important; border: 2px solid #000; margin: 0 auto 5px; }
+        .size-A5 { width: 14.8cm; height: 21cm; padding: 0.6cm; margin: 0 auto 10px; }
+        .size-A4P { width: 21cm; height: 29.7cm; padding: 1cm; margin: 0 auto 10px; }
         
-        .size-6x3 { width: 6cm !important; height: 3cm !important; margin: 0; border: 0.5px solid #000; display: flex !important; flex-direction: column !important; }
-        .size-6x4 { width: 6cm !important; height: 4cm !important; margin: 0; border: 0.5px solid #000; display: flex !important; flex-direction: column !important; }
-        .size-8x6 { width: 8cm !important; height: 6cm !important; margin: 0; border: 1px solid #000; display: flex !important; flex-direction: column !important; }
-        
-        /* NOVO MODELO FOTO 6x10,5 */
-        .size-6x105 { width: 6cm !important; height: 10.5cm !important; border: 1px solid #000; display: flex !important; flex-direction: column !important; padding: 0 !important; }
-        .header-white-space { height: 3cm; width: 100%; background: white; border-bottom: 1px dashed #ccc; }
-        .content-6x105 { flex: 1; display: flex; flex-direction: column; padding: 5px; position: relative; }
-        .lp-yellow-bottom { background: var(--secondary); padding: 10px 5px; border-top: 1px solid #000; }
+        /* LAYOUT FOTO 6x10,5 */
+        .size-6x105 { width: 6cm !important; height: 10.5cm !important; border: 1px solid #000; padding: 0 !important; }
+        .header-white-6x105 { height: 3cm; width: 100%; background: white; }
+        .body-6x105 { flex: 1; display: flex; flex-direction: column; padding: 5px; text-align: left; }
+        .yellow-footer-6x105 { background: var(--secondary); padding: 10px 5px; border-top: 1px solid #000; text-align: center; }
 
-        .size-17x8 { width: 17cm !important; height: 9cm !important; border: 2px solid #000; margin: 0 auto 5px !important; padding: 0; display: flex !important; flex-direction: column !important; justify-content: space-between !important; }
-
-        .size-A5 { width: 14.8cm; height: 21cm; padding: 0.6cm; margin: 0 auto 10px !important; }
-        .size-A4P { width: 21cm; height: 29.7cm; padding: 1cm; margin: 0 auto 10px !important; }
-        .logo-interna { max-height: 80px; width: auto; padding: 5px; }
-
-        .farmacia-header { font-size: 7px; font-weight: 900; color: #000; padding: 4px; border-bottom: 1px solid #eee; text-transform: uppercase; display: flex; justify-content: center; align-items: center; }
-        .size-17x8 .farmacia-header { padding: 0; border: none; }
-        .size-17x8 .logo-interna { max-height: 70px; padding: 2px; }
-
-        .tag-title { flex-grow: 1; display: flex; align-items: center; justify-content: center; font-weight: 900; padding: 2px 4px; line-height: 1.1; text-transform: uppercase; font-size: 11px; overflow: hidden; }
-        .size-6x3 .tag-title { font-size: 9px; height: 18px; }
-        .size-6x4 .tag-title { font-size: 9.5px; height: 20px; line-height: 0.95; padding-top: 5px; }
-        .size-6x105 .tag-title { font-size: 13px; height: 45px; text-align: left; align-items: flex-start; }
-        .size-8x6 .tag-title { font-size: 14px; }
-        
-        .size-17x8 .tag-title { font-size: 34px; line-height: 1; height: 2.8cm !important; margin: 0; }
-
-        .promo-banner { background: var(--primary); color: var(--secondary); font-size: 12px; font-weight: 900; padding: 3px; border-bottom: 1px solid #000; text-transform: uppercase; }
-        .size-6x4 .promo-banner, .size-6x3 .promo-banner { font-size: 10px; padding: 2px; }
-        .size-17x8 .promo-banner { font-size: 26px; padding: 4px; border-top: 1px solid #000; }
-
+        .tag-title { font-weight: 900; padding: 2px 4px; text-transform: uppercase; font-size: 11px; overflow: hidden; line-height: 1.1; display: flex; align-items: center; justify-content: center; flex-grow: 1; }
+        .promo-banner { background: var(--primary); color: var(--secondary); font-size: 12px; font-weight: 900; padding: 3px; border-bottom: 1px solid #000; }
         .price-box { background: var(--secondary); padding: 4px; border-top: 1px solid #000; border-bottom: 1px solid #000; display: flex; justify-content: center; align-items: center; }
         .main-price { color: var(--primary); font-weight: 900; display: flex; align-items: flex-start; line-height: 0.85; font-size: 40px; }
-        .size-6x3 .main-price { font-size: 30px; }
-        .size-6x4 .main-price { font-size: 36px; }
-        .size-6x105 .main-price { font-size: 38px; color: #000; }
-        .size-6x105 .lp-yellow-bottom .main-price { color: #000; font-size: 55px; }
-        .label-por { font-size: 10px; margin-right: 2px; align-self: center; color: #000; }
+        .footer-barcode { background: white; display: flex; justify-content: center; padding: 2px 0; }
+        .delete-btn { position: absolute; top: 1px; left: 1px; background: #000; color: #fff; border: none; border-radius: 50%; width: 22px; height: 22px; z-index: 1000; cursor: pointer; }
 
-        .footer-barcode { background: white; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 5px 0; }
-        .footer-barcode svg { max-width: 95%; height: auto; }
-        .size-6x3 .footer-barcode { height: 22px; }
-        .size-6x4 .footer-barcode { height: 28px; padding: 1px 0; }
-        .size-6x105 .footer-barcode { height: 35px; margin-top: auto; }
-
-        .delete-btn { position: absolute; top: 1px; left: 1px; background: #000; color: #fff; border: none; border-radius: 50%; width: 25px; height: 25px; font-weight: bold; z-index: 1000; cursor: pointer; }
-
-        @media print { 
-            .no-print, .delete-btn { display: none !important; } 
-            body { background: white; padding: 0; } 
-            #printArea { width: 100%; text-align: left; }
-            .tag { border: 1px solid #000 !important; }
-            @page { margin: 0; size: auto; }
-        }
+        @media print { .no-print, .delete-btn { display: none !important; } body { background: white; } #printArea { width: 100%; } }
     </style>
 </head>
 <body>
-<div class="no-print" id="statusPainel" style="background:#f1f5f9; padding:10px; margin:10px auto; max-width:1100px; border-radius:8px; border:1px solid #cbd5e1; font-size:12px; font-weight:bold; display: flex; justify-content: space-between;">
-    <span id="txtPlanilha">📊 PLANILHA: Verificando...</span>
-    <span id="txtUpdate">📅 ÚLTIMA ATUALIZAÇÃO: --/--/--</span>
-</div>
+    <div class="no-print" id="statusPainel" style="background:#f1f5f9; padding:10px; margin:10px auto; max-width:1100px; border-radius:8px; border:1px solid #cbd5e1; font-size:12px; font-weight:bold; display: flex; justify-content: space-between;">
+        <span id="txtPlanilha">📊 PLANILHA: Verificando...</span>
+        <span id="txtUpdate">📅 ÚLTIMA ATUALIZAÇÃO: --/--/--</span>
+    </div>
+
     <script>
         const firebaseConfig = { apiKey: "AIzaSyBfxAE5NnNQ2JKn8iX8-s8lz7M_CVQG6DI", authDomain: "etiqueta-70cbf.firebaseapp.com", databaseURL: "https://etiqueta-70cbf-default-rtdb.firebaseio.com/", projectId: "etiqueta-70cbf", storageBucket: "etiqueta-70cbf.firebasestorage.app", messagingSenderId: "899263207040", appId: "1:899263207040:web:7103a5f0fb49ca15f1b865" };
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
     </script>
-    <div class="no-print" style="text-align:center; padding: 15px;">
-        <div style="display: block; margin-bottom: 10px;"><img src="logo.png" style="max-height: 80px; width: auto;" onerror="this.style.display='none'"></div>
-        <div style="display: block;"><b style="color:var(--primary); font-size: 18px;">SOUZA FARMA - FARMÁCIA DO TRABALHADOR</b></div>
-    </div>
+
     <div class="no-print">
         <div class="tabs">
-            <button class="tab-btn active" onclick="openTab(event, 'etiquetas')">ETIQUETAS PADRÃO</button>
-            <button class="tab-btn" onclick="openTab(event, 'promocoes')">PROMOÇÕES (LEVE/PAGUE)</button>
+            <button class="tab-btn active" onclick="openTab(event, 'etiquetas')">PADRÃO (OFERTA/HOJE)</button>
+            <button class="tab-btn" onclick="openTab(event, 'abaFoto')">ETIQUETA FOTO (6x10,5)</button>
+            <button class="tab-btn" onclick="openTab(event, 'promocoes')">LEVE/PAGUE (A4)</button>
         </div>
+
         <div id="etiquetas" class="tab-content active">
-            <div style="background:#f8fafc; padding:12px; border-radius:8px; margin-bottom:15px; border:1px solid #cbd5e1;">
-                <label>📂 ATUALIZAR PLANILHA ONLINE:</label>
-                <input type="file" onchange="handleExcel(event)"> <span id="excelStatus"></span>
-                <button onclick="if(confirm('Limpar banco online?')) database.ref('produtos').remove()" style="float:right; background:#000; color:#fff; border:none; padding:5px 10px; border-radius:5px; cursor:pointer; font-size:10px;">LIMPAR BANCO</button>
-            </div>
             <div class="grid-form">
-                <div class="field" style="grid-column: span 2;"><label>PRODUTO (BIPE OU BUSQUE)</label><input type="text" id="searchField" class="nav" placeholder="Digite ou bipe..." autocomplete="off"><div id="suggestions"></div></div>
-                <div class="field"><label>PREÇO DE / UNIT.</label><input type="text" id="pOld" class="nav" placeholder="0,00"></div>
-                <div class="field"><label>PREÇO POR / KIT</label><input type="text" id="pNew" class="nav" placeholder="0,00"></div>
+                <div class="field" style="grid-column: span 2;"><label>PRODUTO</label><input type="text" id="searchField" class="nav" placeholder="Busque..."><div id="suggestions"></div></div>
+                <div class="field"><label>PREÇO DE</label><input type="text" id="pOld" class="nav" placeholder="0,00"></div>
+                <div class="field"><label>PREÇO POR</label><input type="text" id="pNew" class="nav" placeholder="0,00"></div>
                 <div class="field"><label>TAMANHO</label><select id="pSize" class="nav">
                     <option value="size-70mm">Térmica 70mm</option>
                     <option value="size-6x3">6x3</option>
                     <option value="size-6x4">6x4</option>
                     <option value="size-8x6">8x6</option>
-                    <option value="size-6x105">ESPECIAL FOTO 6x10,5cm</option>
                     <option value="size-17x8">Cartaz 17x9cm</option>
-                    <option value="size-A5">Cartaz A5</option>
-                    <option value="size-A4P">Cartaz A4</option>
                 </select></div>
-                <div class="field"><label>CAMPANHA (KIT)</label><input type="text" id="pPromoText" class="nav" placeholder="Ex: LEVE 2 POR" value="LEVE 2 POR"></div>
+                <div class="field"><label>CAMPANHA</label><select id="pPromo" class="nav">
+                    <option value="OFERTA">OFERTA</option>
+                    <option value="MEGA OFERTA">MEGA OFERTA</option>
+                    <option value="IMBATÍVEL">IMBATÍVEL</option>
+                    <option value="SÓ HOJE">SÓ HOJE</option>
+                    <option value="">Sem Frase</option>
+                </select></div>
                 <div class="field"><label>QTD</label><input type="number" id="pQty" class="nav" value="1"></div>
                 <div class="btn-group">
-                    <button class="btn-add" id="btnAddTag" onclick="addTag()">ADICIONAR</button>
+                    <button class="btn-add" onclick="addTag()">ADICIONAR</button>
                     <button class="btn-print" onclick="window.print()">IMPRIMIR</button>
-                    <button class="btn-clear" onclick="clearAll()">LIMPAR TELA</button>
+                    <button class="btn-clear" onclick="clearAll()">LIMPAR</button>
                 </div>
             </div>
-            <div id="histDisplay" style="margin-top:10px;"></div>
         </div>
-        <div id="promocoes" class="tab-content">
+
+        <div id="abaFoto" class="tab-content">
             <div class="grid-form">
-                <div class="field" style="grid-column: span 2;"><label>PRODUTO (BIPE OU BUSQUE NOME)</label><input type="text" id="lpProd" class="navLP" placeholder="Bipe ou digite..." autocomplete="off"><div id="suggestionsLP"></div></div>
-                <div class="field"><label>TIPO MODELO</label><select id="lpModel" class="navLP"><option value="full">Cartaz A4 Completo</option><option value="gondola">Etiqueta Gôndola (10x15)</option></select></div>
-                <div class="field"><label>LEVE</label><input type="number" id="lpLeve" class="navLP" value="3" oninput="calcLP()"></div>
-                <div class="field"><label>PAGUE</label><input type="number" id="lpPague" class="navLP" value="2" oninput="calcLP()"></div>
-                <div class="field"><label>VALOR UN. (R$)</label><input type="text" id="lpUnit" class="navLP" placeholder="0,00" oninput="calcLP()"></div>
-                <div class="field"><label>VALIDADE</label><input type="text" id="lpData" class="navLP" placeholder="Validade"></div>
-                <div class="field"><label>TOTAL KIT</label><input type="text" id="lpTotal" readonly></div>
-                <div class="field"><label>SAI POR</label><input type="text" id="lpFinal" readonly></div>
-                <div class="btn-group"><button class="btn-add" id="btnAddLP" onclick="addLPTag()">GERAR CARTAZ</button><button class="btn-print" onclick="window.print()">IMPRIMIR CARTAZ</button></div>
+                <div class="field" style="grid-column: span 2;"><label>PRODUTO (BIPE OU BUSQUE)</label><input type="text" id="fProd" class="navF" placeholder="Digite..."><div id="suggestionsFoto"></div></div>
+                <div class="field"><label>PREÇO UNITÁRIO (R$)</label><input type="text" id="fUnit" class="navF" placeholder="19,99"></div>
+                <div class="field"><label>PREÇO NO KIT (R$)</label><input type="text" id="fKitPrice" class="navF" placeholder="16,99"></div>
+                <div class="field"><label>TEXTO KIT</label><input type="text" id="fTexto" class="navF" value="LEVE 2 POR"></div>
+                <div class="field"><label>VALIDADE</label><input type="text" id="fData" class="navF" value="25/01/2026"></div>
+                <div class="btn-group">
+                    <button class="btn-add" onclick="addFotoTag()">GERAR ETIQUETA FOTO</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="promocoes" class="tab-content">
+             <div class="grid-form">
+                <div class="field" style="grid-column: span 2;"><label>PRODUTO</label><input type="text" id="lpProd" class="navLP"><div id="suggestionsLP"></div></div>
+                <div class="field"><label>LEVE</label><input type="number" id="lpLeve" value="3" oninput="calcLP()"></div>
+                <div class="field"><label>PAGUE</label><input type="number" id="lpPague" value="2" oninput="calcLP()"></div>
+                <div class="field"><label>UNITÁRIO</label><input type="text" id="lpUnit" oninput="calcLP()"></div>
+                <div class="btn-group"><button class="btn-add" onclick="addLPTag()">GERAR CARTAZ A4</button></div>
             </div>
         </div>
     </div>
-    <div id="printArea"><div id="thermalArea"></div><div id="gondolaArea" class="gondola-container"></div><div id="posterArea"></div></div>
+
+    <div id="printArea">
+        <div id="thermalArea"></div>
+        <div id="gondolaArea" style="display: flex; flex-wrap: wrap; gap: 2px;"></div>
+        <div id="posterArea"></div>
+    </div>
+
     <script>
-        let db = []; let historyData = []; let selectedItem = null; let selectedItemLP = null;
+        let db = []; let selectedItem = null; let selectedItemF = null;
         database.ref('produtos').on('value', (s) => { 
-            const data = s.val(); db = data ? Object.values(data) : []; 
+            db = s.val() ? Object.values(s.val()) : [];
             document.getElementById('txtPlanilha').innerText = `📊 PLANILHA: ${db.length > 0 ? 'CONECTADA' : 'VAZIA'}`;
             document.getElementById('txtUpdate').innerText = `📅 ATUALIZADO: ${new Date().toLocaleDateString()}`;
         });
 
-        function setupBipe(inputId, focusId, suggestionId) {
-            const input = document.getElementById(inputId);
-            input.addEventListener('input', (e) => {
-                const val = e.target.value.toUpperCase().trim();
-                if(!val) return;
-                const exact = db.find(i => String(Object.values(i)[0]) == val || String(Object.values(i)[1]) == val);
-                if(exact) { 
-                    if(inputId === 'searchField') selectedItem = {code: Object.values(exact)[0], name: Object.values(exact)[2]};
-                    else selectedItemLP = {code: Object.values(exact)[0], name: Object.values(exact)[2]};
-                    input.value = Object.values(exact)[2]; 
-                    document.getElementById(suggestionId).style.display = 'none';
-                    setTimeout(() => document.getElementById(focusId).focus(), 50);
-                } else if(val.length >= 2) {
-                   const matches = db.filter(i => String(Object.values(i)[2]).toUpperCase().includes(val));
-                    if(matches.length > 0) {
-                        document.getElementById(suggestionId).innerHTML = matches.slice(0,10).map(m => `<div class="suggestion-item" onclick="selectItem('${Object.values(m)[0]}', '${Object.values(m)[2]}', '${inputId}', '${focusId}', '${suggestionId}')"><b>${Object.values(m)[1]}</b> - ${Object.values(m)[2]}</div>`).join('');
-                        document.getElementById(suggestionId).style.display = 'block';
-                    }
-                }
+        function setupBipe(inputId, suggestionId, callback) {
+            document.getElementById(inputId).addEventListener('input', (e) => {
+                const val = e.target.value.toUpperCase();
+                if(val.length < 2) return;
+                const matches = db.filter(i => String(Object.values(i)[2]).toUpperCase().includes(val) || String(Object.values(i)[0]).includes(val));
+                document.getElementById(suggestionId).innerHTML = matches.slice(0,8).map(m => `<div class="suggestion-item" onclick="selectItem('${Object.values(m)[0]}','${Object.values(m)[2]}','${inputId}','${suggestionId}')">${Object.values(m)[2]}</div>`).join('');
+                document.getElementById(suggestionId).style.display = 'block';
             });
         }
-        setupBipe('searchField', 'pOld', 'suggestions'); setupBipe('lpProd', 'lpLeve', 'suggestionsLP');
-
-        function selectItem(code, name, inputId, focusId, suggestionId) { 
-            if(inputId === 'searchField') selectedItem = {code, name}; else selectedItemLP = {code, name};
-            document.getElementById(inputId).value = name; document.getElementById(suggestionId).style.display = 'none'; 
-            setTimeout(() => document.getElementById(focusId).focus(), 50); 
+        function selectItem(code, name, inputId, suggId) { 
+            document.getElementById(inputId).value = name; 
+            document.getElementById(suggId).style.display = 'none';
+            if(inputId === 'searchField') selectedItem = {code, name};
+            if(inputId === 'fProd') selectedItemF = {code, name};
         }
+        setupBipe('searchField', 'suggestions');
+        setupBipe('fProd', 'suggestionsFoto');
 
-        function addTag(reuseItem = null) {
-            const name = reuseItem ? reuseItem.name : document.getElementById('searchField').value, 
-                  oldP = reuseItem ? reuseItem.old : document.getElementById('pOld').value, 
-                  newP = reuseItem ? reuseItem.new : document.getElementById('pNew').value,
-                  size = document.getElementById('pSize').value, 
-                  promo = document.getElementById('pPromoText').value, 
-                  qty = reuseItem ? 1 : parseInt(document.getElementById('pQty').value);
-            
-            if (!name || !newP) return;
-            const barcode = reuseItem ? reuseItem.code : (selectedItem ? selectedItem.code : "0000000000000");
+        function addTag() {
+            const name = document.getElementById('searchField').value, oldP = document.getElementById('pOld').value, newP = document.getElementById('pNew').value;
+            const size = document.getElementById('pSize').value, promo = document.getElementById('pPromo').value, qty = document.getElementById('pQty').value;
+            const barcode = selectedItem ? selectedItem.code : "0000000000000";
             const [reais, cents] = newP.split(',');
-            const [uReais, uCents] = oldP.split(',');
+            for(let i=0; i<qty; i++){
+                const tagId = "bc-"+Date.now()+i, div = document.createElement('div'); div.className = `tag ${size}`;
+                div.innerHTML = `<button class="delete-btn" onclick="this.parentElement.remove()">X</button><div class="farmacia-header">SOUZA FARMA</div>${promo?`<div class="promo-banner">${promo}</div>`:''}<div class="tag-title">${name.toUpperCase()}</div><div class="price-box"><span class="label-por">POR</span><div class="main-price"><small>R$</small>${reais}<small>,${cents||'00'}</small></div></div><div class="footer-barcode"><svg id="${tagId}"></svg></div>`;
+                document.getElementById(size==='size-70mm'?'thermalArea':'gondolaArea').appendChild(div);
+                JsBarcode(`#${tagId}`, barcode, {width: 1, height: 25, fontSize: 10});
+            }
+        }
 
-            let area = (size === 'size-70mm') ? 'thermalArea' : (size.includes('size-6') || size.includes('size-8') ? 'gondolaArea' : 'posterArea');
-            
-            for (let i = 0; i < qty; i++) {
-                const tagId = "bc-" + Date.now() + i, div = document.createElement('div'); div.className = `tag ${size}`;
-                
-                if(size === 'size-6x105') {
-                    div.innerHTML = `<button class="delete-btn" onclick="this.parentElement.remove()">X</button>
-                        <div class="header-white-space"></div>
-                        <div class="content-6x105">
-                            <div class="tag-title">${name.toUpperCase()}</div>
-                            <div style="text-align:left; font-size:16px; margin-bottom:5px;">R$ <b style="font-size:24px;">${oldP}</b> <small>CADA</small></div>
-                            <div class="footer-barcode" style="margin-top:auto;"><svg id="${tagId}"></svg></div>
+        function addFotoTag() {
+            const name = document.getElementById('fProd').value, unit = document.getElementById('fUnit').value, kit = document.getElementById('fKitPrice').value;
+            const texto = document.getElementById('fTexto').value, dataVal = document.getElementById('fData').value;
+            const barcode = selectedItemF ? selectedItemF.code : "0000000000000";
+            const [kReais, kCents] = kit.split(',');
+            const kitTotal = (parseFloat(kit.replace(',','.')) * 2).toFixed(2).replace('.',',');
+
+            const div = document.createElement('div'); div.className = 'tag size-6x105';
+            div.innerHTML = `<button class="delete-btn" onclick="this.parentElement.remove()">X</button>
+                <div class="header-white-6x105"></div>
+                <div class="body-6x105">
+                    <div style="font-size:12px; font-weight:900; line-height:1.2; height:40px; overflow:hidden;">${name.toUpperCase()}</div>
+                    <div style="margin-top:5px; font-size:16px;">R$ <b style="font-size:22px;">${unit}</b> <small>CADA</small></div>
+                    <div class="footer-barcode" style="margin-top:auto;"><svg id="fbc-${Date.now()}"></svg></div>
+                </div>
+                <div class="yellow-footer-6x105">
+                    <div style="font-size:22px; font-weight:900;">${texto}</div>
+                    <div style="display:flex; justify-content:center; align-items:flex-start; color:#e30613; margin:2px 0;">
+                        <span style="font-size:16px; margin-top:10px; font-weight:900; color:#000;">R$</span>
+                        <b style="font-size:55px; line-height:0.8; color:#000;">${kReais}</b>
+                        <div style="display:flex; flex-direction:column; align-items:flex-start;">
+                            <b style="font-size:22px; line-height:1; color:#000; text-decoration:underline;">,${kCents||'00'}</b>
+                            <span style="font-size:12px; color:#000; font-weight:900;">CADA</span>
                         </div>
-                        <div class="lp-yellow-bottom">
-                            <div style="font-size:24px; font-weight:900;">${promo}</div>
-                            <div class="main-price" style="justify-content:center;"><small style="font-size:0.4em; margin-top:10px;">R$</small>${reais}<small style="font-size:0.4em; text-decoration:underline; margin-top:10px;">,${cents||'00'}</small> <small style="font-size:0.2em; align-self:center; margin-left:5px;">CADA</small></div>
-                            <div style="font-weight:bold; font-size:14px; margin-top:5px;">Valor do Kit: R$ ${ (parseFloat(newP.replace(',','.')) * 2).toFixed(2).replace('.',',') }</div>
-                            <div style="font-size:10px; margin-top:10px;">Ofertas até ${new Date().toLocaleDateString()}</div>
-                        </div>`;
-                } else {
-                    const vOld = parseFloat(oldP.replace(',', '.')), vNew = parseFloat(newP.replace(',', '.')), perc = (vOld > vNew) ? Math.round(((vOld - vNew) / vOld) * 100) : 0;
-                    div.innerHTML = `<button class="delete-btn" onclick="this.parentElement.remove()">X</button><div class="farmacia-header"><b>SOUZA FARMA</b></div><div class="tag-title">${name.toUpperCase()}</div><div class="info-row"><div class="old-price-label">${(oldP && oldP !== '0,00') ? 'DE R$ '+oldP : ''}</div>${perc > 0 ? `<div class="perc-badge-outer">-${perc}%</div>` : ''}</div><div class="price-box"><span class="label-por">POR</span><div class="main-price"><small style="font-size:0.35em;">R$</small>${reais}<small style="font-size:0.4em; text-decoration:underline;">,${cents||'00'}</small></div></div><div class="footer-barcode"><svg id="${tagId}"></svg></div>`;
-                }
-                
-                document.getElementById(area).appendChild(div); 
-                JsBarcode(`#${tagId}`, barcode, { format: "CODE128", width: size.includes('A')?3:1.1, height: size==='size-6x105'?25:size==='size-6x3'?15:25, displayValue: true, fontSize: 10 });
-            }
-            if(!reuseItem) { historyData.unshift({name, old: oldP, new: newP, code: barcode}); updateHistory(); }
+                    </div>
+                    <div style="font-weight:900; font-size:14px; border-top:1px solid #000; padding-top:2px;">Valor do Kit: R$ ${kitTotal}</div>
+                    <div style="font-size:10px; margin-top:5px;">Ofertas até ${dataVal}</div>
+                </div>`;
+            document.getElementById('gondolaArea').appendChild(div);
+            JsBarcode(`#fbc-${Date.now()}`, barcode, {width: 1, height: 25, fontSize: 10});
         }
 
-        // ... manter demais funções originais de calcLP, openTab, handleExcel e clearAll conforme v107 ...
-        function updateHistory() { document.getElementById('histDisplay').innerHTML = historyData.slice(0, 6).map((h, i) => `<span class="hist-chip" onclick='addTag(historyData[${i}])'>${h.name}</span>`).join(''); }
-        function calcLP() { const l = parseInt(document.getElementById('lpLeve').value) || 0, p = parseInt(document.getElementById('lpPague').value) || 0, u = parseFloat(document.getElementById('lpUnit').value.replace(',', '.')) || 0; if(l > 0 && u > 0) { const f = (p * u) / l; document.getElementById('lpFinal').value = f.toLocaleString('pt-br', {minimumFractionDigits:2, maximumFractionDigits:2}); document.getElementById('lpTotal').value = (p*u).toLocaleString('pt-br', {minimumFractionDigits:2}); } }
-        function openTab(evt, tabName) { document.querySelectorAll('.tab-content, .tab-btn').forEach(el => el.classList.remove('active')); document.getElementById(tabName).classList.add('active'); evt.currentTarget.classList.add('active'); }
-        function handleExcel(e) { const reader = new FileReader(); reader.onload = (evt) => { const workbook = XLSX.read(evt.target.result, { type: 'binary' }); const products = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]); database.ref('produtos').set(products).then(() => alert("Sincronizado!")); }; reader.readAsBinaryString(e.target.files[0]); }
-        function clearAll() { if(confirm("Limpar Tudo?")) { document.getElementById('thermalArea').innerHTML = ""; document.getElementById('gondolaArea').innerHTML = ""; document.getElementById('posterArea').innerHTML = ""; historyData = []; updateHistory(); } }
-        function addLPTag() {
-            const barcode = selectedItemLP ? selectedItemLP.code : "0000000000000", tagId = "lpbc-" + Date.now();
-            const model = document.getElementById('lpModel').value;
-            const div = document.createElement('div'); 
-            if(model === 'full') {
-                div.className = 'promo-tag-lp';
-                div.innerHTML = `<button class="delete-btn" onclick="this.parentElement.remove()">X</button><div class="lp-header-box"><span>— MEGA —</span><h1>OFERTA</h1></div><div class="lp-prod-name">${document.getElementById('lpProd').value.toUpperCase()}</div><div class="lp-leve-pague"><div class="lp-box" style="background:#000; color:#fff;">LEVE ${document.getElementById('lpLeve').value}</div><div class="lp-box" style="background:var(--primary); color:#fff;">PAGUE ${document.getElementById('lpPague').value}</div></div><div style="font-size:32px; margin-top:5px;">VALOR DA UNIDADE: R$ ${document.getElementById('lpUnit').value}</div><div style="font-size:38px; margin: 10px 0;">VALOR TOTAL DO KIT: <b>R$ ${document.getElementById('lpTotal').value}</b></div><div class="lp-yellow-box"><span style="font-size:28px; display:block; font-weight:bold;">NA COMPRA DE ${document.getElementById('lpLeve').value}, A UNIDADE SAI POR:</span>R$ <b>${document.getElementById('lpFinal').value}</b></div><div class="lp-barcode-container"><svg id="${tagId}"></svg></div><div class="lp-footer">SOUZA FARMA - FARMÁCIA DO TRABALHADOR<br>OFERTA VÁLIDA: ${document.getElementById('lpData').value.toUpperCase()}</div>`;
-            } else {
-                div.className = 'tag size-lp-gondola';
-                div.innerHTML = `<button class="delete-btn" onclick="this.parentElement.remove()">X</button><div class="lp-top-white"><div style="font-size:12px; font-weight:bold; border-bottom:1px solid #000; padding-bottom:5px;">SOUZA FARMA</div><div style="font-size:22px; line-height:1.1; margin-top:10px; height:65px; overflow:hidden; font-weight:900;">${document.getElementById('lpProd').value.toUpperCase()}</div><div class="price-unit-lp"><small style="font-size:16px;">R$</small> <b>${document.getElementById('lpUnit').value}</b> <small style="font-size:14px;">CADA</small></div><div style="position:absolute; bottom:5px; right:5px; font-size:9px;">${barcode}</div></div><div class="lp-bottom-yellow"><div style="background:#000; color:#fff; font-size:22px; padding:6px; margin-bottom:5px; font-weight:900;">LEVE ${document.getElementById('lpLeve').value}, PAGUE ${document.getElementById('lpPague').value}</div><div style="font-size:16px; font-weight:bold;">UNITÁRIO SAI POR:</div><div class="price-final-lp"><span style="font-size:28px; vertical-align:middle;">R$</span> <b>${document.getElementById('lpFinal').value}</b></div><div style="font-size:18px; margin-top:5px; font-weight:900; border-top:1px solid #000; padding-top:5px;">Valor do Kit: <span style="font-size:14px;">R$</span> ${document.getElementById('lpTotal').value}</div><div style="font-size:10px; margin-top:5px;">Válido até: ${document.getElementById('lpData').value}</div></div>`;
-            }
-            document.getElementById('posterArea').appendChild(div); 
-            if(model === 'full') JsBarcode(`#${tagId}`, barcode, { format: "CODE128", width: 2.5, height: 75, displayValue: true, fontSize: 30 });
+        function openTab(evt, tabName) {
+            document.querySelectorAll('.tab-content, .tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            evt.currentTarget.classList.add('active');
         }
+        function clearAll() { document.getElementById('thermalArea').innerHTML = ""; document.getElementById('gondolaArea').innerHTML = ""; document.getElementById('posterArea').innerHTML = ""; }
     </script>
 </body>
 </html>
