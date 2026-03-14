@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Souza Farma v108 - Personalizada</title>
+    <title>Souza Farma v109 - Personalizada</title>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     
@@ -10,7 +10,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
-        :root { --primary: #e30613; --secondary: #fff200; }
+        :root { --primary: #e30613; --secondary: #fff200; --dorflex-blue: #2d1a70; }
         body { font-family: 'Arial Black', sans-serif; background: #cbd5e1; padding: 20px; margin: 0; }
         .no-print { background: white; padding: 20px; border-radius: 12px; max-width: 1100px; margin: 0 auto 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         .tabs { display: flex; gap: 5px; margin-bottom: 15px; border-bottom: 2px solid #cbd5e1; }
@@ -55,14 +55,15 @@
         .size-17x8 .farmacia-header { padding: 0; border: none; }
         .size-17x8 .logo-interna { max-height: 70px; padding: 2px; }
 
+        /* AJUSTE NA 6x3 PARA O NOME NÃO FICAR EMBAIXO DA OFERTA */
         .tag-title { flex-grow: 1; display: flex; align-items: center; justify-content: center; font-weight: 900; padding: 2px 4px; line-height: 1.1; text-transform: uppercase; font-size: 11px; overflow: hidden; }
-        .size-6x3 .tag-title { font-size: 9px; height: 18px; line-height: 0.9; }
+        .size-6x3 .tag-title { font-size: 9px; height: 18px; line-height: 0.9; margin-top: 2px; }
         .size-6x4 .tag-title { font-size: 9.5px; height: 20px; line-height: 0.95; padding-top: 5px; }
         .size-8x6 .tag-title { font-size: 14px; }
         
         .size-17x8 .tag-title { font-size: 34px; line-height: 1; height: 2.8cm !important; margin: 0; }
 
-        .promo-banner { background: var(--primary); color: var(--secondary); font-size: 12px; font-weight: 900; padding: 3px; border-bottom: 1px solid #000; text-transform: uppercase; }
+        .promo-banner { background: var(--primary); color: var(--secondary); font-size: 12px; font-weight: 900; padding: 3px; border-bottom: 1px solid #000; text-transform: uppercase; position: relative; z-index: 10; }
         .size-6x3 .promo-banner, .size-6x4 .promo-banner { font-size: 10px; padding: 2px; }
         .size-17x8 .promo-banner { font-size: 26px; padding: 4px; border-top: 1px solid #000; }
         
@@ -91,15 +92,18 @@
         .size-17x8 .footer-barcode { height: 45px; margin-top: 0; }
         .size-A5 .footer-barcode { height: 140px; } .size-A4P .footer-barcode { height: 180px; }
 
-        /* NOVO MODELO 6x10,5cm BASEADO NA FOTO */
-        .size-6x105 { width: 6cm !important; height: 10.5cm !important; border: 1px solid #000; margin: 5px; display: flex !important; flex-direction: column !important; background: #fff; overflow: hidden; }
+        /* MODELO 6x10,5cm - CORREÇÃO DE COR E BOTÃO EXCLUIR */
+        .size-6x105 { width: 6cm !important; height: 10.5cm !important; border: 1px solid #000; margin: 5px; display: flex !important; flex-direction: column !important; background: #fff; overflow: hidden; position: relative; }
         .photo-blank-space { height: 3cm; border-bottom: 1px dashed #ccc; background: #fff; }
         .photo-content { flex: 1; padding: 5px; display: flex; flex-direction: column; text-align: left; position: relative; }
-        .photo-prod-name { font-size: 13px; font-weight: 900; line-height: 1.1; margin-bottom: 10px; text-transform: uppercase; }
+        .photo-prod-name { font-size: 13px; font-weight: 900; line-height: 1.1; margin-bottom: 10px; text-transform: uppercase; color: #333; }
         .photo-old-price { font-size: 22px; font-weight: 900; color: #333; display: flex; align-items: center; justify-content: flex-end; gap: 5px; margin-right: 10px; }
         .photo-old-price small { font-size: 10px; }
         .photo-yellow-box { background: var(--secondary); margin-top: auto; padding: 8px 5px; border-top: 2px solid #000; text-align: center; }
-        .photo-leve-pague { font-size: 22px; font-weight: 900; margin-bottom: 5px; }
+        
+        /* COR IGUAL A FOTO (AZUL ESCURO/ROXO) */
+        .photo-leve-pague { font-size: 22px; font-weight: 900; margin-bottom: 5px; color: var(--dorflex-blue); text-transform: uppercase; }
+        
         .photo-final-price { color: #000; font-size: 48px; font-weight: 900; line-height: 0.8; }
         .photo-kit-val { font-size: 13px; font-weight: 900; margin-top: 8px; }
         .photo-barcode { text-align: right; padding-right: 5px; font-size: 8px; margin-bottom: 2px; }
@@ -297,7 +301,6 @@
             document.getElementById('gondolaArea').appendChild(div);
         }
 
-        // Funções Originais Mantidas
         function addTag(reuseItem = null) {
             const name = reuseItem ? reuseItem.name : document.getElementById('searchField').value, oldP = reuseItem ? reuseItem.old : document.getElementById('pOld').value, newP = reuseItem ? reuseItem.new : document.getElementById('pNew').value;
             const size = document.getElementById('pSize').value, promo = document.getElementById('pPromo').value, qty = reuseItem ? 1 : parseInt(document.getElementById('pQty').value);
