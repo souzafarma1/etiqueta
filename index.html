@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Souza Farma v110 - Estabilizada</title>
+    <title>Souza Farma v109 - Personalizada</title>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     
@@ -55,16 +55,16 @@
         .size-17x8 .farmacia-header { padding: 0; border: none; }
         .size-17x8 .logo-interna { max-height: 70px; padding: 2px; }
 
-        /* CORREÇÃO 6x3: Ordem correta (Header > Nome > Preço > Promo > Barcode) */
+        /* AJUSTE NA 6x3: Ordem corrigida (Promo acima de Nome) e Preço reduzido */
         .tag-title { flex-grow: 1; display: flex; align-items: center; justify-content: center; font-weight: 900; padding: 2px 4px; line-height: 1.1; text-transform: uppercase; font-size: 11px; overflow: hidden; }
-        .size-6x3 .tag-title { font-size: 9.5px; height: 18px; line-height: 0.9; order: 2; margin-bottom: 2px; }
+        .size-6x3 .tag-title { font-size: 9px; height: 18px; line-height: 0.9; margin-top: 0px; margin-bottom: 2px; order: 2; }
         .size-6x4 .tag-title { font-size: 9.5px; height: 20px; line-height: 0.95; padding-top: 5px; }
         .size-8x6 .tag-title { font-size: 14px; }
         
         .size-17x8 .tag-title { font-size: 34px; line-height: 1; height: 2.8cm !important; margin: 0; }
 
         .promo-banner { background: var(--primary); color: var(--secondary); font-size: 12px; font-weight: 900; padding: 3px; border-bottom: 1px solid #000; text-transform: uppercase; position: relative; z-index: 10; }
-        .size-6x3 .promo-banner { font-size: 10px; padding: 2px; order: 4; border-top: 1px solid #000; border-bottom: none; }
+        .size-6x3 .promo-banner { font-size: 10px; padding: 2px; order: 1; border-bottom: 0.5px solid #000; }
         .size-6x4 .promo-banner { font-size: 10px; padding: 2px; }
         .size-17x8 .promo-banner { font-size: 26px; padding: 4px; border-top: 1px solid #000; }
         
@@ -72,9 +72,8 @@
         .size-A4P .promo-banner { font-size: 75px; padding: 25px; border-bottom: 5px solid #000; }
 
         .price-box { background: var(--secondary); padding: 4px; border-top: 1px solid #000; border-bottom: 1px solid #000; display: flex; justify-content: center; align-items: center; }
-        .size-6x3 .price-box { order: 3; }
         .main-price { color: var(--primary); font-weight: 900; display: flex; align-items: flex-start; line-height: 0.85; font-size: 40px; }
-        .size-6x3 .main-price { font-size: 28px; } 
+        .size-6x3 .main-price { font-size: 24px; } /* Reduzido para evitar sobreposição */
         .size-6x4 .main-price { font-size: 36px; }
         .size-17x8 .main-price { font-size: 80px; }
         .label-por { font-size: 10px; margin-right: 2px; align-self: center; color: #000; }
@@ -88,13 +87,13 @@
 
         .footer-barcode { background: white; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 5px 0; }
         .footer-barcode svg { max-width: 95%; height: auto; }
-        .size-6x3 .footer-barcode { height: 18px; order: 5; padding: 1px 0; }
+        .size-6x3 .footer-barcode { height: 20px; order: 5; }
         .size-6x4 .footer-barcode { height: 28px; padding: 1px 0; }
         .size-8x6 .footer-barcode { height: 45px; }
         .size-17x8 .footer-barcode { height: 45px; margin-top: 0; }
         .size-A5 .footer-barcode { height: 140px; } .size-A4P .footer-barcode { height: 180px; }
 
-        /* MODELO 6x10,5cm - CORREÇÃO DE BORDA ESQUERDA ZERADA */
+        /* MODELO 6x10,5cm */
         .size-6x105 { width: 6cm !important; height: 10.5cm !important; border: 1px solid #000; margin: 5px 5px 5px 0px !important; display: flex !important; flex-direction: column !important; background: #fff; overflow: hidden; position: relative; padding-left: 0 !important; }
         .photo-blank-space { height: 3cm; border-bottom: 1px dashed #ccc; background: #fff; }
         .photo-content { flex: 1; padding: 5px 5px 5px 8px; display: flex; flex-direction: column; text-align: left; position: relative; }
@@ -116,12 +115,19 @@
         .lp-box { padding: 10px 30px; border-radius: 10px; font-size: 50px; font-weight: 900; }
         .lp-yellow-box { background: var(--secondary); border: 4px solid #000; padding: 10px; margin: 10px 0; width: 95%; }
         .lp-yellow-box b { font-size: 85px; color: var(--primary); }
-        .lp-barcode-container { background: white; padding: 2px 0; width: 100%; display: flex; justify-content: center; margin-top: auto; }
+        .lp-barcode-container { background: white; padding: 2px 0; width: 100%; display: center; justify-content: center; margin-top: auto; }
         .lp-barcode-container svg { height: 75px; max-width: 75%; }
         .lp-footer { border-top: 3px solid #000; width: 100%; padding-top: 5px; font-size: 18px; font-weight: bold; padding-bottom: 10px; }
 
         .delete-btn { position: absolute; top: 1px; left: 1px; background: #000; color: #fff; border: none; border-radius: 50%; width: 25px; height: 25px; font-weight: bold; z-index: 1000; cursor: pointer; }
         .hist-chip { display: inline-block; background: #e2e8f0; padding: 5px 10px; border-radius: 15px; font-size: 10px; margin: 2px; cursor: pointer; font-weight: bold; }
+
+        .size-lp-gondola { width: 10cm !important; height: 15cm !important; border: 2px solid #000; margin: 5px; background: #fff; text-align: left !important; display: flex !important; flex-direction: column !important; box-sizing: border-box; }
+        .lp-top-white { padding: 12px; flex: 1.2; position: relative; }
+        .lp-bottom-yellow { background: var(--secondary); padding: 12px; border-top: 3px solid #000; flex: 1.8; text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
+        .price-unit-lp { margin-top: 15px; }
+        .price-unit-lp b { font-size: 55px; line-height: 0.8; }
+        .price-final-lp { color: var(--primary); font-size: 85px; line-height: 0.8; font-weight: 900; }
 
         @media print { 
             .no-print, .delete-btn { display: none !important; } 
@@ -197,7 +203,7 @@
                 <div class="field"><label>PAGUE (CADA SAI POR)</label><input type="text" id="photoFinal" class="navPhoto" placeholder="16,99" oninput="calcPhoto()"></div>
                 <div class="field"><label>VALIDADE</label><input type="text" id="photoValidade" class="navPhoto" placeholder="25/01/2026"></div>
                 <div class="field"><label>TOTAL DO KIT</label><input type="text" id="photoTotalKit" readonly></div>
-                <div class="btn-group"><button class="btn-add" onclick="addPhotoTag()">ADICIONAR MODELO FOTO</button><button class="btn-print" onclick="window.print()">IMPRIMIR</button></div>
+                <div class="btn-group"><button class="btn-add" id="btnAddPhoto" onclick="addPhotoTag()">ADICIONAR MODELO FOTO</button><button class="btn-print" onclick="window.print()">IMPRIMIR</button></div>
             </div>
         </div>
     </div>
@@ -210,6 +216,24 @@
 
     <script>
         let db = []; let historyData = []; let selectedItem = null; let selectedItemLP = null; let selectedItemPhoto = null;
+        
+        // FUNÇÃO PARA NAVEGAR COM ENTER
+        function enableEnterNavigation(className, actionBtnId) {
+            const fields = document.querySelectorAll('.' + className);
+            fields.forEach((field, index) => {
+                field.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        if (index < fields.length - 1) {
+                            fields[index + 1].focus();
+                        } else {
+                            document.getElementById(actionBtnId).click();
+                        }
+                    }
+                });
+            });
+        }
+
         database.ref('produtos').on('value', (s) => { 
             const data = s.val(); 
             db = data ? Object.values(data) : []; 
@@ -241,9 +265,15 @@
                 }
             });
         }
+        
         setupBipe('searchField', 'pOld', 'suggestions', 'std'); 
         setupBipe('lpProd', 'lpLeve', 'suggestionsLP', 'lp');
         setupBipe('photoProd', 'photoPriceEach', 'suggestionsPHOTO', 'photo');
+
+        // Ativa navegação por Enter em todas as abas
+        enableEnterNavigation('nav', 'btnAddTag');
+        enableEnterNavigation('navLP', 'btnAddLP');
+        enableEnterNavigation('navPhoto', 'btnAddPhoto');
 
         function selectItem(code, name, inputId, focusId, suggestionId, type) { 
             if(type === 'std') selectedItem = {code, name}; 
@@ -274,6 +304,7 @@
             div.className = 'size-6x105';
             div.innerHTML = `<button class="delete-btn" onclick="this.parentElement.remove()">X</button><div class="photo-blank-space"></div><div class="photo-content"><div class="photo-prod-name">${name}</div><div class="photo-old-price"><small>R$</small> ${priceEach} <small>CADA</small></div><div class="photo-barcode">${barcode}</div><div class="photo-yellow-box"><div class="photo-leve-pague">LEVE ${leve} POR</div><div class="photo-final-price"><small style="font-size:18px">R$</small> ${pFinal} <small style="font-size:14px">CADA</small></div><div class="photo-kit-val">Valor do Kit: R$ ${kit}</div><div style="font-size:8px; margin-top:5px">Ofertas até ${data}</div></div></div>`;
             document.getElementById('gondolaArea').appendChild(div);
+            document.getElementById('photoProd').value = ""; document.getElementById('photoProd').focus();
         }
 
         function addTag(reuseItem = null) {
@@ -286,7 +317,7 @@
             for (let i = 0; i < qty; i++) {
                 const tagId = "bc-" + Date.now() + i, div = document.createElement('div'); div.className = `tag ${size}`;
                 const headerContent = (size.includes('size-17') || size.includes('size-A')) ? `<img src="logo.png" class="logo-interna" onerror="this.outerHTML='<b>SOUZA FARMA</b>'">` : `<b>SOUZA FARMA</b>`;
-                div.innerHTML = `<button class="delete-btn" onclick="this.parentElement.remove()">X</button><div class="farmacia-header">${headerContent}</div><div class="tag-title">${name.toUpperCase()}</div><div class="info-row"><div class="old-price-label">${(oldP && oldP !== '0,00') ? 'DE R$ '+oldP : ''}</div>${perc > 0 ? `<div class="perc-badge-outer">-${perc}%</div>` : ''}</div><div class="price-box"><span class="label-por">POR</span><div class="main-price"><small style="font-size:0.35em;">R$</small>${reais}<small style="font-size:0.4em; text-decoration:underline;">,${cents||'00'}</small></div></div>${promo ? `<div class="promo-banner">${promo}</div>` : ''}<div class="footer-barcode"><svg id="${tagId}"></svg></div>`;
+                div.innerHTML = `<button class="delete-btn" onclick="this.parentElement.remove()">X</button><div class="farmacia-header">${headerContent}</div>${promo ? `<div class="promo-banner">${promo}</div>` : ''}<div class="tag-title">${name.toUpperCase()}</div><div class="info-row"><div class="old-price-label">${(oldP && oldP !== '0,00') ? 'DE R$ '+oldP : ''}</div>${perc > 0 ? `<div class="perc-badge-outer">-${perc}%</div>` : ''}</div><div class="price-box"><span class="label-por">POR</span><div class="main-price"><small style="font-size:0.35em;">R$</small>${reais}<small style="font-size:0.4em; text-decoration:underline;">,${cents||'00'}</small></div></div><div class="footer-barcode"><svg id="${tagId}"></svg></div>`;
                 document.getElementById(area).appendChild(div); JsBarcode(`#${tagId}`, barcode, { format: "CODE128", width: size.includes('A') || size.includes('17')?3:1.1, height: size.includes('A')?120:size.includes('17')?70:size.includes('size-6x')?20:30, displayValue: true, fontSize: size.includes('A')?40:size.includes('17')?30:10 });
             }
             if(!reuseItem) { historyData.unshift({name, old: oldP, new: newP, code: barcode}); updateHistory(); document.getElementById('searchField').value = ""; document.getElementById('pOld').value = ""; document.getElementById('pNew').value = ""; document.getElementById('searchField').focus(); }
