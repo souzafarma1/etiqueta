@@ -52,24 +52,17 @@
         .logo-interna { max-height: 80px; width: auto; padding: 5px; }
 
         .farmacia-header { font-size: 7px; font-weight: 900; color: #000; padding: 4px; border-bottom: 1px solid #eee; text-transform: uppercase; display: flex; justify-content: center; align-items: center; }
-        .size-17x8 .farmacia-header { padding: 0; border: none; }
-        .size-17x8 .logo-interna { max-height: 70px; padding: 2px; }
-
-        /* AJUSTE NA 6x3 PARA O NOME NÃO FICAR EMBAIXO DA OFERTA */
+        
         .tag-title { flex-grow: 1; display: flex; align-items: center; justify-content: center; font-weight: 900; padding: 2px 4px; line-height: 1.1; text-transform: uppercase; font-size: 11px; overflow: hidden; }
         .size-6x3 .tag-title { font-size: 9px; height: 18px; line-height: 0.9; margin-top: 2px; }
         .size-6x4 .tag-title { font-size: 9.5px; height: 20px; line-height: 0.95; padding-top: 5px; }
         .size-8x6 .tag-title { font-size: 14px; }
-        
         .size-17x8 .tag-title { font-size: 34px; line-height: 1; height: 2.8cm !important; margin: 0; }
 
         .promo-banner { background: var(--primary); color: var(--secondary); font-size: 12px; font-weight: 900; padding: 3px; border-bottom: 1px solid #000; text-transform: uppercase; position: relative; z-index: 10; }
         .size-6x3 .promo-banner, .size-6x4 .promo-banner { font-size: 10px; padding: 2px; }
         .size-17x8 .promo-banner { font-size: 26px; padding: 4px; border-top: 1px solid #000; }
         
-        .size-A5 .promo-banner { font-size: 55px; padding: 15px; border-bottom: 5px solid #000; }
-        .size-A4P .promo-banner { font-size: 75px; padding: 25px; border-bottom: 5px solid #000; }
-
         .price-box { background: var(--secondary); padding: 4px; border-top: 1px solid #000; border-bottom: 1px solid #000; display: flex; justify-content: center; align-items: center; }
         .main-price { color: var(--primary); font-weight: 900; display: flex; align-items: flex-start; line-height: 0.85; font-size: 40px; }
         .size-6x3 .main-price { font-size: 30px; }
@@ -92,51 +85,27 @@
         .size-17x8 .footer-barcode { height: 45px; margin-top: 0; }
         .size-A5 .footer-barcode { height: 140px; } .size-A4P .footer-barcode { height: 180px; }
 
-        /* MODELO 6x10,5cm - CORREÇÃO DE COR E BOTÃO EXCLUIR */
-        .size-6x105 { width: 6cm !important; height: 10.5cm !important; border: 1px solid #000; margin: 5px; display: flex !important; flex-direction: column !important; background: #fff; overflow: hidden; position: relative; }
+        /* MODELO 6x10,5cm - MARGEM ESQUERDA 0.5CM */
+        .size-6x105 { width: 6cm !important; height: 10.5cm !important; border: 1px solid #000; margin: 5px; margin-left: 0.5cm !important; display: flex !important; flex-direction: column !important; background: #fff; overflow: hidden; position: relative; }
         .photo-blank-space { height: 3cm; border-bottom: 1px dashed #ccc; background: #fff; }
         .photo-content { flex: 1; padding: 5px; display: flex; flex-direction: column; text-align: left; position: relative; }
         .photo-prod-name { font-size: 13px; font-weight: 900; line-height: 1.1; margin-bottom: 10px; text-transform: uppercase; color: #333; }
         .photo-old-price { font-size: 22px; font-weight: 900; color: #333; display: flex; align-items: center; justify-content: flex-end; gap: 5px; margin-right: 10px; }
         .photo-old-price small { font-size: 10px; }
         .photo-yellow-box { background: var(--secondary); margin-top: auto; padding: 8px 5px; border-top: 2px solid #000; text-align: center; }
-        
-        /* COR IGUAL A FOTO (AZUL ESCURO/ROXO) */
         .photo-leve-pague { font-size: 22px; font-weight: 900; margin-bottom: 5px; color: var(--dorflex-blue); text-transform: uppercase; }
-        
         .photo-final-price { color: #000; font-size: 48px; font-weight: 900; line-height: 0.8; }
         .photo-kit-val { font-size: 13px; font-weight: 900; margin-top: 8px; }
         .photo-barcode { text-align: right; padding-right: 5px; font-size: 8px; margin-bottom: 2px; }
 
-        .promo-tag-lp { background: white; border: 12px solid var(--primary); width: 21cm; height: 27.5cm; padding: 0.3cm; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; color: #000; margin: 0 auto 5px; page-break-after: always; }
-        .lp-header-box { background: #000; color: #fff; width: calc(100% + 0.6cm); margin-top: -0.3cm; padding: 12px 0; margin-bottom: 15px; }
-        .lp-header-box h1 { font-size: 110px; margin: 0; line-height: 0.8; letter-spacing: -3px; }
-        .lp-header-box span { font-size: 35px; display: block; letter-spacing: 10px; font-weight: 900; }
-        .lp-prod-name { font-size: 60px; height: 140px; display: flex; align-items: center; justify-content: center; text-transform: uppercase; font-weight: 900; margin: 25px 0 20px; line-height: 1; overflow: hidden; }
-        .lp-leve-pague { display: flex; gap: 15px; margin: 15px 0; }
-        .lp-box { padding: 10px 30px; border-radius: 10px; font-size: 50px; font-weight: 900; }
-        .lp-yellow-box { background: var(--secondary); border: 4px solid #000; padding: 10px; margin: 10px 0; width: 95%; }
-        .lp-yellow-box b { font-size: 85px; color: var(--primary); }
-        .lp-barcode-container { background: white; padding: 2px 0; width: 100%; display: flex; justify-content: center; margin-top: auto; }
-        .lp-barcode-container svg { height: 75px; max-width: 75%; }
-        .lp-footer { border-top: 3px solid #000; width: 100%; padding-top: 5px; font-size: 18px; font-weight: bold; padding-bottom: 10px; }
-
         .delete-btn { position: absolute; top: 1px; left: 1px; background: #000; color: #fff; border: none; border-radius: 50%; width: 25px; height: 25px; font-weight: bold; z-index: 1000; cursor: pointer; }
         .hist-chip { display: inline-block; background: #e2e8f0; padding: 5px 10px; border-radius: 15px; font-size: 10px; margin: 2px; cursor: pointer; font-weight: bold; }
-
-        /* NOVO MODELO GÔNDOLA 10x15 v107 */
-        .size-lp-gondola { width: 10cm !important; height: 15cm !important; border: 2px solid #000; margin: 5px; background: #fff; text-align: left !important; display: flex !important; flex-direction: column !important; box-sizing: border-box; }
-        .lp-top-white { padding: 12px; flex: 1.2; position: relative; }
-        .lp-bottom-yellow { background: var(--secondary); padding: 12px; border-top: 3px solid #000; flex: 1.8; text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
-        .price-unit-lp { margin-top: 15px; }
-        .price-unit-lp b { font-size: 55px; line-height: 0.8; }
-        .price-final-lp { color: var(--primary); font-size: 85px; line-height: 0.8; font-weight: 900; }
 
         @media print { 
             .no-print, .delete-btn { display: none !important; } 
             body { background: white; padding: 0; } 
             #printArea { width: 100%; text-align: left; }
-            .tag, .promo-tag-lp, .size-6x105 { border: 2px solid #000 !important; }
+            .tag, .size-6x105 { border: 2px solid #000 !important; }
             @page { margin: 0; size: auto; }
         }
     </style>
@@ -302,19 +271,63 @@
         }
 
         function addTag(reuseItem = null) {
-            const name = reuseItem ? reuseItem.name : document.getElementById('searchField').value, oldP = reuseItem ? reuseItem.old : document.getElementById('pOld').value, newP = reuseItem ? reuseItem.new : document.getElementById('pNew').value;
-            const size = document.getElementById('pSize').value, promo = document.getElementById('pPromo').value, qty = reuseItem ? 1 : parseInt(document.getElementById('pQty').value);
+            const name = reuseItem ? reuseItem.name : document.getElementById('searchField').value, 
+                  oldP = reuseItem ? reuseItem.old : document.getElementById('pOld').value, 
+                  newP = reuseItem ? reuseItem.new : document.getElementById('pNew').value;
+            const size = document.getElementById('pSize').value, 
+                  promo = document.getElementById('pPromo').value, 
+                  qty = reuseItem ? 1 : parseInt(document.getElementById('pQty').value);
+            
             if (!name || !newP) return;
-            const [reais, cents] = newP.split(','), barcode = reuseItem ? reuseItem.code : (selectedItem ? selectedItem.code : "0000000000000");
-            const vOld = parseFloat(oldP.replace(',', '.')), vNew = parseFloat(newP.replace(',', '.')), perc = (vOld > vNew) ? Math.round(((vOld - vNew) / vOld) * 100) : 0;
+            
+            const [reais, cents] = newP.split(','), 
+                  barcode = reuseItem ? reuseItem.code : (selectedItem ? selectedItem.code : "0000000000000");
+            const vOld = parseFloat(oldP.replace(',', '.')), 
+                  vNew = parseFloat(newP.replace(',', '.')), 
+                  perc = (vOld > vNew) ? Math.round(((vOld - vNew) / vOld) * 100) : 0;
+            
             let area = (size === 'size-70mm') ? 'thermalArea' : (size.includes('size-6') || size.includes('size-8') ? 'gondolaArea' : 'posterArea');
+            
             for (let i = 0; i < qty; i++) {
-                const tagId = "bc-" + Date.now() + i, div = document.createElement('div'); div.className = `tag ${size}`;
+                const tagId = "bc-" + Date.now() + i, div = document.createElement('div'); 
+                div.className = `tag ${size}`;
                 const headerContent = (size.includes('size-17') || size.includes('size-A')) ? `<img src="logo.png" class="logo-interna" onerror="this.outerHTML='<b>SOUZA FARMA</b>'">` : `<b>SOUZA FARMA</b>`;
-                div.innerHTML = `<button class="delete-btn" onclick="this.parentElement.remove()">X</button><div class="farmacia-header">${headerContent}</div>${promo ? `<div class="promo-banner">${promo}</div>` : ''}<div class="tag-title">${name.toUpperCase()}</div><div class="info-row"><div class="old-price-label">${(oldP && oldP !== '0,00') ? 'DE R$ '+oldP : ''}</div>${perc > 0 ? `<div class="perc-badge-outer">-${perc}%</div>` : ''}</div><div class="price-box"><span class="label-por">POR</span><div class="main-price"><small style="font-size:0.35em;">R$</small>${reais}<small style="font-size:0.4em; text-decoration:underline;">,${cents||'00'}</small></div></div><div class="footer-barcode"><svg id="${tagId}"></svg></div>`;
-                document.getElementById(area).appendChild(div); JsBarcode(`#${tagId}`, barcode, { format: "CODE128", width: size.includes('A') || size.includes('17')?3:1.1, height: size.includes('A')?120:size.includes('17')?70:size.includes('size-6x')?20:30, displayValue: true, fontSize: size.includes('A')?40:size.includes('17')?30:10 });
+                
+                // AJUSTE REALIZADO AQUI: Nome acima da Oferta
+                div.innerHTML = `
+                    <button class="delete-btn" onclick="this.parentElement.remove()">X</button>
+                    <div class="farmacia-header">${headerContent}</div>
+                    <div class="tag-title">${name.toUpperCase()}</div>
+                    ${promo ? `<div class="promo-banner">${promo}</div>` : ''}
+                    <div class="info-row">
+                        <div class="old-price-label">${(oldP && oldP !== '0,00') ? 'DE R$ '+oldP : ''}</div>
+                        ${perc > 0 ? `<div class="perc-badge-outer">-${perc}%</div>` : ''}
+                    </div>
+                    <div class="price-box">
+                        <span class="label-por">POR</span>
+                        <div class="main-price">
+                            <small style="font-size:0.35em;">R$</small>${reais}<small style="font-size:0.4em; text-decoration:underline;">,${cents||'00'}</small>
+                        </div>
+                    </div>
+                    <div class="footer-barcode"><svg id="${tagId}"></svg></div>`;
+                
+                document.getElementById(area).appendChild(div); 
+                JsBarcode(`#${tagId}`, barcode, { 
+                    format: "CODE128", 
+                    width: size.includes('A') || size.includes('17')?3:1.1, 
+                    height: size.includes('A')?120:size.includes('17')?70:size.includes('size-6x')?20:30, 
+                    displayValue: true, 
+                    fontSize: size.includes('A')?40:size.includes('17')?30:10 
+                });
             }
-            if(!reuseItem) { historyData.unshift({name, old: oldP, new: newP, code: barcode}); updateHistory(); document.getElementById('searchField').value = ""; document.getElementById('pOld').value = ""; document.getElementById('pNew').value = ""; document.getElementById('searchField').focus(); }
+            if(!reuseItem) { 
+                historyData.unshift({name, old: oldP, new: newP, code: barcode}); 
+                updateHistory(); 
+                document.getElementById('searchField').value = ""; 
+                document.getElementById('pOld').value = ""; 
+                document.getElementById('pNew').value = ""; 
+                document.getElementById('searchField').focus(); 
+            }
         }
 
         function addLPTag() {
