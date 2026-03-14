@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Souza Farma v112 - Completa e Ajustada</title>
+    <title>Souza Farma v109 - Personalizada</title>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     
@@ -41,35 +41,41 @@
         .size-70mm { width: 70mm; padding-left: 0.3cm; padding-right: 0.3cm; border: 1px dashed #999; margin-left: 0 !important; margin-right: auto !important; margin-bottom: 5px !important; }
         .gondola-container { display: flex; flex-wrap: wrap; gap: 0; justify-content: flex-start; padding: 1cm; box-sizing: border-box; }
         
-        /* AJUSTE NA 6x3 PARA O NOME NÃO FICAR EMBAIXO DA OFERTA */
-        .tag-title { flex-grow: 1; display: flex; align-items: center; justify-content: center; font-weight: 900; padding: 2px 4px; line-height: 1.1; text-transform: uppercase; font-size: 11px; overflow: hidden; }
-        
-        /* CORREÇÃO ESPECÍFICA 6x3 */
-        .size-6x3 { width: 6cm !important; height: 3cm !important; margin: 0; border: 0.5px solid #000; display: flex !important; flex-direction: column !important; justify-content: flex-start !important; }
-        .size-6x3 .promo-banner { order: 1; height: 18px; line-height: 18px; padding: 0; border-bottom: 1px solid #000; }
-        .size-6x3 .tag-title { order: 2; font-size: 8.5px; height: 18px; line-height: 0.9; margin: 2px 0; }
-        .size-6x3 .info-row { order: 3; min-height: 15px; }
-        .size-6x3 .price-box { order: 4; padding: 2px; }
-        .size-6x3 .main-price { font-size: 26px; } /* Diminuído para dar espaço ao nome */
-        .size-6x3 .footer-barcode { order: 5; height: 18px; padding: 0; }
-
+        .size-6x3 { width: 6cm !important; height: 3cm !important; margin: 0; border: 0.5px solid #000; display: flex !important; flex-direction: column !important; }
         .size-6x4 { width: 6cm !important; height: 4cm !important; margin: 0; border: 0.5px solid #000; display: flex !important; flex-direction: column !important; }
-        .size-6x4 .tag-title { font-size: 9.5px; height: 20px; line-height: 0.95; padding-top: 5px; }
         .size-8x6 { width: 8cm !important; height: 6cm !important; margin: 0; border: 1px solid #000; display: flex !important; flex-direction: column !important; }
-        .size-8x6 .tag-title { font-size: 14px; }
         
         .size-17x8 { width: 17cm !important; height: 9cm !important; border: 2px solid #000; margin: 0 auto 5px !important; padding: 0; display: flex !important; flex-direction: column !important; justify-content: space-between !important; }
-        .size-17x8 .tag-title { font-size: 34px; line-height: 1; height: 2.8cm !important; margin: 0; }
 
         .size-A5 { width: 14.8cm; height: 21cm; padding: 0.6cm; margin: 0 auto 10px !important; }
         .size-A4P { width: 21cm; height: 29.7cm; padding: 1cm; margin: 0 auto 10px !important; }
         .logo-interna { max-height: 80px; width: auto; padding: 5px; }
 
         .farmacia-header { font-size: 7px; font-weight: 900; color: #000; padding: 4px; border-bottom: 1px solid #eee; text-transform: uppercase; display: flex; justify-content: center; align-items: center; }
-        .promo-banner { background: var(--primary); color: var(--secondary); font-size: 12px; font-weight: 900; padding: 3px; border-bottom: 1px solid #000; text-transform: uppercase; position: relative; z-index: 10; }
+        .size-17x8 .farmacia-header { padding: 0; border: none; }
+        .size-17x8 .logo-interna { max-height: 70px; padding: 2px; }
+
+        /* AJUSTE NA 6x3: Nome do produto agora respeita a ordem e o preço foi reduzido */
+        .tag-title { flex-grow: 1; display: flex; align-items: center; justify-content: center; font-weight: 900; padding: 2px 4px; line-height: 1.1; text-transform: uppercase; font-size: 11px; overflow: hidden; }
+        .size-6x3 .tag-title { font-size: 9px; height: 18px; line-height: 0.9; margin-top: 0px; margin-bottom: 2px; order: 2; }
+        .size-6x4 .tag-title { font-size: 9.5px; height: 20px; line-height: 0.95; padding-top: 5px; }
+        .size-8x6 .tag-title { font-size: 14px; }
         
+        .size-17x8 .tag-title { font-size: 34px; line-height: 1; height: 2.8cm !important; margin: 0; }
+
+        .promo-banner { background: var(--primary); color: var(--secondary); font-size: 12px; font-weight: 900; padding: 3px; border-bottom: 1px solid #000; text-transform: uppercase; position: relative; z-index: 10; }
+        .size-6x3 .promo-banner { font-size: 10px; padding: 2px; order: 1; }
+        .size-6x4 .promo-banner { font-size: 10px; padding: 2px; }
+        .size-17x8 .promo-banner { font-size: 26px; padding: 4px; border-top: 1px solid #000; }
+        
+        .size-A5 .promo-banner { font-size: 55px; padding: 15px; border-bottom: 5px solid #000; }
+        .size-A4P .promo-banner { font-size: 75px; padding: 25px; border-bottom: 5px solid #000; }
+
         .price-box { background: var(--secondary); padding: 4px; border-top: 1px solid #000; border-bottom: 1px solid #000; display: flex; justify-content: center; align-items: center; }
         .main-price { color: var(--primary); font-weight: 900; display: flex; align-items: flex-start; line-height: 0.85; font-size: 40px; }
+        .size-6x3 .main-price { font-size: 26px; } /* Reduzido para não sobrepor */
+        .size-6x4 .main-price { font-size: 36px; }
+        .size-17x8 .main-price { font-size: 80px; }
         .label-por { font-size: 10px; margin-right: 2px; align-self: center; color: #000; }
 
         .size-A5 .tag-title { font-size: 45px; } .size-A4P .tag-title { font-size: 55px; }
@@ -81,15 +87,23 @@
 
         .footer-barcode { background: white; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 5px 0; }
         .footer-barcode svg { max-width: 95%; height: auto; }
-        
-        /* MODELO 6x10,5cm (FOTO) */
-        .size-6x105 { width: 6cm !important; height: 10.5cm !important; border: 1px solid #000; margin: 5px; display: flex !important; flex-direction: column !important; background: #fff; overflow: hidden; position: relative; }
+        .size-6x3 .footer-barcode { height: 20px; order: 5; }
+        .size-6x4 .footer-barcode { height: 28px; padding: 1px 0; }
+        .size-8x6 .footer-barcode { height: 45px; }
+        .size-17x8 .footer-barcode { height: 45px; margin-top: 0; }
+        .size-A5 .footer-barcode { height: 140px; } .size-A4P .footer-barcode { height: 180px; }
+
+        /* MODELO 6x10,5cm - BORDA ESQUERDA ZERADA */
+        .size-6x105 { width: 6cm !important; height: 10.5cm !important; border: 1px solid #000; margin: 5px 5px 5px 0px !important; display: flex !important; flex-direction: column !important; background: #fff; overflow: hidden; position: relative; padding-left: 0 !important; }
         .photo-blank-space { height: 3cm; border-bottom: 1px dashed #ccc; background: #fff; }
-        .photo-content { flex: 1; padding: 5px; display: flex; flex-direction: column; text-align: left; position: relative; }
+        .photo-content { flex: 1; padding: 5px 5px 5px 8px; display: flex; flex-direction: column; text-align: left; position: relative; }
         .photo-prod-name { font-size: 13px; font-weight: 900; line-height: 1.1; margin-bottom: 10px; text-transform: uppercase; color: #333; }
         .photo-old-price { font-size: 22px; font-weight: 900; color: #333; display: flex; align-items: center; justify-content: flex-end; gap: 5px; margin-right: 10px; }
-        .photo-yellow-box { background: var(--secondary); margin-top: auto; padding: 8px 5px; border-top: 2px solid #000; text-align: center; }
+        .photo-old-price small { font-size: 10px; }
+        .photo-yellow-box { background: var(--secondary); margin-top: auto; padding: 8px 5px; border-top: 2px solid #000; text-align: center; margin-left: -8px; }
+        
         .photo-leve-pague { font-size: 22px; font-weight: 900; margin-bottom: 5px; color: var(--dorflex-blue); text-transform: uppercase; }
+        
         .photo-final-price { color: #000; font-size: 48px; font-weight: 900; line-height: 0.8; }
         .photo-kit-val { font-size: 13px; font-weight: 900; margin-top: 8px; }
         .photo-barcode { text-align: right; padding-right: 5px; font-size: 8px; margin-bottom: 2px; }
@@ -107,21 +121,21 @@
         .lp-barcode-container svg { height: 75px; max-width: 75%; }
         .lp-footer { border-top: 3px solid #000; width: 100%; padding-top: 5px; font-size: 18px; font-weight: bold; padding-bottom: 10px; }
 
+        .delete-btn { position: absolute; top: 1px; left: 1px; background: #000; color: #fff; border: none; border-radius: 50%; width: 25px; height: 25px; font-weight: bold; z-index: 1000; cursor: pointer; }
+        .hist-chip { display: inline-block; background: #e2e8f0; padding: 5px 10px; border-radius: 15px; font-size: 10px; margin: 2px; cursor: pointer; font-weight: bold; }
+
         .size-lp-gondola { width: 10cm !important; height: 15cm !important; border: 2px solid #000; margin: 5px; background: #fff; text-align: left !important; display: flex !important; flex-direction: column !important; box-sizing: border-box; }
         .lp-top-white { padding: 12px; flex: 1.2; position: relative; }
         .lp-bottom-yellow { background: var(--secondary); padding: 12px; border-top: 3px solid #000; flex: 1.8; text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
+        .price-unit-lp { margin-top: 15px; }
+        .price-unit-lp b { font-size: 55px; line-height: 0.8; }
         .price-final-lp { color: var(--primary); font-size: 85px; line-height: 0.8; font-weight: 900; }
-
-        .delete-btn { position: absolute; top: 1px; left: 1px; background: #000; color: #fff; border: none; border-radius: 50%; width: 25px; height: 25px; font-weight: bold; z-index: 1000; cursor: pointer; }
-        .hist-chip { display: inline-block; background: #e2e8f0; padding: 5px 10px; border-radius: 15px; font-size: 10px; margin: 2px; cursor: pointer; font-weight: bold; }
 
         @media print { 
             .no-print, .delete-btn { display: none !important; } 
             body { background: white; padding: 0; } 
             #printArea { width: 100%; text-align: left; }
-            /* CORREÇÃO SOLICITADA: 2mm da borda esquerda */
-            .size-6x105 { margin-left: 2mm !important; border: 1px solid #000 !important; }
-            .tag, .promo-tag-lp, .size-lp-gondola { border: 2px solid #000 !important; }
+            .tag, .promo-tag-lp, .size-6x105 { border: 1px solid #000 !important; }
             @page { margin: 0; size: auto; }
         }
     </style>
@@ -157,7 +171,7 @@
                 <div class="field" style="grid-column: span 2;"><label>PRODUTO (BIPE OU BUSQUE)</label><input type="text" id="searchField" class="nav" placeholder="Digite ou bipe..." autocomplete="off"><div id="suggestions"></div></div>
                 <div class="field"><label>PREÇO DE</label><input type="text" id="pOld" class="nav" placeholder="0,00"></div>
                 <div class="field"><label>PREÇO POR</label><input type="text" id="pNew" class="nav" placeholder="0,00"></div>
-                <div class="field"><label>TAMANHO</label><select id="pSize" class="nav"><option value="size-6x3">6x3 (Gôndola)</option><option value="size-70mm">Térmica 70mm</option><option value="size-6x4">6x4</option><option value="size-8x6">8x6</option><option value="size-17x8">Cartaz 17x9cm</option><option value="size-A5">Cartaz A5</option><option value="size-A4P">Cartaz A4</option></select></div>
+                <div class="field"><label>TAMANHO</label><select id="pSize" class="nav"><option value="size-70mm">Térmica 70mm</option><option value="size-6x3">6x3</option><option value="size-6x4">6x4</option><option value="size-8x6">8x6</option><option value="size-17x8">Cartaz 17x9cm</option><option value="size-A5">Cartaz A5</option><option value="size-A4P">Cartaz A4</option></select></div>
                 <div class="field"><label>CAMPANHA</label><select id="pPromo" class="nav"><option value="OFERTA">OFERTA</option><option value="MEGA OFERTA">MEGA OFERTA</option><option value="IMBATÍVEL">IMBATÍVEL</option><option value="SÓ HOJE">SÓ HOJE</option><option value="">Sem Frase</option></select></div>
                 <div class="field"><label>QTD</label><input type="number" id="pQty" class="nav" value="1"></div>
                 <div class="btn-group">
@@ -218,10 +232,20 @@
             input.addEventListener('input', (e) => {
                 const val = e.target.value.toUpperCase().trim();
                 if(!val) return;
-                const matches = db.filter(i => String(Object.values(i)[2]).toUpperCase().includes(val) || String(Object.values(i)[1]).includes(val));
-                if(matches.length > 0) {
-                    document.getElementById(suggestionId).innerHTML = matches.slice(0,10).map(m => `<div class="suggestion-item" onclick="selectItem('${Object.values(m)[0]}', '${Object.values(m)[2]}', '${inputId}', '${focusId}', '${suggestionId}', '${type}')"><b>${Object.values(m)[1]}</b> - ${Object.values(m)[2]}</div>`).join('');
-                    document.getElementById(suggestionId).style.display = 'block';
+                const exact = db.find(i => String(Object.values(i)[0]) == val || String(Object.values(i)[1]) == val);
+                if(exact) { 
+                    if(type === 'std') selectedItem = {code: Object.values(exact)[0], name: Object.values(exact)[2]};
+                    else if(type === 'lp') selectedItemLP = {code: Object.values(exact)[0], name: Object.values(exact)[2]};
+                    else if(type === 'photo') selectedItemPhoto = {code: Object.values(exact)[0], name: Object.values(exact)[2]};
+                    input.value = Object.values(exact)[2]; 
+                    document.getElementById(suggestionId).style.display = 'none';
+                    setTimeout(() => document.getElementById(focusId).focus(), 50);
+                } else if(val.length >= 2) {
+                   const matches = db.filter(i => String(Object.values(i)[2]).toUpperCase().includes(val) || String(Object.values(i)[1]).includes(val));
+                    if(matches.length > 0) {
+                        document.getElementById(suggestionId).innerHTML = matches.slice(0,10).map(m => `<div class="suggestion-item" onclick="selectItem('${Object.values(m)[0]}', '${Object.values(m)[2]}', '${inputId}', '${focusId}', '${suggestionId}', '${type}')"><b>${Object.values(m)[1]}</b> - ${Object.values(m)[2]}</div>`).join('');
+                        document.getElementById(suggestionId).style.display = 'block';
+                    }
                 }
             });
         }
@@ -230,7 +254,9 @@
         setupBipe('photoProd', 'photoPriceEach', 'suggestionsPHOTO', 'photo');
 
         function selectItem(code, name, inputId, focusId, suggestionId, type) { 
-            if(type === 'std') selectedItem = {code, name}; else if(type === 'lp') selectedItemLP = {code, name}; else selectedItemPhoto = {code, name};
+            if(type === 'std') selectedItem = {code, name}; 
+            else if(type === 'lp') selectedItemLP = {code, name};
+            else if(type === 'photo') selectedItemPhoto = {code, name};
             document.getElementById(inputId).value = name; document.getElementById(suggestionId).style.display = 'none'; 
             setTimeout(() => document.getElementById(focusId).focus(), 50); 
         }
@@ -244,10 +270,33 @@
         }
 
         function addPhotoTag() {
-            const name = document.getElementById('photoProd').value, priceEach = document.getElementById('photoPriceEach').value, leve = document.getElementById('photoLeve').value, pFinal = document.getElementById('photoFinal').value, kit = document.getElementById('photoTotalKit').value, data = document.getElementById('photoValidade').value;
+            const name = document.getElementById('photoProd').value;
+            const priceEach = document.getElementById('photoPriceEach').value;
+            const leve = document.getElementById('photoLeve').value;
+            const pFinal = document.getElementById('photoFinal').value;
+            const kit = document.getElementById('photoTotalKit').value;
+            const data = document.getElementById('photoValidade').value;
             const barcode = selectedItemPhoto ? selectedItemPhoto.code : "7891058017507";
-            const div = document.createElement('div'); div.className = 'size-6x105';
-            div.innerHTML = `<button class="delete-btn" onclick="this.parentElement.remove()">X</button><div class="photo-blank-space"></div><div class="photo-content"><div class="photo-prod-name">${name}</div><div class="photo-old-price"><small>R$</small> ${priceEach} <small>CADA</small></div><div class="photo-yellow-box"><div class="photo-leve-pague">LEVE ${leve} POR</div><div class="photo-final-price"><small style="font-size:18px">R$</small> ${pFinal} <small style="font-size:14px">CADA</small></div><div class="photo-kit-val">Valor do Kit: R$ ${kit}</div><div style="font-size:8px; margin-top:5px">Ofertas até ${data} - ${barcode}</div></div></div>`;
+
+            if(!name || !pFinal) return;
+
+            const div = document.createElement('div');
+            div.className = 'size-6x105';
+            div.innerHTML = `
+                <button class="delete-btn" onclick="this.parentElement.remove()">X</button>
+                <div class="photo-blank-space"></div>
+                <div class="photo-content">
+                    <div class="photo-prod-name">${name}</div>
+                    <div class="photo-old-price"><small>R$</small> ${priceEach} <small>CADA</small></div>
+                    <div class="photo-barcode">${barcode}</div>
+                    <div class="photo-yellow-box">
+                        <div class="photo-leve-pague">LEVE ${leve} POR</div>
+                        <div class="photo-final-price"><small style="font-size:18px">R$</small> ${pFinal} <small style="font-size:14px">CADA</small></div>
+                        <div class="photo-kit-val">Valor do Kit: R$ ${kit}</div>
+                        <div style="font-size:8px; margin-top:5px">Ofertas até ${data}</div>
+                    </div>
+                </div>
+            `;
             document.getElementById('gondolaArea').appendChild(div);
         }
 
@@ -269,13 +318,14 @@
 
         function addLPTag() {
             const barcode = selectedItemLP ? selectedItemLP.code : "0000000000000", tagId = "lpbc-" + Date.now();
-            const model = document.getElementById('lpModel').value, div = document.createElement('div'); 
+            const model = document.getElementById('lpModel').value;
+            const div = document.createElement('div'); 
             if(model === 'full') {
                 div.className = 'promo-tag-lp';
                 div.innerHTML = `<button class="delete-btn" onclick="this.parentElement.remove()">X</button><div class="lp-header-box"><span>— MEGA —</span><h1>OFERTA</h1></div><div class="lp-prod-name">${document.getElementById('lpProd').value.toUpperCase()}</div><div class="lp-leve-pague"><div class="lp-box" style="background:#000; color:#fff;">LEVE ${document.getElementById('lpLeve').value}</div><div class="lp-box" style="background:var(--primary); color:#fff;">PAGUE ${document.getElementById('lpPague').value}</div></div><div style="font-size:32px; margin-top:5px;">VALOR DA UNIDADE: R$ ${document.getElementById('lpUnit').value}</div><div style="font-size:38px; margin: 10px 0;">VALOR TOTAL DO KIT: <b>R$ ${document.getElementById('lpTotal').value}</b></div><div class="lp-yellow-box"><span style="font-size:28px; display:block; font-weight:bold;">NA COMPRA DE ${document.getElementById('lpLeve').value}, A UNIDADE SAI POR:</span>R$ <b>${document.getElementById('lpFinal').value}</b></div><div class="lp-barcode-container"><svg id="${tagId}"></svg></div><div class="lp-footer">SOUZA FARMA - FARMÁCIA DO TRABALHADOR<br>OFERTA VÁLIDA: ${document.getElementById('lpData').value.toUpperCase()}</div>`;
             } else {
                 div.className = 'tag size-lp-gondola';
-                div.innerHTML = `<button class="delete-btn" onclick="this.parentElement.remove()">X</button><div class="lp-top-white"><div style="font-size:12px; font-weight:bold; border-bottom:1px solid #000; padding-bottom:5px;">SOUZA FARMA</div><div style="font-size:22px; line-height:1.1; margin-top:10px; height:65px; overflow:hidden; font-weight:900;">${document.getElementById('lpProd').value.toUpperCase()}</div><div style="position:absolute; bottom:5px; right:5px; font-size:9px;">${barcode}</div></div><div class="lp-bottom-yellow"><div style="background:#000; color:#fff; font-size:22px; padding:6px; margin-bottom:5px; font-weight:900;">LEVE ${document.getElementById('lpLeve').value}, PAGUE ${document.getElementById('lpPague').value}</div><div style="font-size:16px; font-weight:bold;">UNITÁRIO SAI POR:</div><div class="price-final-lp"><span style="font-size:28px; vertical-align:middle;">R$</span> <b>${document.getElementById('lpFinal').value}</b></div><div style="font-size:18px; margin-top:5px; font-weight:900; border-top:1px solid #000; padding-top:5px;">Valor do Kit: R$ ${document.getElementById('lpTotal').value}</div><div style="font-size:10px; margin-top:5px;">Válido até: ${document.getElementById('lpData').value}</div></div>`;
+                div.innerHTML = `<button class="delete-btn" onclick="this.parentElement.remove()">X</button><div class="lp-top-white"><div style="font-size:12px; font-weight:bold; border-bottom:1px solid #000; padding-bottom:5px;">SOUZA FARMA</div><div style="font-size:22px; line-height:1.1; margin-top:10px; height:65px; overflow:hidden; font-weight:900;">${document.getElementById('lpProd').value.toUpperCase()}</div><div class="price-unit-lp"><small style="font-size:16px;">R$</small> <b>${document.getElementById('lpUnit').value}</b> <small style="font-size:14px;">CADA</small></div><div style="position:absolute; bottom:5px; right:5px; font-size:9px;">${barcode}</div></div><div class="lp-bottom-yellow"><div style="background:#000; color:#fff; font-size:22px; padding:6px; margin-bottom:5px; font-weight:900;">LEVE ${document.getElementById('lpLeve').value}, PAGUE ${document.getElementById('lpPague').value}</div><div style="font-size:16px; font-weight:bold;">UNITÁRIO SAI POR:</div><div class="price-final-lp"><span style="font-size:28px; vertical-align:middle;">R$</span> <b>${document.getElementById('lpFinal').value}</b></div><div style="font-size:18px; margin-top:5px; font-weight:900; border-top:1px solid #000; padding-top:5px;">Valor do Kit: <span style="font-size:14px;">R$</span> ${document.getElementById('lpTotal').value}</div><div style="font-size:10px; margin-top:5px;">Válido até: ${document.getElementById('lpData').value}</div></div>`;
             }
             document.getElementById('posterArea').appendChild(div); 
             if(model === 'full') JsBarcode(`#${tagId}`, barcode, { format: "CODE128", width: 2.5, height: 75, displayValue: true, fontSize: 30 });
@@ -283,7 +333,7 @@
         }
 
         function updateHistory() { document.getElementById('histDisplay').innerHTML = historyData.slice(0, 6).map((h, i) => `<span class="hist-chip" onclick='addTag(historyData[${i}])'>${h.name}</span>`).join(''); }
-        function calcLP() { const l = parseInt(document.getElementById('lpLeve').value) || 0, p = parseInt(document.getElementById('lpPague').value) || 0, u = parseFloat(document.getElementById('lpUnit').value.replace(',', '.')) || 0; if(l > 0 && u > 0) { const f = (p * u) / l; document.getElementById('lpFinal').value = f.toLocaleString('pt-br', {minimumFractionDigits:2}); document.getElementById('lpTotal').value = (p*u).toLocaleString('pt-br', {minimumFractionDigits:2}); } }
+        function calcLP() { const l = parseInt(document.getElementById('lpLeve').value) || 0, p = parseInt(document.getElementById('lpPague').value) || 0, u = parseFloat(document.getElementById('lpUnit').value.replace(',', '.')) || 0; if(l > 0 && u > 0) { const f = (p * u) / l; document.getElementById('lpFinal').value = f.toLocaleString('pt-br', {minimumFractionDigits:2, maximumFractionDigits:2}); document.getElementById('lpTotal').value = (p*u).toLocaleString('pt-br', {minimumFractionDigits:2}); } }
         function openTab(evt, tabName) { document.querySelectorAll('.tab-content, .tab-btn').forEach(el => el.classList.remove('active')); document.getElementById(tabName).classList.add('active'); evt.currentTarget.classList.add('active'); }
         function handleExcel(e) { const reader = new FileReader(); reader.onload = (evt) => { const workbook = XLSX.read(evt.target.result, { type: 'binary' }); const products = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]); database.ref('produtos').set(products).then(() => alert("Sincronizado!")); }; reader.readAsBinaryString(e.target.files[0]); }
         function clearAll() { if(confirm("Limpar Tudo?")) { document.getElementById('thermalArea').innerHTML = ""; document.getElementById('gondolaArea').innerHTML = ""; document.getElementById('posterArea').innerHTML = ""; historyData = []; updateHistory(); } }
