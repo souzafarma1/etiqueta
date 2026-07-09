@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Souza Farma v112 - Ajustes Finos 10x15</title>
+    <title>Souza Farma v113 - Otimizado 4 por Folha</title>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     
@@ -39,7 +39,7 @@
         .perc-badge-outer { background: #000; color: #fff; font-size: 11px; padding: 2px 5px; border-radius: 4px; font-weight: 900; }
 
         .size-70mm { width: 70mm; padding-left: 0.3cm; padding-right: 0.3cm; border: 1px dashed #999; margin-left: 0 !important; margin-right: auto !important; margin-bottom: 5px !important; }
-        .gondola-container { display: flex; flex-wrap: wrap; gap: 0; justify-content: flex-start; padding: 1cm; box-sizing: border-box; }
+        .gondola-container { display: flex; flex-wrap: wrap; gap: 4px; justify-content: flex-start; padding: 0.3cm; box-sizing: border-box; }
         
         /* AJUSTES 6x3 */
         .size-6x3 { width: 6cm !important; height: 3cm !important; margin: 0; border: 0.5px solid #000; display: flex !important; flex-direction: column !important; }
@@ -112,28 +112,23 @@
         .lp-header-box h1 { font-size: 110px; margin: 0; line-height: 0.8; letter-spacing: -3px; }
         .lp-header-box span { font-size: 35px; display: block; letter-spacing: 10px; font-weight: 900; }
         .lp-prod-name { font-size: 60px; height: 140px; display: flex; align-items: center; justify-content: center; text-transform: uppercase; font-weight: 900; margin: 25px 0 20px; line-height: 1; overflow: hidden; }
-        .lp-leve-pague { display: flex; gap: 15px; margin: 15px 0; }
-        .lp-box { padding: 10px 30px; border-radius: 10px; font-size: 50px; font-weight: 900; }
+        .lp-footer { border-top: 3px solid #000; width: 100%; padding-top: 5px; font-size: 18px; font-weight: bold; padding-bottom: 10px; text-align: center; }
+
+        /* AJUSTADO COUBE 4 POR FOLHA PERFEITO (9.8cm x 13.8cm) */
+        .size-lp-gondola { width: 9.8cm !important; height: 13.8cm !important; border: 2px solid #000; margin: 2px; background: #fff; text-align: left !important; display: flex !important; flex-direction: column !important; box-sizing: border-box; page-break-inside: avoid; }
+        .lp-top-white { padding: 10px; flex: 1.5; position: relative; display: flex; flex-direction: column; }
+        .lp-bottom-yellow { background: var(--secondary); padding: 8px 10px; border-top: 3px solid #000; flex: 1.3; text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
+        .price-final-lp { color: var(--primary); font-size: 76px; line-height: 0.8; font-weight: 900; }
+
+        .ind-old-box { font-size: 38px; text-decoration: line-through; margin: 10px 0; font-weight: bold; }
+        .ind-old-gondola { font-size: 22px; text-decoration: line-through; font-weight: bold; margin-top: 4px; }
+
+        .ind-badge { background: #000; color: #fff; padding: 3px 8px; font-size: 14px; font-weight: 900; border-radius: 4px; display: inline-block; vertical-align: middle; margin-left: 10px; text-decoration: none !important; }
+        .ind-badge-full { background: #000; color: #fff; padding: 10px 20px; font-size: 32px; font-weight: 900; border-radius: 8px; display: inline-block; margin-top: 10px; }
         .lp-yellow-box { background: var(--secondary); border: 4px solid #000; padding: 10px; margin: 10px 0; width: 95%; }
         .lp-yellow-box b { font-size: 85px; color: var(--primary); }
         .lp-barcode-container { background: white; padding: 2px 0; width: 100%; display: flex; justify-content: center; margin-top: auto; }
         .lp-barcode-container svg { height: 75px; max-width: 75%; }
-        .lp-footer { border-top: 3px solid #000; width: 100%; padding-top: 5px; font-size: 18px; font-weight: bold; padding-bottom: 10px; text-align: center; }
-
-        /* AJUSTE DO MODELO GÔNDOLA 10x15 PARA PROMOÇÃO INDIVIDUAL NO TOPO */
-        .size-lp-gondola { width: 10cm !important; height: 15cm !important; border: 2px solid #000; margin: 5px; background: #fff; text-align: left !important; display: flex !important; flex-direction: column !important; box-sizing: border-box; }
-        .lp-top-white { padding: 12px; flex: 1.6; position: relative; display: flex; flex-direction: column; }
-        .lp-bottom-yellow { background: var(--secondary); padding: 10px 12px; border-top: 3px solid #000; flex: 1.4; text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
-        .price-unit-lp { margin-top: 15px; }
-        .price-unit-lp b { font-size: 55px; line-height: 0.8; }
-        .price-final-lp { color: var(--primary); font-size: 85px; line-height: 0.8; font-weight: 900; }
-
-        .ind-old-box { font-size: 38px; text-decoration: line-through; margin: 10px 0; font-weight: bold; }
-        .ind-old-gondola { font-size: 24px; text-decoration: line-through; font-weight: bold; margin-top: 5px; }
-
-        /* NOVAS ADIÇÕES PARA SELO DE DESCONTO E ALINHAMENTO */
-        .ind-badge { background: #000; color: #fff; padding: 3px 8px; font-size: 14px; font-weight: 900; border-radius: 4px; display: inline-block; vertical-align: middle; margin-left: 10px; text-decoration: none !important; }
-        .ind-badge-full { background: #000; color: #fff; padding: 10px 20px; font-size: 32px; font-weight: 900; border-radius: 8px; display: inline-block; margin-top: 10px; }
 
         .delete-btn { position: absolute; top: 1px; left: 1px; background: #000; color: #fff; border: none; border-radius: 50%; width: 25px; height: 25px; font-weight: bold; z-index: 1000; cursor: pointer; }
         .hist-chip { display: inline-block; background: #e2e8f0; padding: 5px 10px; border-radius: 15px; font-size: 10px; margin: 2px; cursor: pointer; font-weight: bold; }
@@ -141,9 +136,10 @@
         @media print { 
             .no-print, .delete-btn { display: none !important; } 
             body { background: white; padding: 0; } 
-            #printArea { width: 100%; text-align: left; }
-            .tag, .promo-tag-lp, .size-6x105, .size-lp-gondola { border: 1px solid #000 !important; }
-            @page { margin: 0; size: auto; }
+            #printArea { width: 100%; text-align: left; max-width: 100%; }
+            .gondola-container { padding: 0; gap: 0; }
+            .tag, .promo-tag-lp, .size-6x105, .size-lp-gondola { border: 2px solid #000 !important; }
+            @page { margin: 0.4cm; size: A4 portrait; }
         }
     </style>
 </head>
@@ -194,7 +190,7 @@
         <div id="promocoes" class="tab-content">
             <div class="grid-form">
                 <div class="field" style="grid-column: span 2;"><label>PRODUTO (BIPE OU BUSQUE NOME)</label><input type="text" id="lpProd" class="navLP" placeholder="Bipe ou digite..." autocomplete="off"><div id="suggestionsLP"></div></div>
-                <div class="field"><label>TIPO MODELO</label><select id="lpModel" class="navLP"><option value="full">Cartaz A4 Completo</option><option value="gondola">Etiqueta Gôndola (10x15)</option></select></div>
+                <div class="field"><label>TIPO MODELO</label><select id="lpModel" class="navLP"><option value="full">Cartaz A4 Completo</option><option value="gondola">Etiqueta Gôndola (4 por folha)</option></select></div>
                 <div class="field"><label>LEVE</label><input type="number" id="lpLeve" class="navLP" value="3" oninput="calcLP()"></div>
                 <div class="field"><label>PAGUE</label><input type="number" id="lpPague" class="navLP" value="2" oninput="calcLP()"></div>
                 <div class="field"><label>VALOR UN. (R$)</label><input type="text" id="lpUnit" class="navLP" placeholder="0,00" oninput="calcLP()"></div>
@@ -220,7 +216,7 @@
         <div id="promocaoIndividual" class="tab-content">
             <div class="grid-form">
                 <div class="field" style="grid-column: span 2;"><label>PRODUTO (BIPE OU BUSQUE)</label><input type="text" id="indProd" class="navInd" placeholder="Busque o produto..." autocomplete="off"><div id="suggestionsIND"></div></div>
-                <div class="field"><label>TIPO MODELO</label><select id="indModel" class="navInd"><option value="full">Cartaz A4 Completo</option><option value="gondola">Etiqueta Gôndola (10x15)</option></select></div>
+                <div class="field"><label>TIPO MODELO</label><select id="indModel" class="navInd"><option value="full">Cartaz A4 Completo</option><option value="gondola">Etiqueta Gôndola (4 por folha)</option></select></div>
                 <div class="field"><label>PREÇO DE (R$)</label><input type="text" id="indOldPrice" class="navInd" placeholder="0,00"></div>
                 <div class="field"><label>PREÇO POR (R$)</label><input type="text" id="indNewPrice" class="navInd" placeholder="0,00"></div>
                 <div class="field"><label>VALIDADE</label><input type="text" id="indData" class="navInd" placeholder="Validade"></div>
@@ -265,10 +261,7 @@
                 }
             });
         }
-        setupEnterNavigation('nav');
-        setupEnterNavigation('navLP');
-        setupEnterNavigation('navPhoto');
-        setupEnterNavigation('navInd');
+        setupEnterNavigation('nav'); setupEnterNavigation('navLP'); setupEnterNavigation('navPhoto'); setupEnterNavigation('navInd');
 
         function setupBipe(inputId, focusId, suggestionId, type) {
             const input = document.getElementById(inputId);
@@ -293,26 +286,17 @@
                 }
             });
         }
-        setupBipe('searchField', 'pOld', 'suggestions', 'std'); 
-        setupBipe('lpProd', 'lpLeve', 'suggestionsLP', 'lp');
-        setupBipe('photoProd', 'photoPriceEach', 'suggestionsPHOTO', 'photo');
-        setupBipe('indProd', 'indOldPrice', 'suggestionsIND', 'ind');
+        setupBipe('searchField', 'pOld', 'suggestions', 'std'); setupBipe('lpProd', 'lpLeve', 'suggestionsLP', 'lp'); setupBipe('photoProd', 'photoPriceEach', 'suggestionsPHOTO', 'photo'); setupBipe('indProd', 'indOldPrice', 'suggestionsIND', 'ind');
 
         function selectItem(code, name, inputId, focusId, suggestionId, type) { 
-            if(type === 'std') selectedItem = {code, name}; 
-            else if(type === 'lp') selectedItemLP = {code, name};
-            else if(type === 'photo') selectedItemPhoto = {code, name};
-            else if(type === 'ind') selectedItemInd = {code, name};
-            document.getElementById(inputId).value = name; document.getElementById(suggestionId).style.display = 'none'; 
-            setTimeout(() => document.getElementById(focusId).focus(), 50); 
+            if(type === 'std') selectedItem = {code, name}; else if(type === 'lp') selectedItemLP = {code, name}; else if(type === 'photo') selectedItemPhoto = {code, name}; else if(type === 'ind') selectedItemInd = {code, name};
+            document.getElementById(inputId).value = name; document.getElementById(suggestionId).style.display = 'none'; setTimeout(() => document.getElementById(focusId).focus(), 50); 
         }
 
         function calcPhoto() {
             const leve = parseInt(document.getElementById('photoLeve').value) || 0;
             const pFinal = parseFloat(document.getElementById('photoFinal').value.replace(',', '.')) || 0;
-            if(leve > 0 && pFinal > 0) {
-                document.getElementById('photoTotalKit').value = (leve * pFinal).toLocaleString('pt-br', {minimumFractionDigits:2});
-            }
+            if(leve > 0 && pFinal > 0) document.getElementById('photoTotalKit').value = (leve * pFinal).toLocaleString('pt-br', {minimumFractionDigits:2});
         }
 
         function addPhotoTag() {
@@ -324,8 +308,7 @@
             const data = document.getElementById('photoValidade').value;
             const barcode = selectedItemPhoto ? selectedItemPhoto.code : "7891058017507";
             if(!name || !pFinal) return;
-            const div = document.createElement('div');
-            div.className = 'size-6x105';
+            const div = document.createElement('div'); div.className = 'size-6x105';
             div.innerHTML = `<button class="delete-btn" onclick="this.parentElement.remove()">X</button><div class="photo-blank-space"></div><div class="photo-content"><div class="photo-prod-name">${name}</div><div class="photo-old-price"><small>R$</small> ${priceEach} <small>CADA</small></div><div class="photo-barcode">${barcode}</div><div class="photo-yellow-box"><div class="photo-leve-pague">LEVE ${leve} POR</div><div class="photo-final-price"><small style="font-size:18px">R$</small> ${pFinal} <small style="font-size:14px">CADA</small></div><div class="photo-kit-val">Valor do Kit: R$ ${kit}</div><div style="font-size:8px; margin-top:5px">Ofertas até ${data}</div></div></div>`;
             document.getElementById('gondolaArea').appendChild(div);
         }
@@ -337,38 +320,36 @@
             const oldP = document.getElementById('indOldPrice').value;
             const newP = document.getElementById('indNewPrice').value;
             const dataVal = document.getElementById('indData').value.toUpperCase();
-            
             if(!name || !newP) return;
 
-            // Cálculo da Porcentagem de Desconto
             const vOld = parseFloat(oldP.replace(',', '.')), vNew = parseFloat(newP.replace(',', '.'));
             const perc = (vOld > vNew) ? Math.round(((vOld - vNew) / vOld) * 100) : 0;
             const badgeHtml = perc > 0 ? `<span class="ind-badge">-${perc}%</span>` : '';
             const badgeFullHtml = perc > 0 ? `<div class="ind-badge-full">DESCONTO DE ${perc}%</div>` : '';
 
             const div = document.createElement('div');
-            
             if(model === 'full') {
                 div.className = 'promo-tag-lp';
                 div.innerHTML = `<button class="delete-btn" onclick="this.parentElement.remove()">X</button><div class="lp-header-box"><span>— MEGA —</span><h1>PROMOÇÃO</h1></div><div class="lp-prod-name">${name}</div><div class="ind-old-box">DE: R$ ${oldP}</div><div class="lp-yellow-box" style="padding: 20px 10px;"> <span style="font-size:32px; display:block; font-weight:bold; color:#000;">POR APENAS:</span> <span style="font-size:35px; font-weight:900; color:var(--primary);">R$</span> <b style="font-size:110px; line-height:0.8;">${newP}</b> </div>${badgeFullHtml}<div class="lp-barcode-container" style="margin-top:auto;"><svg id="${tagId}"></svg></div><div class="lp-footer">SOUZA FARMA - FARMÁCIA DO TRABALHADOR<br>OFERTA VÁLIDA: ${dataVal}</div>`;
+                document.getElementById('posterArea').appendChild(div);
+                JsBarcode(`#${tagId}`, barcode, { format: "CODE128", width: 2.5, height: 75, displayValue: true, fontSize: 30 });
             } else {
-                div.className = 'tag size-lp-gondola';
+                div.className = 'size-lp-gondola';
                 div.innerHTML = `<button class="delete-btn" onclick="this.parentElement.remove()">X</button>
                     <div class="lp-top-white">
                         <div style="background:#000; color:#fff; font-size:26px; padding:6px 0; margin-bottom:5px; font-weight:900; text-transform:uppercase; text-align:center; letter-spacing:1px;">PROMOÇÃO</div>
                         <div style="font-size:11px; font-weight:bold; border-bottom:1px solid #eee; padding-bottom:3px; text-align:center;">SOUZA FARMA</div>
-                        <div style="font-size:22px; line-height:1.1; margin-top:8px; height:50px; overflow:hidden; font-weight:900;">${name}</div>
+                        <div style="font-size:20px; line-height:1.1; margin-top:8px; height:45px; overflow:hidden; font-weight:900;">${name}</div>
                         <div class="ind-old-gondola">DE: R$ ${oldP} ${badgeHtml}</div>
                         <div style="position:absolute; bottom:5px; right:5px; font-size:9px;">${barcode}</div>
                     </div>
                     <div class="lp-bottom-yellow">
-                        <div style="font-size:14px; font-weight:900; color:#000; text-transform:uppercase; text-align:center; margin-bottom:2px;">POR APENAS:</div>
-                        <div class="price-final-lp"><span style="font-size:28px; vertical-align:middle;">R$</span> <b>${newP}</b></div>
-                        <div style="font-size:11px; font-weight:bold; margin-top:auto; padding-top:5px;">Válido até: ${dataVal}</div>
+                        <div style="font-size:13px; font-weight:900; color:#000; text-transform:uppercase; text-align:center; margin-bottom:2px;">POR APENAS:</div>
+                        <div class="price-final-lp"><span style="font-size:24px; vertical-align:middle;">R$</span> <b>${newP}</b></div>
+                        <div style="font-size:11px; font-weight:bold; margin-top:auto; padding-top:2px;">Válido até: ${dataVal}</div>
                     </div>`;
+                document.getElementById('gondolaArea').appendChild(div);
             }
-            document.getElementById('posterArea').appendChild(div);
-            if(model === 'full') JsBarcode(`#${tagId}`, barcode, { format: "CODE128", width: 2.5, height: 75, displayValue: true, fontSize: 30 });
             document.getElementById('indProd').value = ""; document.getElementById('indOldPrice').value = ""; document.getElementById('indNewPrice').value = ""; document.getElementById('indProd').focus();
         }
 
@@ -395,12 +376,13 @@
             if(model === 'full') {
                 div.className = 'promo-tag-lp';
                 div.innerHTML = `<button class="delete-btn" onclick="this.parentElement.remove()">X</button><div class="lp-header-box"><span>— MEGA —</span><h1>OFERTA</h1></div><div class="lp-prod-name">${document.getElementById('lpProd').value.toUpperCase()}</div><div class="lp-leve-pague"><div class="lp-box" style="background:#000; color:#fff;">LEVE ${document.getElementById('lpLeve').value}</div><div class="lp-box" style="background:var(--primary); color:#fff;">PAGUE ${document.getElementById('lpPague').value}</div></div><div style="font-size:32px; margin-top:5px;">VALOR DA UNIDADE: R$ ${document.getElementById('lpUnit').value}</div><div style="font-size:38px; margin: 10px 0;">VALOR TOTAL DO KIT: <b>R$ ${document.getElementById('lpTotal').value}</b></div><div class="lp-yellow-box"><span style="font-size:28px; display:block; font-weight:bold;">NA COMPRA DE ${document.getElementById('lpLeve').value}, A UNIDADE SAI POR:</span>R$ <b>${document.getElementById('lpFinal').value}</b></div><div class="lp-barcode-container"><svg id="${tagId}"></svg></div><div class="lp-footer">SOUZA FARMA - FARMÁCIA DO TRABALHADOR<br>OFERTA VÁLIDA: ${document.getElementById('lpData').value.toUpperCase()}</div>`;
+                document.getElementById('posterArea').appendChild(div);
+                JsBarcode(`#${tagId}`, barcode, { format: "CODE128", width: 2.5, height: 75, displayValue: true, fontSize: 30 });
             } else {
-                div.className = 'tag size-lp-gondola';
-                div.innerHTML = `<button class="delete-btn" onclick="this.parentElement.remove()">X</button><div class="lp-top-white"><div style="font-size:12px; font-weight:bold; border-bottom:1px solid #000; padding-bottom:5px;">SOUZA FARMA</div><div style="font-size:22px; line-height:1.1; margin-top:10px; height:65px; overflow:hidden; font-weight:900;">${document.getElementById('lpProd').value.toUpperCase()}</div><div class="price-unit-lp"><small style="font-size:16px;">R$</small> <b>${document.getElementById('lpUnit').value}</b> <small style="font-size:14px;">CADA</small></div><div style="position:absolute; bottom:5px; right:5px; font-size:9px;">${barcode}</div></div><div class="lp-bottom-yellow"><div style="background:#000; color:#fff; font-size:22px; padding:6px; margin-bottom:5px; font-weight:900;">LEVE ${document.getElementById('lpLeve').value}, PAGUE ${document.getElementById('lpPague').value}</div><div style="font-size:16px; font-weight:bold;">UNITÁRIO SAI POR:</div><div class="price-final-lp"><span style="font-size:28px; vertical-align:middle;">R$</span> <b>${document.getElementById('lpFinal').value}</b></div><div style="font-size:18px; margin-top:5px; font-weight:900; border-top:1px solid #000; padding-top:5px;">Valor do Kit: <span style="font-size:14px;">R$</span> ${document.getElementById('lpTotal').value}</div><div style="font-size:10px; margin-top:5px;">Válido até: ${document.getElementById('lpData').value}</div></div>`;
+                div.className = 'size-lp-gondola';
+                div.innerHTML = `<button class="delete-btn" onclick="this.parentElement.remove()">X</button><div class="lp-top-white"><div style="background:#000; color:#fff; font-size:24px; padding:4px 0; margin-bottom:5px; font-weight:900; text-transform:uppercase; text-align:center;">LEVE/PAGUE</div><div style="font-size:11px; font-weight:bold; border-bottom:1px solid #eee; padding-bottom:3px; text-align:center;">SOUZA FARMA</div><div style="font-size:20px; line-height:1.1; margin-top:8px; height:45px; overflow:hidden; font-weight:900;">${document.getElementById('lpProd').value.toUpperCase()}</div><div class="price-unit-lp" style="margin-top:5px;"><small style="font-size:14px;">R$</small> <b style="font-size:22px;">${document.getElementById('lpUnit').value}</b> <small style="font-size:12px;">CADA</small></div><div style="position:absolute; bottom:5px; right:5px; font-size:9px;">${barcode}</div></div><div class="lp-bottom-yellow"><div style="background:#e30613; color:#fff; font-size:18px; padding:3px; font-weight:900;">LEVE ${document.getElementById('lpLeve').value}, PAGUE ${document.getElementById('lpPague').value}</div><div class="price-final-lp" style="font-size:55px;"><span style="font-size:20px; vertical-align:middle;">R$</span> <b>${document.getElementById('lpFinal').value}</b></div><div style="font-size:13px; font-weight:900; border-top:1px solid #000; padding-top:2px;">Kit: R$ ${document.getElementById('lpTotal').value}</div></div>`;
+                document.getElementById('gondolaArea').appendChild(div);
             }
-            document.getElementById('posterArea').appendChild(div); 
-            if(model === 'full') JsBarcode(`#${tagId}`, barcode, { format: "CODE128", width: 2.5, height: 75, displayValue: true, fontSize: 30 });
             document.getElementById('lpProd').value = ""; document.getElementById('lpUnit').value = ""; document.getElementById('lpProd').focus();
         }
 
