@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Souza Farma v115 - Correção Definitiva Excel</title>
+    <title>Souza Farma v117 - Produção GitHub</title>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     
@@ -147,11 +147,6 @@
     <span id="txtPlanilha">📊 PLANILHA: Verificando...</span>
     <span id="txtUpdate">📅 ÚLTIMA ATUALIZAÇÃO: --/--/--</span>
 </div>
-    <script>
-        const firebaseConfig = { apiKey: "AIzaSyBfxAE5NnNQ2JKn8iX8-s8lz7M_CVQG6DI", authDomain: "etiqueta-70cbf.firebaseapp.com", databaseURL: "https://etiqueta-70cbf-default-rtdb.firebaseio.com/", projectId: "etiqueta-70cbf", storageBucket: "etiqueta-70cbf.firebasestorage.app", messagingSenderId: "899263207040", appId: "1:899263207040:web:7103a5f0fb49ca15f1b865" };
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-    </script>
     <div class="no-print" style="text-align:center; padding: 15px;">
         <div style="display: block; margin-bottom: 10px;"><img src="logo.png" style="max-height: 80px; width: auto;" onerror="this.style.display='none'"></div>
         <div style="display: block;"><b style="color:var(--primary); font-size: 18px;">SOUZA FARMA - FARMÁCIA DO TRABALHADOR</b></div>
@@ -167,7 +162,7 @@
         <div id="etiquetas" class="tab-content active">
             <div style="background:#f8fafc; padding:12px; border-radius:8px; margin-bottom:15px; border:1px solid #cbd5e1;">
                 <label>📂 ATUALIZAR PLANILHA ONLINE:</label>
-                <input type="file" onchange="handleExcel(event)"> <span id="excelStatus">✅ Sistema pronto.</span>
+                <input type="file" onchange="handleExcel(event)"> <span id="excelStatus">✅ Pronto para ler.</span>
                 <button onclick="if(confirm('Limpar banco online?')) database.ref('produtos').remove()" style="float:right; background:#000; color:#fff; border:none; padding:5px 10px; border-radius:5px; cursor:pointer; font-size:10px;">LIMPAR BANCO</button>
             </div>
             <div class="grid-form">
@@ -232,13 +227,14 @@
 
     <script>
         let db = []; let historyData = []; let selectedItem = null; let selectedItemLP = null; let selectedItemPhoto = null; let selectedItemInd = null;
+        
+        // Método de escuta síncrono padrão (Ideal para GitHub Pages)
         database.ref('produtos').on('value', (s) => { 
             const data = s.val(); 
             db = data ? Object.values(data) : []; 
             const statusTxt = db.length > 0 ? `✅ CONECTADA (${db.length} ITENS)` : "⚠️ BANCO VAZIO";
-            const dataTxt = new Date().toLocaleString('pt-br', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
             document.getElementById('txtPlanilha').innerText = `📊 PLANILHA: ${statusTxt}`;
-            document.getElementById('txtUpdate').innerText = `📅 ATUALIZADO: ${dataTxt}`;
+            document.getElementById('txtUpdate').innerText = `📅 ATUALIZADO: ${new Date().toLocaleDateString()}`;
         });
 
         function setupEnterNavigation(className) {
@@ -251,10 +247,6 @@
                         if (index > -1 && index < inputs.length - 1) {
                             e.preventDefault();
                             inputs[index + 1].focus();
-                        } else if (index === inputs.length - 1) {
-                            if (className === 'nav') document.getElementById('btnAddTag').click();
-                            if (className === 'navLP') document.getElementById('btnAddLP').click();
-                            if (className === 'navInd').click();
                         }
                     }
                 }
@@ -267,7 +259,7 @@
             input.addEventListener('input', (e) => {
                 const val = e.target.value.toUpperCase().trim();
                 if(!val) return;
-                const exact = db.find(i => String(Object.values(i)[0]) == val || String(Object.values(i)[1]) == val);
+                const exact = db.find(i => i && (String(Object.values(i)[0]) == val || String(Object.values(i)[1]) == val));
                 if(exact) { 
                     if(type === 'std') selectedItem = {code: Object.values(exact)[0], name: Object.values(exact)[2]};
                     else if(type === 'lp') selectedItemLP = {code: Object.values(exact)[0], name: Object.values(exact)[2]};
@@ -277,7 +269,7 @@
                     document.getElementById(suggestionId).style.display = 'none';
                     setTimeout(() => document.getElementById(focusId).focus(), 50);
                 } else if(val.length >= 2) {
-                   const matches = db.filter(i => String(Object.values(i)[2]).toUpperCase().includes(val) || String(Object.values(i)[1]).includes(val));
+                   const matches = db.filter(i => i && (String(Object.values(i)[2]).toUpperCase().includes(val) || String(Object.values(i)[1]).includes(val)));
                     if(matches.length > 0) {
                         document.getElementById(suggestionId).innerHTML = matches.slice(0,10).map(m => `<div class="suggestion-item" onclick="selectItem('${Object.values(m)[0]}', '${Object.values(m)[2]}', '${inputId}', '${focusId}', '${suggestionId}', '${type}')"><b>${Object.values(m)[1]}</b> - ${Object.values(m)[2]}</div>`).join('');
                         document.getElementById(suggestionId).style.display = 'block';
@@ -305,7 +297,7 @@
             const pFinal = document.getElementById('photoFinal').value;
             const kit = document.getElementById('photoTotalKit').value;
             const data = document.getElementById('photoValidade').value;
-            const barcode = selectedItemPhoto ? selectedItemPhoto.code : "7891058017507";
+            const barcode = selectedItemPhoto ? selectedItemPhoto.code : "0000000000000";
             if(!name || !pFinal) return;
             const div = document.createElement('div'); div.className = 'size-6x105';
             div.innerHTML = `<button class="delete-btn" onclick="this.parentElement.remove()">X</button><div class="photo-blank-space"></div><div class="photo-content"><div class="photo-prod-name">${name}</div><div class="photo-old-price"><small>R$</small> ${priceEach} <small>CADA</small></div><div class="photo-barcode">${barcode}</div><div class="photo-yellow-box"><div class="photo-leve-pague">LEVE ${leve} POR</div><div class="photo-final-price"><small style="font-size:18px">R$</small> ${pFinal} <small style="font-size:14px">CADA</small></div><div class="photo-kit-val">Valor do Kit: R$ ${kit}</div><div style="font-size:8px; margin-top:5px">Ofertas até ${data}</div></div></div>`;
@@ -378,44 +370,22 @@
                 document.getElementById('posterArea').appendChild(div);
                 JsBarcode(`#${tagId}`, barcode, { format: "CODE128", width: 2.5, height: 75, displayValue: true, fontSize: 30 });
             } else {
-                div.className = 'tag size-lp-gondola';
+                div.className = 'size-lp-gondola';
                 div.innerHTML = `<button class="delete-btn" onclick="this.parentElement.remove()">X</button><div class="lp-top-white"><div style="background:#000; color:#fff; font-size:24px; padding:4px 0; margin-bottom:5px; font-weight:900; text-transform:uppercase; text-align:center;">LEVE/PAGUE</div><div style="font-size:11px; font-weight:bold; border-bottom:1px solid #eee; padding-bottom:3px; text-align:center;">SOUZA FARMA</div><div style="font-size:20px; line-height:1.1; margin-top:8px; height:45px; overflow:hidden; font-weight:900;">${document.getElementById('lpProd').value.toUpperCase()}</div><div class="price-unit-lp" style="margin-top:5px;"><small style="font-size:14px;">R$</small> <b style="font-size:22px;">${document.getElementById('lpUnit').value}</b> <small style="font-size:12px;">CADA</small></div><div style="position:absolute; bottom:5px; right:5px; font-size:9px;">${barcode}</div></div><div class="lp-bottom-yellow"><div style="background:#e30613; color:#fff; font-size:18px; padding:3px; font-weight:900;">LEVE ${document.getElementById('lpLeve').value}, PAGUE ${document.getElementById('lpPague').value}</div><div class="price-final-lp" style="font-size:55px;"><span style="font-size:20px; vertical-align:middle;">R$</span> <b>${document.getElementById('lpFinal').value}</b></div><div style="font-size:13px; font-weight:900; border-top:1px solid #000; padding-top:2px;">Kit: R$ ${document.getElementById('lpTotal').value}</div></div>`;
                 document.getElementById('gondolaArea').appendChild(div);
             }
             document.getElementById('lpProd').value = ""; document.getElementById('lpUnit').value = ""; document.getElementById('lpProd').focus();
         }
 
-        // LEITURA SIMPLIFICADA PARA IMPEDIR TRAVAMENTOS OU CONFLITO DE CHAVES NULAS
+        // Script compatível e direto com o Firebase via Web
         function handleExcel(e) {
-            const elStatus = document.getElementById('excelStatus');
-            if(elStatus) elStatus.innerText = "⏳ Lendo arquivo...";
             const reader = new FileReader();
             reader.onload = (evt) => {
-                try {
-                    const workbook = XLSX.read(evt.target.result, { type: 'binary' });
-                    const sheetName = workbook.SheetNames[0];
-                    const products = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
-                    
-                    if(!products || products.length === 0) {
-                        alert("Sua planilha foi identificada como vazia!");
-                        if(elStatus) elStatus.innerText = "❌ Arquivo vazio.";
-                        return;
-                    }
-
-                    // Gravação direta sem remover o nó para evitar o delay assíncrono local
-                    database.ref('produtos').set(products, (error) => {
-                        if (error) {
-                            alert("Falha ao salvar: " + error);
-                            if(elStatus) elStatus.innerText = "❌ Falha ao sincronizar.";
-                        } else {
-                            if(elStatus) elStatus.innerText = `✅ Pronto! Sincronizado.`;
-                            alert(`Sucesso definitivo! ${products.length} produtos injetados com sucesso.`);
-                        }
-                    });
-                } catch(err) {
-                    alert("Erro interno na leitura do arquivo Excel: " + err);
-                    if(elStatus) elStatus.innerText = "❌ Erro de processamento.";
-                }
+                const workbook = XLSX.read(evt.target.result, { type: 'binary' });
+                const products = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+                database.ref('produtos').set(products).then(() => {
+                    alert("Planilha Sincronizada com Sucesso!");
+                });
             };
             reader.readAsBinaryString(e.target.files[0]);
         }
