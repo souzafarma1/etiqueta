@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Souza Farma v117 - Produção GitHub</title>
+    <title>Souza Farma v119 - Ajuste de Nó Firebase</title>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     
@@ -113,7 +113,7 @@
         .lp-prod-name { font-size: 60px; height: 140px; display: flex; align-items: center; justify-content: center; text-transform: uppercase; font-weight: 900; margin: 25px 0 20px; line-height: 1; overflow: hidden; }
         .lp-footer { border-top: 3px solid #000; width: 100%; padding-top: 5px; font-size: 18px; font-weight: bold; padding-bottom: 10px; text-align: center; }
 
-        /* COUBE 4 POR FOLHA PERFEITO (9.8cm x 13.8cm) */
+        /* MULTIPLOS 4 POR FOLHA PERFEITO (9.8cm x 13.8cm) */
         .size-lp-gondola { width: 9.8cm !important; height: 13.8cm !important; border: 2px solid #000; margin: 2px; background: #fff; text-align: left !important; display: flex !important; flex-direction: column !important; box-sizing: border-box; page-break-inside: avoid; }
         .lp-top-white { padding: 10px; flex: 1.5; position: relative; display: flex; flex-direction: column; }
         .lp-bottom-yellow { background: var(--secondary); padding: 8px 10px; border-top: 3px solid #000; flex: 1.3; text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
@@ -147,6 +147,11 @@
     <span id="txtPlanilha">📊 PLANILHA: Verificando...</span>
     <span id="txtUpdate">📅 ÚLTIMA ATUALIZAÇÃO: --/--/--</span>
 </div>
+    <script>
+        const firebaseConfig = { apiKey: "AIzaSyBfxAE5NnNQ2JKn8iX8-s8lz7M_CVQG6DI", authDomain: "etiqueta-70cbf.firebaseapp.com", databaseURL: "https://etiqueta-70cbf-default-rtdb.firebaseio.com/", projectId: "etiqueta-70cbf", storageBucket: "etiqueta-70cbf.firebasestorage.app", messagingSenderId: "899263207040", appId: "1:899263207040:web:7103a5f0fb49ca15f1b865" };
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+    </script>
     <div class="no-print" style="text-align:center; padding: 15px;">
         <div style="display: block; margin-bottom: 10px;"><img src="logo.png" style="max-height: 80px; width: auto;" onerror="this.style.display='none'"></div>
         <div style="display: block;"><b style="color:var(--primary); font-size: 18px;">SOUZA FARMA - FARMÁCIA DO TRABALHADOR</b></div>
@@ -163,7 +168,7 @@
             <div style="background:#f8fafc; padding:12px; border-radius:8px; margin-bottom:15px; border:1px solid #cbd5e1;">
                 <label>📂 ATUALIZAR PLANILHA ONLINE:</label>
                 <input type="file" onchange="handleExcel(event)"> <span id="excelStatus">✅ Pronto para ler.</span>
-                <button onclick="if(confirm('Limpar banco online?')) database.ref('produtos').remove()" style="float:right; background:#000; color:#fff; border:none; padding:5px 10px; border-radius:5px; cursor:pointer; font-size:10px;">LIMPAR BANCO</button>
+                <button onclick="if(confirm('Limpar banco online?')) database.ref('teste').remove()" style="float:right; background:#000; color:#fff; border:none; padding:5px 10px; border-radius:5px; cursor:pointer; font-size:10px;">LIMPAR BANCO</button>
             </div>
             <div class="grid-form">
                 <div class="field" style="grid-column: span 2;"><label>PRODUTO (BIPE OU BUSQUE)</label><input type="text" id="searchField" class="nav" placeholder="Digite ou bipe..." autocomplete="off"><div id="suggestions"></div></div>
@@ -228,8 +233,8 @@
     <script>
         let db = []; let historyData = []; let selectedItem = null; let selectedItemLP = null; let selectedItemPhoto = null; let selectedItemInd = null;
         
-        // Método de escuta síncrono padrão (Ideal para GitHub Pages)
-        database.ref('produtos').on('value', (s) => { 
+        // Mapeado dinamicamente para escutar o nó correto da imagem ("/teste")
+        database.ref('teste').on('value', (s) => { 
             const data = s.val(); 
             db = data ? Object.values(data) : []; 
             const statusTxt = db.length > 0 ? `✅ CONECTADA (${db.length} ITENS)` : "⚠️ BANCO VAZIO";
@@ -370,20 +375,20 @@
                 document.getElementById('posterArea').appendChild(div);
                 JsBarcode(`#${tagId}`, barcode, { format: "CODE128", width: 2.5, height: 75, displayValue: true, fontSize: 30 });
             } else {
-                div.className = 'size-lp-gondola';
+                div.className = 'tag size-lp-gondola';
                 div.innerHTML = `<button class="delete-btn" onclick="this.parentElement.remove()">X</button><div class="lp-top-white"><div style="background:#000; color:#fff; font-size:24px; padding:4px 0; margin-bottom:5px; font-weight:900; text-transform:uppercase; text-align:center;">LEVE/PAGUE</div><div style="font-size:11px; font-weight:bold; border-bottom:1px solid #eee; padding-bottom:3px; text-align:center;">SOUZA FARMA</div><div style="font-size:20px; line-height:1.1; margin-top:8px; height:45px; overflow:hidden; font-weight:900;">${document.getElementById('lpProd').value.toUpperCase()}</div><div class="price-unit-lp" style="margin-top:5px;"><small style="font-size:14px;">R$</small> <b style="font-size:22px;">${document.getElementById('lpUnit').value}</b> <small style="font-size:12px;">CADA</small></div><div style="position:absolute; bottom:5px; right:5px; font-size:9px;">${barcode}</div></div><div class="lp-bottom-yellow"><div style="background:#e30613; color:#fff; font-size:18px; padding:3px; font-weight:900;">LEVE ${document.getElementById('lpLeve').value}, PAGUE ${document.getElementById('lpPague').value}</div><div class="price-final-lp" style="font-size:55px;"><span style="font-size:20px; vertical-align:middle;">R$</span> <b>${document.getElementById('lpFinal').value}</b></div><div style="font-size:13px; font-weight:900; border-top:1px solid #000; padding-top:2px;">Kit: R$ ${document.getElementById('lpTotal').value}</div></div>`;
                 document.getElementById('gondolaArea').appendChild(div);
             }
             document.getElementById('lpProd').value = ""; document.getElementById('lpUnit').value = ""; document.getElementById('lpProd').focus();
         }
 
-        // Script compatível e direto com o Firebase via Web
         function handleExcel(e) {
             const reader = new FileReader();
             reader.onload = (evt) => {
                 const workbook = XLSX.read(evt.target.result, { type: 'binary' });
                 const products = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
-                database.ref('produtos').set(products).then(() => {
+                // Grava no nó "teste" igual ao que está estruturado na nuvem
+                database.ref('teste').set(products).then(() => {
                     alert("Planilha Sincronizada com Sucesso!");
                 });
             };
